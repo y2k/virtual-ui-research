@@ -11,11 +11,13 @@ fun main(args: Array<String>) {
     val result = loadAndScanJar(android, loader)
     val classes = result["classes"]!!
 
-    classes.forEach { handleClass(it) }
+    val filterParent = classes.first { it.name == "android.view.View" }
+
+    classes.forEach { handleClass(it, filterParent) }
 }
 
-fun handleClass(clazz: Class<*>) {
-    if (!isView(clazz)) return
+fun handleClass(clazz: Class<*>, filterParent: Class<*>) {
+    if (!filterParent.isAssignableFrom(clazz)) return
 
     println(clazz.canonicalName + " : " + clazz.superclass.canonicalName)
 
@@ -26,16 +28,6 @@ fun printMethods(clazz: Class<*>) {
     clazz.methods
         .filter { it.name.matches(Regex("set[A-Z].+")) }
         .forEach { println("\t${it.name}(${it.parameters.joinToString { it.type.simpleName }})") }
-}
-
-fun isView(clazz: Class<*>): Boolean {
-    if (clazz.superclass?.name == "android.view.ViewGroup") return true
-    if (clazz.superclass?.name == "android.view.View") return true
-    if (clazz.superclass?.name == "android.widget.TextView") return true
-    if (clazz.superclass?.name == "android.widget.FrameLayout") return true
-    if (clazz.superclass?.name == "android.widget.LinearLayout") return true
-
-    return false
 }
 
 private fun loadAndScanJar(jarFile: File, loader: ClassLoader): Map<String, List<Class<*>>> {
