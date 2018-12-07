@@ -1,3 +1,6 @@
 .gradle
 out
 .idea
+dsl/build
+research/build
+examples

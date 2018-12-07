@@ -1,0 +1,23 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.10'
+}
+
+group 'y2k'
+version '0.1'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.boundlessgeo.com/main/' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'android:android:5.0_r1'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
