@@ -2,6 +2,7 @@
 
 import android.graphics.Color
 import android.widget.LinearLayout
+import common.*
 
 fun main(args: Array<String>) {
     view(
