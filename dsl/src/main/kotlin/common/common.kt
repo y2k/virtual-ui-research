@@ -12,7 +12,7 @@ fun printPretty(x: Any) {
 }
 
 class LinearLayout_ {
-    val `@class` = "common.LinearLayout"
+    val `@class` = "LinearLayout"
     var backgroundColor: Int = 0
     var orientation: Int = 0
     var padding: FloatArray = floatArrayOf()
@@ -30,7 +30,7 @@ class Button_ {
 }
 
 class TextView_ {
-    val `@class` = "common.TextView"
+    val `@class` = "TextView"
     var backgroundDrawableRes: Int = 0
     var text: String = ""
     var textColor: Int = 0

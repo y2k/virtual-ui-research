@@ -1,6 +1,7 @@
 import android.graphics.Color
 import common.*
 import java.lang.Math.max
+import java.util.*
 
 fun main(args: Array<String>) {
     val container = LinearLayout()
@@ -25,40 +26,43 @@ fun main(args: Array<String>) {
 }
 
 private fun mkState1(): LinearLayout__ =
-    LinearLayout__().apply {
-        backgroundColor.set(Color.LTGRAY)
+    linearLayout {
+        backgroundColor = Color.LTGRAY
 
-        children += TextView__().apply {
-            text.set("1) Hello World")
-            textColor.set(Color.RED)
+        textView {
+            text = "1) Hello World"
+            textColor = Color.RED
+            textSize = 20f
         }
-        children += TextView__().apply {
-            text.set("2) Moscow")
-            textColor.set(Color.GREEN)
+        textView {
+            text = "2) Moscow"
+            textColor = Color.GREEN
         }
     }
 
 private fun mkState2(): LinearLayout__ =
-    LinearLayout__().apply {
-        backgroundColor.set(Color.LTGRAY)
+    linearLayout {
+        backgroundColor = Color.LTGRAY
 
-        children += TextView__().apply {
-            text.set("1.1) Hello World")
-            textColor.set(Color.RED)
+        textView {
+            text = "1.1) Hello World"
+            textColor = Color.RED
+            textSize = 20f
         }
     }
 
 private fun mkState3(): LinearLayout__ =
-    LinearLayout__().apply {
-        backgroundColor.set(Color.LTGRAY)
+    linearLayout {
+        backgroundColor = Color.LTGRAY
 
-        children += TextView__().apply {
-            text.set("1.1) Hello World")
-            textColor.set(Color.LTGRAY)
+        textView {
+            text = "1.1) Hello World"
+            textColor = Color.LTGRAY
+            textSize = 10f
         }
-        children += TextView__().apply {
-            text.set("2.1) Moscow")
-            textColor.set(Color.GREEN)
+        textView {
+            text = "2.1) Moscow"
+            textColor = Color.GREEN
         }
     }
 
@@ -115,6 +119,28 @@ fun updateViewProp(root: View, c: Property<*, out View>) {
 }
 
 // ================================================================
+// DSL
+// ================================================================
+
+private val stack = Stack<LinearLayout__>()
+
+private fun textView(f: TextView__.() -> Unit) {
+    val a = TextView__()
+    a.f()
+    stack.peek().children.add(a)
+}
+
+private fun linearLayout(f: LinearLayout__.() -> Unit): LinearLayout__ {
+    val a = LinearLayout__()
+    stack.add(a)
+    a.f()
+    stack.pop()
+    return a
+}
+
+// ================================================================
+// Properties
+// ================================================================
 
 class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit) {
     fun update(view: TView) {
@@ -137,10 +163,15 @@ interface GroupHolder {
 }
 
 class LinearLayout__ : GroupHolder, PropertyHolder {
-    val backgroundColor: Property<Int, LinearLayout> = Property(0, LinearLayout::setBackgroundColor)
+
+    var backgroundColor: Int
+        get() = backgroundColor__.value
+        set(value) = backgroundColor__.set(value)
+
+    private val backgroundColor__: Property<Int, LinearLayout> = Property(0, LinearLayout::setBackgroundColor)
 
     override val props: List<Property<out Any, LinearLayout>> =
-        listOf(backgroundColor)
+        listOf(backgroundColor__)
 
     override val children = ArrayList<PropertyHolder>()
 
@@ -148,12 +179,23 @@ class LinearLayout__ : GroupHolder, PropertyHolder {
 }
 
 class TextView__ : PropertyHolder {
-    val text: Property<String, TextView> = Property("", TextView::setText)
-    val textSize: Property<Float, TextView> = Property(0f, TextView::setTextSize)
-    val textColor: Property<Int, TextView> = Property(0, TextView::setTextColor)
+
+    var text: String
+        get() = text__.value
+        set(value) = text__.set(value)
+    var textColor: Int
+        get() = textColor__.value
+        set(value) = textColor__.set(value)
+    var textSize: Float
+        get() = textSize__.value
+        set(value) = textSize__.set(value)
+
+    private val text__: Property<String, TextView> = Property("", TextView::setText)
+    private val textSize__: Property<Float, TextView> = Property(0f, TextView::setTextSize)
+    private val textColor__: Property<Int, TextView> = Property(0, TextView::setTextColor)
 
     override val props: List<Property<out Any, TextView>> =
-        listOf(text, textSize, textColor)
+        listOf(text__, textSize__, textColor__)
 
     override fun createEmpty(): View = TextView()
 }
