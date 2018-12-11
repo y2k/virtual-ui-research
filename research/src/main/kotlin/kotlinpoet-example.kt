@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
 }
 
 class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>)
-class PropertyDescription(val name: String, val type: TypeName)
+class PropertyDescription(val name: String, val type: ClassName)
 
 private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName): TypeSpec {
     val clazz = inputViewClass.simpleName
@@ -68,10 +68,8 @@ private fun createType(properties: List<PropertyDescription>, inputViewClass: Cl
         .build()
 }
 
-private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, name: String, type: TypeName): TypeSpec.Builder {
+private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, name: String, type: ClassName): TypeSpec.Builder {
     val privateProp = "_$name"
-
-    /* private val text_: Property<String, TextView> = Property("", TextView::setText) */
     val propertyType = ClassName.bestGuess("Property")
 
     return addProperty(
@@ -98,7 +96,19 @@ private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, name: String, typ
                     propertyType.parameterizedBy(type, inputViewClass),
                     KModifier.PRIVATE
                 )
-                .initializer("%T()", propertyType)
+                .initializer("%T(%L, %T::%L)", propertyType, getDefaultValue(type), inputViewClass, toSetter(name))
                 .build()
         )
 }
+
+fun getDefaultValue(type: ClassName): String =
+    when (type.simpleName) {
+        "String" -> "\"\""
+        "Float" -> "0.0f"
+        "Int" -> "0"
+        "Boolean" -> "false"
+        else -> "null"
+    }
+
+fun toSetter(name: String): String =
+    "set${name[0].toUpperCase()}${name.drop(1)}"

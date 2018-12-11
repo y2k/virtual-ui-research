@@ -27,6 +27,7 @@ fun handleClass(clazz: Class<*>, filterParent: Class<*>) {
 fun printMethods(clazz: Class<*>) {
     clazz.methods
         .filter { it.name.matches(Regex("set[A-Z].+")) }
+        .filter { it.parameterCount == 1 }
         .forEach { println("\t${it.name}(${it.parameters.joinToString { it.type.simpleName }})") }
 }
 
