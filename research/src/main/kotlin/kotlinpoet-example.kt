@@ -1,44 +1,82 @@
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 fun main(args: Array<String>) {
-    val utils =
-        FileSpec
-            .builder("y2k.virtualui", "dsl")
-            .addType(
-                TypeSpec.classBuilder("TextView_")
-                    .addSuperinterface(ClassName.bestGuess("PropertyHolder"))
-                    .addProp("text", "String")
-                    .addProp("textSize", "Float")
-                    .addProperty(
-                        PropertySpec
-                            .builder(
-                                "props",
-                                ClassName.bestGuess("List<Property<out Any, TextView>>"),
-                                KModifier.OVERRIDE
-                            )
-                            .initializer(
-                                "listOf( %P )",
-                                listOf("text", "textSize").joinToString(transform = { it + "_" })
-                            )
-                            .build()
-                    )
-                    .addFunction(
-                        FunSpec.builder("createEmpty")
-                            .addModifiers(KModifier.OVERRIDE)
-                            .addCode("return TextView()")
-                            .build()
-                    )
-                    .build()
+    val components = listOf(
+        ComponentDesc(
+            ClassName.bestGuess("android.widget.TextView"),
+            listOf(
+                PropertyDescription("text", ClassName.bestGuess("String")),
+                PropertyDescription("textSize", ClassName.bestGuess("Float"))
             )
-            .build()
+        ),
+        ComponentDesc(
+            ClassName.bestGuess("android.widget.LinearLayout"),
+            listOf(
+                PropertyDescription("text", ClassName.bestGuess("String")),
+                PropertyDescription("textSize", ClassName.bestGuess("Float"))
+            )
+        )
+    )
 
-    println(utils)
+    val fileSpecBuild = FileSpec
+        .builder("y2k.virtualui", "dsl")
+
+    components.forEach {
+        fileSpecBuild.addType(createType(it.properties, it.viewType))
+    }
+
+    println(fileSpecBuild.build())
 }
 
-private fun TypeSpec.Builder.addProp(name: String, type: String): TypeSpec.Builder =
-    addProperty(
+class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>)
+class PropertyDescription(val name: String, val type: TypeName)
+
+private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName): TypeSpec {
+    val clazz = inputViewClass.simpleName
+    val className = ClassName.bestGuess("${clazz}_")
+
+    val viewBuilder = TypeSpec
+        .classBuilder(className)
+        .addSuperinterface(ClassName.bestGuess("PropertyHolder"))
+
+    properties.forEach {
+        viewBuilder.addProp(inputViewClass, it.name, it.type)
+    }
+
+    return viewBuilder
+        .addProperty(
+            PropertySpec
+                .builder(
+                    "props",
+                    ClassName.bestGuess("List<Property<out Any, $clazz>>"),
+                    KModifier.OVERRIDE
+                )
+                .initializer(
+                    "listOf(%N)",
+                    listOf("text", "textSize").joinToString(transform = { "_$it" })
+                )
+                .build()
+        )
+        .addFunction(
+            FunSpec.builder("createEmpty")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter("context", ClassName.bestGuess("android.content.Context"))
+                .addCode("return $clazz(context)")
+                .build()
+        )
+        .build()
+}
+
+private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, name: String, type: TypeName): TypeSpec.Builder {
+    val privateProp = "_$name"
+
+    /* private val text_: Property<String, TextView> = Property("", TextView::setText) */
+    val propertyType = ClassName.bestGuess("Property")
+
+    return addProperty(
         PropertySpec
-            .builder(name, String::class)
+            .builder(name, type)
             .mutable(true)
             .getter(
                 FunSpec.getterBuilder()
@@ -47,14 +85,20 @@ private fun TypeSpec.Builder.addProp(name: String, type: String): TypeSpec.Build
             )
             .setter(
                 FunSpec.setterBuilder()
-                    .addParameter("value", String::class)
-                    .addCode("${name}_.set(value)")
+                    .addParameter("value", type)
+                    .addCode("$privateProp.set(value)")
                     .build()
             )
             .build()
     )
         .addProperty(
             PropertySpec
-                .builder("${name}_", ClassName.bestGuess("Property<$type, TextView>"), KModifier.PRIVATE)
+                .builder(
+                    privateProp,
+                    propertyType.parameterizedBy(type, inputViewClass),
+                    KModifier.PRIVATE
+                )
+                .initializer("%T()", propertyType)
                 .build()
         )
+}

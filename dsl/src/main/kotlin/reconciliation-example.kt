@@ -1,10 +1,11 @@
+import android.content.Context
 import android.graphics.Color
 import common.*
 import java.lang.Math.max
 import java.util.*
 
 fun main(args: Array<String>) {
-    val container = LinearLayout()
+    val container = LinearLayout(null)
 
     val state1 = mkState1()
     println("=================================")
@@ -93,7 +94,7 @@ fun updateRealView(view: View, prev: PropertyHolder?, current: PropertyHolder) {
                 view.removeViewAt(i)
             } else {
                 if (p == null) {
-                    val v = c.createEmpty()
+                    val v = c.createEmpty(view.context)
                     view.addView(v)
                     updateRealView(v, p, c)
                 } else {
@@ -102,7 +103,7 @@ fun updateRealView(view: View, prev: PropertyHolder?, current: PropertyHolder) {
                         updateRealView(v, p, c)
                     } else {
                         view.removeViewAt(i)
-                        val v = c.createEmpty()
+                        val v = c.createEmpty(view.context)
                         view.addView(v, i)
                         updateRealView(v, p, c)
                     }
@@ -153,7 +154,7 @@ class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit)
 }
 
 interface PropertyHolder {
-    fun createEmpty(): View
+    fun createEmpty(context: Context?): View
 
     val props: List<Property<*, out View>>
 }
@@ -175,7 +176,7 @@ class LinearLayout__ : GroupHolder, PropertyHolder {
 
     override val children = ArrayList<PropertyHolder>()
 
-    override fun createEmpty(): View = LinearLayout()
+    override fun createEmpty(context: Context?): View = LinearLayout(context)
 }
 
 class TextView__ : PropertyHolder {
@@ -197,5 +198,5 @@ class TextView__ : PropertyHolder {
     override val props: List<Property<out Any, TextView>> =
         listOf(text_, textSize_, textColor_)
 
-    override fun createEmpty(): View = TextView()
+    override fun createEmpty(context: Context?): View = TextView(context)
 }

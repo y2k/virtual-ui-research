@@ -1,6 +1,10 @@
+@file:Suppress("PropertyName", "MemberVisibilityCanBePrivate")
+
 package common
 
-open class View {
+import android.content.Context
+
+open class View(val context: Context?) {
     var backgroundColor_: Int = 0
 
     fun setBackgroundColor(i: Int) {
@@ -9,7 +13,7 @@ open class View {
     }
 }
 
-open class ViewGroup : View() {
+open class ViewGroup(context: Context?) : View(context) {
 
     val children = ArrayList<View>()
 
@@ -31,11 +35,11 @@ open class ViewGroup : View() {
     }
 }
 
-class LinearLayout : ViewGroup() {
+class LinearLayout(context: Context?) : ViewGroup(context) {
     val `@class` = "LinearLayout"
 }
 
-class TextView : View() {
+class TextView(context: Context?) : View(context) {
 
     val `@class` = "TextView"
     var textColor_: Int = 0
