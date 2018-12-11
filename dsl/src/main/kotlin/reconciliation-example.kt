@@ -181,21 +181,21 @@ class LinearLayout__ : GroupHolder, PropertyHolder {
 class TextView__ : PropertyHolder {
 
     var text: String
-        get() = text__.value
-        set(value) = text__.set(value)
+        get() = throw IllegalStateException()
+        set(value) = text_.set(value)
     var textColor: Int
-        get() = textColor__.value
-        set(value) = textColor__.set(value)
+        get() = throw IllegalStateException()
+        set(value) = textColor_.set(value)
     var textSize: Float
-        get() = textSize__.value
-        set(value) = textSize__.set(value)
+        get() = throw IllegalStateException()
+        set(value) = textSize_.set(value)
 
-    private val text__: Property<String, TextView> = Property("", TextView::setText)
-    private val textSize__: Property<Float, TextView> = Property(0f, TextView::setTextSize)
-    private val textColor__: Property<Int, TextView> = Property(0, TextView::setTextColor)
+    private val text_: Property<String, TextView> = Property("", TextView::setText)
+    private val textSize_: Property<Float, TextView> = Property(0f, TextView::setTextSize)
+    private val textColor_: Property<Int, TextView> = Property(0, TextView::setTextColor)
 
     override val props: List<Property<out Any, TextView>> =
-        listOf(text__, textSize__, textColor__)
+        listOf(text_, textSize_, textColor_)
 
     override fun createEmpty(): View = TextView()
 }
