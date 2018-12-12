@@ -1,7 +1,10 @@
+import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.asTypeName
 import java.io.File
 import java.net.URLClassLoader
 import java.util.*
 import java.util.jar.JarFile
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
     val android = File(args[0])
@@ -13,22 +16,43 @@ fun main(args: Array<String>) {
 
     val filterParent = classes.first { it.name == "android.view.View" }
 
-    classes.forEach { handleClass(it, filterParent) }
+    classes
+        .forEach { handleClass(it, filterParent) }
 }
 
 fun handleClass(clazz: Class<*>, filterParent: Class<*>) {
     if (!filterParent.isAssignableFrom(clazz)) return
 
-    println(clazz.canonicalName + " : " + clazz.superclass.canonicalName)
+//    println(clazz.canonicalName + " : " + clazz.superclass.canonicalName)
 
     printMethods(clazz)
 }
 
 fun printMethods(clazz: Class<*>) {
-    clazz.methods
+    val props = clazz.methods
         .filter { it.name.matches(Regex("set[A-Z].+")) }
         .filter { it.parameterCount == 1 }
-        .forEach { println("\t${it.name}(${it.parameters.joinToString { it.type.simpleName }})") }
+
+    val c = ComponentDesc(
+        clazz.asClassName(),
+        props
+            .map {
+                PropertyDescription(
+                    it.name,
+                    it.parameters[0].type.asTypeName()
+                )
+            }
+    )
+
+    printComponents(listOf(c))
+
+    exitProcess(0)
+
+//    println(c)
+
+//    props.forEach {
+//        println("\t${it.name}(${it.parameters.joinToString { it.type.simpleName }})")
+//    }
 }
 
 private fun loadAndScanJar(jarFile: File, loader: ClassLoader): Map<String, List<Class<*>>> {

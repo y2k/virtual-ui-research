@@ -6,19 +6,23 @@ fun main(args: Array<String>) {
         ComponentDesc(
             ClassName.bestGuess("android.widget.TextView"),
             listOf(
-                PropertyDescription("text", ClassName.bestGuess("String")),
-                PropertyDescription("textSize", ClassName.bestGuess("Float"))
+                PropertyDescription("setText", String::class.asTypeName()),
+                PropertyDescription("setTextSize", Float::class.asTypeName())
             )
         ),
         ComponentDesc(
             ClassName.bestGuess("android.widget.LinearLayout"),
             listOf(
-                PropertyDescription("text", ClassName.bestGuess("String")),
-                PropertyDescription("textSize", ClassName.bestGuess("Float"))
+                PropertyDescription("setText", String::class.asTypeName()),
+                PropertyDescription("setTextSize", Float::class.asTypeName())
             )
         )
     )
 
+    printComponents(components)
+}
+
+fun printComponents(components: List<ComponentDesc>) {
     val fileSpecBuild = FileSpec
         .builder("y2k.virtualui", "dsl")
 
@@ -29,8 +33,8 @@ fun main(args: Array<String>) {
     println(fileSpecBuild.build())
 }
 
-class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>)
-class PropertyDescription(val name: String, val type: ClassName)
+data class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>)
+data class PropertyDescription(val methodName: String, val type: TypeName)
 
 private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName): TypeSpec {
     val clazz = inputViewClass.simpleName
@@ -41,7 +45,7 @@ private fun createType(properties: List<PropertyDescription>, inputViewClass: Cl
         .addSuperinterface(ClassName.bestGuess("PropertyHolder"))
 
     properties.forEach {
-        viewBuilder.addProp(inputViewClass, it.name, it.type)
+        viewBuilder.addProp(inputViewClass, it.methodName, it.type)
     }
 
     return viewBuilder
@@ -68,7 +72,8 @@ private fun createType(properties: List<PropertyDescription>, inputViewClass: Cl
         .build()
 }
 
-private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, name: String, type: ClassName): TypeSpec.Builder {
+private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, methodName: String, type: TypeName): TypeSpec.Builder {
+    val name = toPropertyName(methodName)
     val privateProp = "_$name"
     val propertyType = ClassName.bestGuess("Property")
 
@@ -96,19 +101,19 @@ private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, name: String, typ
                     propertyType.parameterizedBy(type, inputViewClass),
                     KModifier.PRIVATE
                 )
-                .initializer("%T(%L, %T::%L)", propertyType, getDefaultValue(type), inputViewClass, toSetter(name))
+                .initializer("%T(%L, %T::%L)", propertyType, getDefaultValue(type), inputViewClass, methodName)
                 .build()
         )
 }
 
-fun getDefaultValue(type: ClassName): String =
-    when (type.simpleName) {
-        "String" -> "\"\""
-        "Float" -> "0.0f"
-        "Int" -> "0"
-        "Boolean" -> "false"
+private fun toPropertyName(methodName: String): String =
+    methodName[3].toLowerCase() + methodName.substring(4)
+
+fun getDefaultValue(type: TypeName): String =
+    when (type) {
+        String::class.asTypeName() -> "\"\""
+        Float::class.asTypeName() -> "0.0f"
+        Int::class.asTypeName() -> "0"
+        Boolean::class.asTypeName() -> "false"
         else -> "null"
     }
-
-fun toSetter(name: String): String =
-    "set${name[0].toUpperCase()}${name.drop(1)}"
