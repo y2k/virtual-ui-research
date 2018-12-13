@@ -33,7 +33,7 @@ fun printComponents(components: List<ComponentDesc>) {
     println(fileSpecBuild.build())
 }
 
-data class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>)
+data class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>, val group: Boolean = false)
 data class PropertyDescription(val methodName: String, val type: TypeName)
 
 private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName): TypeSpec {
