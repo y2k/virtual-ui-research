@@ -1,7 +1,7 @@
 package common
 
 import com.google.gson.GsonBuilder
-import java.util.*
+import y2k.virtual.ui.globalViewStack
 
 fun printPretty(x: Any) {
     GsonBuilder()
@@ -10,35 +10,6 @@ fun printPretty(x: Any) {
         .toJson(x)
         .let(::println)
 }
-
-class LinearLayout_ {
-    val `@class` = "LinearLayout"
-    var backgroundColor: Int = 0
-    var orientation: Int = 0
-    var padding: FloatArray = floatArrayOf()
-    val children = ArrayList<Any>()
-}
-
-class Button_ {
-    val `@class` = "Button"
-    var backgroundDrawableRes: Int = 0
-    var text: String = ""
-    var textColor: Int = 0
-    var textSize: Float = 0f
-    var onPressed: () -> Unit = {}
-    var padding: FloatArray = floatArrayOf()
-}
-
-class TextView_ {
-    val `@class` = "TextView"
-    var backgroundDrawableRes: Int = 0
-    var text: String = ""
-    var textColor: Int = 0
-    var textSize: Float = 0f
-    var padding: FloatArray = floatArrayOf()
-}
-
-private val globalViewStack = Stack<LinearLayout_>()
 
 fun linearLayout(f: LinearLayout_.() -> Unit): LinearLayout_ {
     val l = LinearLayout_()

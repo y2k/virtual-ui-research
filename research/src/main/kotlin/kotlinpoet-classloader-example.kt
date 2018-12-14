@@ -1,6 +1,7 @@
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
 import java.io.File
+import java.lang.reflect.Modifier
 import java.net.URLClassLoader
 import java.util.*
 import java.util.jar.JarFile
@@ -15,24 +16,20 @@ fun main(args: Array<String>) {
     val classes = result["classes"]!!
 
     val filterParent = classes.first { it.name == "android.view.View" }
+    val groupClass = classes.first { it.name == "android.view.ViewGroup" }
 
     classes
-        .forEach { handleClass(it, filterParent) }
+        .filter { it.name == "android.widget.Button" }
+        .forEach { handleClass(it, filterParent, groupClass) }
 }
 
-private fun handleClass(clazz: Class<*>, filterParent: Class<*>) {
-    if (!filterParent.isAssignableFrom(clazz)) return
+private fun handleClass(clazz: Class<*>, viewClass: Class<*>, groupClass: Class<*>) {
+    if (!viewClass.isAssignableFrom(clazz)) return
 
-//    println(clazz.canonicalName + " : " + clazz.superclass.canonicalName)
-
-    printMethods(clazz)
-}
-
-private fun printMethods(clazz: Class<*>) {
     val props = clazz.methods
         .filter { it.name.matches(Regex("set[A-Z].+")) }
+        .filterNot { Modifier.isStatic(it.modifiers) && Modifier.isPublic(it.modifiers) }
         .filter { it.parameterCount == 1 }
-
     val c = ComponentDesc(
         clazz.asClassName(),
         props
@@ -41,18 +38,13 @@ private fun printMethods(clazz: Class<*>) {
                     it.name,
                     it.parameters[0].type.asTypeName()
                 )
-            }
+            },
+        groupClass.isAssignableFrom(clazz)
     )
 
     printComponents(listOf(c))
 
     exitProcess(0)
-
-//    println(c)
-
-//    props.forEach {
-//        println("\t${it.name}(${it.parameters.joinToString { it.type.simpleName }})")
-//    }
 }
 
 private fun loadAndScanJar(jarFile: File, loader: ClassLoader): Map<String, List<Class<*>>> {

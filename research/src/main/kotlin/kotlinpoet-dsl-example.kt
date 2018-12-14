@@ -1,5 +1,7 @@
 import com.squareup.kotlinpoet.*
 
+const val libraryPackage = "y2k.virtual.ui"
+
 fun main(args: Array<String>) {
     val components = listOf(
         ComponentDesc(
@@ -21,10 +23,10 @@ fun main(args: Array<String>) {
     )
 
     val fileSpecBuild = FileSpec
-        .builder("com.vui.dsl", "dsl.kt")
+        .builder(libraryPackage, "dsl.kt")
 
     components.forEach {
-        fileSpecBuild.addFunction(createType(it.viewType, it.group))
+        fileSpecBuild.addFunction(createTypeDsl_(it.viewType, it.group))
     }
 
     fileSpecBuild.build().let(::println)
@@ -46,7 +48,7 @@ fun button(f: Button_.() -> Unit) {
 }
 */
 
-private fun createType(inputViewClass: ClassName, group: Boolean): FunSpec {
+fun createTypeDsl_(inputViewClass: ClassName, group: Boolean): FunSpec {
     return FunSpec
         .builder(toDslFunName(inputViewClass))
         .addParameter(

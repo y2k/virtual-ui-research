@@ -36,15 +36,23 @@ open class ViewGroup(context: Context?) : View(context) {
 }
 
 class LinearLayout(context: Context?) : ViewGroup(context) {
+
     val `@class` = "LinearLayout"
+    var orientation_ = 0
+
+    fun setOrientation(i: Int) {
+        println("LOG: ${javaClass.simpleName}.setOrientation($i)")
+        orientation_ = i
+    }
 }
 
-class TextView(context: Context?) : View(context) {
+open class TextView(context: Context?) : View(context) {
 
     val `@class` = "TextView"
-    var textColor_: Int = 0
-    var text_: String = ""
+    var textColor_ = 0
+    var text_ = ""
     var textSize_ = 0f
+    var backgroundResource_ = 0
 
     fun setTextColor(color: Int) {
         println("LOG: ${javaClass.simpleName}.setTextColor($color)")
@@ -60,4 +68,11 @@ class TextView(context: Context?) : View(context) {
         println("LOG: ${javaClass.simpleName}.setTextSize($size)")
         textSize_ = size
     }
+
+    fun setBackgroundResource(i: Int) {
+        println("LOG: ${javaClass.simpleName}.setBackgroundResource($i)")
+        backgroundResource_ = i
+    }
 }
+
+class Button(context: Context?) : TextView(context)

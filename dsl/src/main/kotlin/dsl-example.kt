@@ -28,18 +28,15 @@ private fun view(counter: String, onUp: () -> Unit, onDown: () -> Unit) =
 
 private fun counterButton(title: String, e: () -> Unit) =
     button {
-        padding = floatArrayOf(4f)
-        backgroundDrawableRes = R.drawable.button_bg
+        backgroundResource = R.drawable.button_bg
         textColor = Color.BLUE
         textSize = 18f
         text = title
-        onPressed = e
     }
 
 private fun h1(title: String) =
     textView {
-        padding = floatArrayOf(4f)
-        backgroundDrawableRes = R.drawable.textview_bg
+        backgroundResource = R.drawable.textview_bg
         textColor = Color.GRAY
         textSize = 20f
         text = title

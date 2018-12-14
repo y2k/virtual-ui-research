@@ -1,21 +1,26 @@
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import java.io.File
 
 fun main(args: Array<String>) {
     val components = listOf(
         ComponentDesc(
             ClassName.bestGuess("android.widget.TextView"),
             listOf(
+                PropertyDescription("setFile", File::class.asTypeName()),
                 PropertyDescription("setText", String::class.asTypeName()),
                 PropertyDescription("setTextSize", Float::class.asTypeName())
-            )
+            ),
+            false
         ),
         ComponentDesc(
             ClassName.bestGuess("android.widget.LinearLayout"),
             listOf(
+                PropertyDescription("setFile", File::class.asTypeName()),
                 PropertyDescription("setText", String::class.asTypeName()),
                 PropertyDescription("setTextSize", Float::class.asTypeName())
-            )
+            ),
+            true
         )
     )
 
@@ -24,25 +29,31 @@ fun main(args: Array<String>) {
 
 fun printComponents(components: List<ComponentDesc>) {
     val fileSpecBuild = FileSpec
-        .builder("y2k.virtualui", "dsl")
+        .builder(libraryPackage, "dsl")
 
     components.forEach {
-        fileSpecBuild.addType(createType(it.properties, it.viewType))
+        fileSpecBuild.addFunction(createTypeDsl_(it.viewType, it.group))
+        fileSpecBuild.addType(createType(it.properties, it.viewType, it.group))
     }
 
     println(fileSpecBuild.build())
 }
 
-data class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>, val group: Boolean = false)
+data class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>, val group: Boolean)
 data class PropertyDescription(val methodName: String, val type: TypeName)
 
-private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName): TypeSpec {
+private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName, group: Boolean): TypeSpec {
     val clazz = inputViewClass.simpleName
     val className = ClassName.bestGuess("${clazz}_")
 
     val viewBuilder = TypeSpec
         .classBuilder(className)
         .addSuperinterface(ClassName.bestGuess("PropertyHolder"))
+
+    if (group) {
+        viewBuilder
+            .superclass(ClassName.bestGuess("ViewGroup_"))
+    }
 
     properties.forEach {
         viewBuilder.addProp(inputViewClass, it.methodName, it.type)
@@ -77,6 +88,7 @@ private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, methodName: Strin
     val privateProp = "_$name"
     val propertyType = ClassName.bestGuess("Property")
 
+    val defValue = getDefaultValue(type)
     return addProperty(
         PropertySpec
             .builder(name, type)
@@ -98,10 +110,10 @@ private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, methodName: Strin
             PropertySpec
                 .builder(
                     privateProp,
-                    propertyType.parameterizedBy(type, inputViewClass),
+                    propertyType.parameterizedBy(type.copy(defValue == null), inputViewClass),
                     KModifier.PRIVATE
                 )
-                .initializer("%T(%L, %T::%L)", propertyType, getDefaultValue(type), inputViewClass, methodName)
+                .initializer("%T(%L, %T::%L)", propertyType, defValue, inputViewClass, methodName)
                 .build()
         )
 }
@@ -109,11 +121,10 @@ private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, methodName: Strin
 private fun toPropertyName(methodName: String): String =
     methodName[3].toLowerCase() + methodName.substring(4)
 
-fun getDefaultValue(type: TypeName): String =
+fun getDefaultValue(type: TypeName): String? =
     when (type) {
-        String::class.asTypeName() -> "\"\""
         Float::class.asTypeName() -> "0.0f"
         Int::class.asTypeName() -> "0"
         Boolean::class.asTypeName() -> "false"
-        else -> "null"
+        else -> null
     }
