@@ -24,7 +24,7 @@ class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit)
 }
 
 interface PropertyHolder {
-    fun createEmpty(context: Context?): View
+    fun createEmpty(context: Context): View
 
     val props: List<Property<*, out View>>
 }
