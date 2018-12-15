@@ -69,7 +69,7 @@ private fun createType(properties: List<PropertyDescription>, inputViewClass: Cl
                 )
                 .initializer(
                     "listOf(%N)",
-                    listOf("text", "textSize").joinToString(transform = { "_$it" })
+                    properties.map { toPropertyName(it.methodName) }.joinToString(transform = { "_$it" })
                 )
                 .build()
         )

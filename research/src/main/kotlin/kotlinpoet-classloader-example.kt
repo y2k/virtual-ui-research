@@ -1,6 +1,7 @@
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
 import java.io.File
+import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.net.URLClassLoader
 import java.util.*
@@ -30,6 +31,7 @@ private fun handleClass(clazz: Class<*>, viewClass: Class<*>, groupClass: Class<
         .filter { it.name.matches(Regex("set[A-Z].+")) }
         .filterNot { Modifier.isStatic(it.modifiers) && Modifier.isPublic(it.modifiers) }
         .filter { it.parameterCount == 1 }
+        .filterNot { isDeprecated(it) }
     val c = ComponentDesc(
         clazz.asClassName(),
         props
@@ -46,6 +48,9 @@ private fun handleClass(clazz: Class<*>, viewClass: Class<*>, groupClass: Class<
 
     exitProcess(0)
 }
+
+fun isDeprecated(method: Method): Boolean =
+    method.isAnnotationPresent(Deprecated::class.java)
 
 private fun loadAndScanJar(jarFile: File, loader: ClassLoader): Map<String, List<Class<*>>> {
     val classes = HashMap<String, List<Class<*>>>()

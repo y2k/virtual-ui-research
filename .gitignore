@@ -2,5 +2,8 @@
 out
 .idea
 dsl/build
+android/build
 research/build
 examples
+local.properties
+*.iml

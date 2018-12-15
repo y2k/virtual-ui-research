@@ -1,6 +1,4 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.10'
-}
+plugins { id 'org.jetbrains.kotlin.jvm' }
 
 group 'y2k'
 version '0.1'
