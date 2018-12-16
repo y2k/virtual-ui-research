@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
                 PropertyDescription("setText", String::class.asTypeName()),
                 PropertyDescription("setTextSize", Float::class.asTypeName())
             ),
+            false,
             false
         ),
         ComponentDesc(
@@ -20,7 +21,8 @@ fun main(args: Array<String>) {
                 PropertyDescription("setText", String::class.asTypeName()),
                 PropertyDescription("setTextSize", Float::class.asTypeName())
             ),
-            true
+            true,
+            false
         )
     )
 

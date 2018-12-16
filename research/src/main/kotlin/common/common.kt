@@ -2,6 +2,7 @@ package common
 
 import java.io.File
 import java.lang.reflect.Method
+import java.lang.reflect.Modifier
 import java.net.URLClassLoader
 import java.util.jar.JarFile
 
@@ -23,6 +24,7 @@ fun loadAllClassesFromJar(jar: File, loader: URLClassLoader): List<Class<*>> =
                 else -> clazz
             }
         }
+        .filter { Modifier.isPublic(it.modifiers) }
         .toList()
 
 fun Method.isOverrided(): Boolean {
