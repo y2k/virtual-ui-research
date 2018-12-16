@@ -34,22 +34,6 @@ fun main(args: Array<String>) {
     fileSpecBuild.build().let(::println)
 }
 
-/*
-fun linearLayout(f: LinearLayout_.() -> Unit): LinearLayout_ {
-    val l = LinearLayout_()
-    globalViewStack.push(l)
-    l.f()
-    globalViewStack.pop()
-    return l
-}
-
-fun button(f: Button_.() -> Unit) {
-    val b = Button_()
-    b.f()
-    globalViewStack.peek().children.add(b)
-}
-*/
-
 fun createTypeDsl(inputViewClass: ClassName, group: Boolean): FunSpec {
     return FunSpec
         .builder(toDslFunName(inputViewClass))
@@ -67,7 +51,7 @@ fun createTypeDsl(inputViewClass: ClassName, group: Boolean): FunSpec {
                 %L
                 x.f()
                 %L
-                globalViewStack.peek()?.children?.add(x)
+                globalViewStack.lastOrNull()?.children?.add(x)
                 """.trimIndent(),
             inputViewClass.simpleName,
             if (group) "globalViewStack.push(x)" else "",

@@ -57,12 +57,12 @@ fun createType(comp: ComponentDesc): TypeSpec {
         .classBuilder(className)
         .addModifiers(KModifier.OPEN)
 
-    viewBuilder.addInitializerBlock(
-        CodeBlock.of(
-            "props += listOf(%N)",
-            comp.properties.map { toPropertyName(it.methodName) }.joinToString(transform = { "_$it" })
-        )
-    )
+//    viewBuilder.addInitializerBlock(
+//        CodeBlock.of(
+//            "props += listOf(%N)",
+//            comp.properties.map { toPropertyName(it.methodName) }.joinToString(transform = { "_$it" })
+//        )
+//    )
 
     if (comp.type.canonicalName == "android.view.View") {
         viewBuilder
@@ -113,7 +113,12 @@ private fun mkCompProps(inputViewClass: TypeName, methodName: String, methodType
         .setter(
             FunSpec.setterBuilder()
                 .addParameter("value", fixedType)
-                .addCode("$privateProp.set(value)")
+                .addCode(
+                    """
+                        $privateProp.set(value)
+                        props += $privateProp
+                        """.trimIndent()
+                )
                 .build()
         )
         .build()

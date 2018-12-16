@@ -3,19 +3,38 @@
 package y2k.virtual.ui
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import y2k.android.BuildConfig
 import java.util.*
+
+fun mkNode(f: () -> Unit): VirtualNode {
+    globalViewStack += object : VirtualNode() {
+        override fun createEmpty(context: Context): View = throw IllegalStateException()
+    }
+
+    f()
+
+    return globalViewStack.pop().children.first()
+}
 
 val globalViewStack = Stack<VirtualNode>()
 
 class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit) {
+
     fun update(view: TView) {
         f(view, value)
     }
 
     fun set(x: T) {
         value = x
+    }
+
+    override fun toString() = "${functionRegex.find("$f")!!.groupValues[1]}($value)"
+
+    companion object {
+        private val functionRegex = Regex("function ([^ ]+)")
     }
 }
 
@@ -52,6 +71,7 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
             } else {
                 if (p == null) {
                     val v = c.createEmpty(view.context)
+                    log { "Add view '${v.javaClass.simpleName}'" }
                     view.addView(v)
                     updateRealView(v, p, c)
                 } else {
@@ -71,7 +91,13 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun updateViewProp(root: View, c: Property<*, out View>) {
+fun updateViewProp(view: View, c: Property<*, out View>) {
+    log { "Update: ${view.javaClass.simpleName}.$c" }
+
     val a = c as Property<*, View>
-    a.update(root)
+    a.update(view)
+}
+
+private inline fun log(f: () -> String) {
+    if (BuildConfig.DEBUG) Log.i("VirtualUi", f())
 }
