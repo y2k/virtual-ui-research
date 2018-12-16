@@ -7,11 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import java.util.*
 
-val globalViewStack = Stack<ViewGroup_>()
-
-abstract class ViewGroup_ {
-    val children = ArrayList<PropertyHolder>()
-}
+val globalViewStack = Stack<VirtualNode>()
 
 class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit) {
     fun update(view: TView) {
@@ -23,13 +19,16 @@ class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit)
     }
 }
 
-interface PropertyHolder {
-    fun createEmpty(context: Context): View
+abstract class VirtualNode {
 
-    val props: List<Property<*, out View>>
+    val children = ArrayList<VirtualNode>()
+
+    val props = ArrayList<Property<*, out View>>()
+
+    abstract fun createEmpty(context: Context): View
 }
 
-fun updateRealView(view: View, prev: PropertyHolder?, current: PropertyHolder) {
+fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
     if (prev == null) {
         current.props.forEach { p -> updateViewProp(view, p) }
     } else {
@@ -42,10 +41,8 @@ fun updateRealView(view: View, prev: PropertyHolder?, current: PropertyHolder) {
             }
     }
 
-    if (current is ViewGroup_) {
-        view as ViewGroup
-
-        val prevChildren = (prev as? ViewGroup_)?.children ?: emptyList<PropertyHolder>()
+    if (view is ViewGroup) {
+        val prevChildren = prev?.children ?: emptyList<VirtualNode>()
         for (i in 0 until Math.max(current.children.size, prevChildren.size)) {
             val p = prevChildren.getOrNull(i)
             val c = current.children.getOrNull(i)

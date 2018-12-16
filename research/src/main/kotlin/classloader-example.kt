@@ -1,3 +1,4 @@
+import common.loadAllClassesFromJar
 import java.io.File
 import java.net.URLClassLoader
 
@@ -6,7 +7,7 @@ fun main(args: Array<String>) {
 
     val loader = URLClassLoader(arrayOf(android.toURL()), ClassLoader.getSystemClassLoader())
 
-    val classes = loadAndScanJar(android, loader)
+    val classes = loadAllClassesFromJar(android, loader)
 
     val filterParent = classes.first { it.name == "android.view.View" }
 

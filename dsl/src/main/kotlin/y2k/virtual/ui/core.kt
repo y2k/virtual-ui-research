@@ -7,9 +7,9 @@ import common.View
 import common.ViewGroup
 import java.util.*
 
-val globalViewStack = Stack<ViewGroup_>()
+val globalViewStack = Stack<ChildrenHolder>()
 
-abstract class ViewGroup_ {
+abstract class ChildrenHolder {
     val children = ArrayList<PropertyHolder>()
 }
 
@@ -42,10 +42,10 @@ fun updateRealView(view: View, prev: PropertyHolder?, current: PropertyHolder) {
             }
     }
 
-    if (current is ViewGroup_) {
+    if (current is ChildrenHolder) {
         view as ViewGroup
 
-        val prevChildren = (prev as? ViewGroup_)?.children ?: emptyList<PropertyHolder>()
+        val prevChildren = (prev as? ChildrenHolder)?.children ?: emptyList<PropertyHolder>()
         for (i in 0 until Math.max(current.children.size, prevChildren.size)) {
             val p = prevChildren.getOrNull(i)
             val c = current.children.getOrNull(i)

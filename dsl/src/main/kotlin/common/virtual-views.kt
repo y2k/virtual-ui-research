@@ -1,11 +1,11 @@
 package common
 
 import android.content.Context
+import y2k.virtual.ui.ChildrenHolder
 import y2k.virtual.ui.Property
 import y2k.virtual.ui.PropertyHolder
-import y2k.virtual.ui.ViewGroup_
 
-class LinearLayout_ : ViewGroup_(), PropertyHolder {
+class LinearLayout_ : ChildrenHolder(), PropertyHolder {
 
     var orientation: Int
         get() = throw IllegalStateException()

@@ -18,7 +18,14 @@ private fun visitClassFile(inputStream: InputStream) {
 
         private var skip = false
 
-        override fun visit(version: Int, access: Int, name: String, signature: String?, superName: String, interfaces: Array<String>) {
+        override fun visit(
+            version: Int,
+            access: Int,
+            name: String,
+            signature: String?,
+            superName: String,
+            interfaces: Array<String>
+        ) {
             super.visit(version, access, name, signature, superName, interfaces)
 
             skip = true
@@ -35,7 +42,13 @@ private fun visitClassFile(inputStream: InputStream) {
             )
         }
 
-        override fun visitMethod(access: Int, name: String, descriptor: String?, signature: String?, exceptions: Array<out String>?): MethodVisitor? {
+        override fun visitMethod(
+            access: Int,
+            name: String,
+            descriptor: String?,
+            signature: String?,
+            exceptions: Array<out String>?
+        ): MethodVisitor? {
             if (skip) return null
             if (!name.matches(Regex("set[A-Z].+"))) return null
 
@@ -49,7 +62,7 @@ private fun visitClassFile(inputStream: InputStream) {
     }, ClassReader.SKIP_DEBUG)
 }
 
-private fun loadAndScanJar(jarFile: File): Map<String, List<Class<*>>> {
+private fun loadAndScanJar(jarFile: File) {
     val classes = HashMap<String, List<Class<*>>>()
 
     val interfaces = ArrayList<Class<*>>()
@@ -74,6 +87,4 @@ private fun loadAndScanJar(jarFile: File): Map<String, List<Class<*>>> {
                 .use(::visitClassFile)
         }
     }
-
-    return classes
 }

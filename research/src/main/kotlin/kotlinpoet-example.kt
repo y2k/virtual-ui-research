@@ -6,6 +6,7 @@ fun main(args: Array<String>) {
     val components = listOf(
         ComponentDesc(
             ClassName.bestGuess("android.widget.TextView"),
+            ClassName.bestGuess("android.view.View"),
             listOf(
                 PropertyDescription("setFile", File::class.asTypeName()),
                 PropertyDescription("setText", String::class.asTypeName()),
@@ -15,6 +16,7 @@ fun main(args: Array<String>) {
         ),
         ComponentDesc(
             ClassName.bestGuess("android.widget.LinearLayout"),
+            ClassName.bestGuess("android.view.ViewGroup"),
             listOf(
                 PropertyDescription("setFile", File::class.asTypeName()),
                 PropertyDescription("setText", String::class.asTypeName()),
@@ -32,90 +34,103 @@ fun printComponents(components: List<ComponentDesc>) {
         .builder(libraryPackage, "dsl")
 
     components.forEach {
-        fileSpecBuild.addFunction(createTypeDsl_(it.viewType, it.group))
-        fileSpecBuild.addType(createType(it.properties, it.viewType, it.group))
+        fileSpecBuild.addFunction(createTypeDsl(it.type, it.group))
+        fileSpecBuild.addType(createType(it))
     }
 
     println(fileSpecBuild.build())
 }
 
-data class ComponentDesc(val viewType: ClassName, val properties: List<PropertyDescription>, val group: Boolean)
+data class ComponentDesc(
+    val type: ClassName,
+    val parentType: ClassName?,
+    val properties: List<PropertyDescription>,
+    val group: Boolean
+)
+
 data class PropertyDescription(val methodName: String, val type: TypeName)
 
-private fun createType(properties: List<PropertyDescription>, inputViewClass: ClassName, group: Boolean): TypeSpec {
-    val clazz = inputViewClass.simpleName
+fun createType(comp: ComponentDesc): TypeSpec {
+    val clazz = comp.type.simpleName
     val className = ClassName.bestGuess("${clazz}_")
-
     val viewBuilder = TypeSpec
         .classBuilder(className)
-        .addSuperinterface(ClassName.bestGuess("PropertyHolder"))
+        .addModifiers(KModifier.OPEN)
 
-    if (group) {
+    viewBuilder.addInitializerBlock(
+        CodeBlock.of(
+            "props += listOf(%N)",
+            comp.properties.map { toPropertyName(it.methodName) }.joinToString(transform = { "_$it" })
+        )
+    )
+
+    if (comp.type.canonicalName == "android.view.View") {
         viewBuilder
-            .superclass(ClassName.bestGuess("ViewGroup_"))
+            .superclass(ClassName.bestGuess("VirtualNode"))
+    } else if (comp.parentType != null && comp.parentType.canonicalName !in listOf("java.lang.Object")) {
+        val sc = comp.parentType.simpleName + "_"
+
+        viewBuilder
+            .superclass(ClassName.bestGuess(sc))
     }
 
-    properties.forEach {
-        viewBuilder.addProp(inputViewClass, it.methodName, it.type)
-    }
+    comp.properties
+        .map { mkCompProps(comp.type, it.methodName, it.type) }
+        .forEach { viewBuilder.addProperties(it) }
 
-    return viewBuilder
-        .addProperty(
-            PropertySpec
-                .builder(
-                    "props",
-                    ClassName.bestGuess("List<Property<out Any, $clazz>>"),
-                    KModifier.OVERRIDE
-                )
-                .initializer(
-                    "listOf(%N)",
-                    properties.map { toPropertyName(it.methodName) }.joinToString(transform = { "_$it" })
-                )
+    mkCreateEmpty(clazz)?.let { viewBuilder.addFunction(it) }
+
+    return viewBuilder.build()
+}
+
+private fun mkCreateEmpty(clazz: String): FunSpec? =
+    if (clazz == "ViewGroup") null
+    else FunSpec.builder("createEmpty")
+        .addModifiers(KModifier.OVERRIDE)
+        .addParameter("context", ClassName.bestGuess("android.content.Context"))
+        .addCode("return $clazz(context)")
+        .build()
+
+private fun mkCompProps(inputViewClass: TypeName, methodName: String, methodType: TypeName): List<PropertySpec> {
+    val name = toPropertyName(methodName)
+    val privateProp = "_$name"
+    val fixedType =
+        when (methodType) {
+            ClassName.bestGuess("java.lang.CharSequence") -> ClassName.bestGuess("CharSequence")
+            ClassName.bestGuess("java.lang.String") -> ClassName.bestGuess("String")
+            ClassName.bestGuess("java.lang.Object") -> ClassName.bestGuess("Any")
+            else -> methodType
+        }
+
+    val p1 = PropertySpec
+        .builder(name, fixedType)
+        .mutable(true)
+        .getter(
+            FunSpec.getterBuilder()
+                .addCode("throw IllegalStateException()")
                 .build()
         )
-        .addFunction(
-            FunSpec.builder("createEmpty")
-                .addModifiers(KModifier.OVERRIDE)
-                .addParameter("context", ClassName.bestGuess("android.content.Context"))
-                .addCode("return $clazz(context)")
+        .setter(
+            FunSpec.setterBuilder()
+                .addParameter("value", fixedType)
+                .addCode("$privateProp.set(value)")
                 .build()
         )
         .build()
-}
 
-private fun TypeSpec.Builder.addProp(inputViewClass: TypeName, methodName: String, type: TypeName): TypeSpec.Builder {
-    val name = toPropertyName(methodName)
-    val privateProp = "_$name"
     val propertyType = ClassName.bestGuess("Property")
+    val defValue = getDefaultValue(fixedType)
 
-    val defValue = getDefaultValue(type)
-    return addProperty(
-        PropertySpec
-            .builder(name, type)
-            .mutable(true)
-            .getter(
-                FunSpec.getterBuilder()
-                    .addCode("throw IllegalStateException()")
-                    .build()
-            )
-            .setter(
-                FunSpec.setterBuilder()
-                    .addParameter("value", type)
-                    .addCode("$privateProp.set(value)")
-                    .build()
-            )
-            .build()
-    )
-        .addProperty(
-            PropertySpec
-                .builder(
-                    privateProp,
-                    propertyType.parameterizedBy(type.copy(defValue == null), inputViewClass),
-                    KModifier.PRIVATE
-                )
-                .initializer("%T(%L, %T::%L)", propertyType, defValue, inputViewClass, methodName)
-                .build()
+    val p2 = PropertySpec
+        .builder(
+            privateProp,
+            propertyType.parameterizedBy(fixedType.copy(defValue == null), inputViewClass),
+            KModifier.PRIVATE
         )
+        .initializer("%T(%L, %T::%L)", propertyType, defValue, inputViewClass, methodName)
+        .build()
+
+    return listOf(p1, p2)
 }
 
 private fun toPropertyName(methodName: String): String =

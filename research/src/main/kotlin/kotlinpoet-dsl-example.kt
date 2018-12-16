@@ -6,6 +6,7 @@ fun main(args: Array<String>) {
     val components = listOf(
         ComponentDesc(
             ClassName.bestGuess("android.widget.TextView"),
+            ClassName.bestGuess("android.view.View"),
             listOf(
                 PropertyDescription("setText", String::class.asTypeName()),
                 PropertyDescription("setTextSize", Float::class.asTypeName())
@@ -14,6 +15,7 @@ fun main(args: Array<String>) {
         ),
         ComponentDesc(
             ClassName.bestGuess("android.widget.LinearLayout"),
+            ClassName.bestGuess("android.view.ViewGroup"),
             listOf(
                 PropertyDescription("setText", String::class.asTypeName()),
                 PropertyDescription("setTextSize", Float::class.asTypeName())
@@ -26,7 +28,7 @@ fun main(args: Array<String>) {
         .builder(libraryPackage, "dsl.kt")
 
     components.forEach {
-        fileSpecBuild.addFunction(createTypeDsl_(it.viewType, it.group))
+        fileSpecBuild.addFunction(createTypeDsl(it.type, it.group))
     }
 
     fileSpecBuild.build().let(::println)
@@ -48,7 +50,7 @@ fun button(f: Button_.() -> Unit) {
 }
 */
 
-fun createTypeDsl_(inputViewClass: ClassName, group: Boolean): FunSpec {
+fun createTypeDsl(inputViewClass: ClassName, group: Boolean): FunSpec {
     return FunSpec
         .builder(toDslFunName(inputViewClass))
         .addParameter(

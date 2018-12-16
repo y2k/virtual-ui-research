@@ -1,68 +1,74 @@
+import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
+import common.isOverrided
+import common.loadAllClassesFromJar
 import java.io.File
+import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.net.URLClassLoader
-import java.util.jar.JarFile
 
 fun main(args: Array<String>) {
     val android = File(args[0])
 
     val loader = URLClassLoader(arrayOf(android.toURI().toURL()), ClassLoader.getSystemClassLoader())
-    val classes = loadAndScanJar(android, loader)
+    val classes = loadAllClassesFromJar(android, loader)
 
-    val filterParent = classes.first { it.name == "android.view.View" }
+    val viewClass = classes.first { it.name == "android.view.View" }
     val groupClass = classes.first { it.name == "android.view.ViewGroup" }
 
+    val fileSpec = FileSpec.builder(libraryPackage, "dsl")
+
     classes
-        .filter { it.name in listOf("android.widget.TextView", "android.widget.Button", "android.widget.LinearLayout") }
-        .forEach { handleClass(it, filterParent, groupClass) }
-}
-
-private fun handleClass(clazz: Class<*>, viewClass: Class<*>, groupClass: Class<*>) {
-    if (!viewClass.isAssignableFrom(clazz)) return
-
-    val properties = clazz
-        .methods
         .filter {
-            it.name.matches(Regex("set[A-Z].+"))
-                    && it.parameterCount == 1
-                    && Modifier.isPublic(it.modifiers)
-                    && !Modifier.isStatic(it.modifiers)
-                    && !it.isAnnotationPresent(Deprecated::class.java)
-        }
-        .map {
-            PropertyDescription(
-                it.name,
-                it.parameters[0].type.asTypeName()
+            it.name in listOf(
+                "android.view.View",
+                "android.view.ViewGroup",
+                "android.widget.LinearLayout",
+                "android.widget.TextView"
             )
         }
+        .filter { viewClass.isAssignableFrom(it) }
+        .map { toComponent(it, groupClass) }
+        .forEach {
+            fileSpec.addFunction(createTypeDsl(it.type, it.group))
+            fileSpec.addType(createType(it))
+        }
 
-    val c = ComponentDesc(
+    println(fileSpec.build())
+}
+
+private fun toComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc =
+    ComponentDesc(
         clazz.asClassName(),
-        properties,
+        clazz.superclass.asClassName(),
+        clazz
+            .declaredMethods
+            .filter {
+                it.name.matches(Regex("set[A-Z].+"))
+                        && it.parameterCount == 1
+                        && Modifier.isPublic(it.modifiers)
+                        && !Modifier.isStatic(it.modifiers)
+                        && !it.isAnnotationPresent(Deprecated::class.java)
+                        && !it.isOverrided()
+                        && !isBlockedMethod(it)
+            }
+            .map {
+                PropertyDescription(
+                    it.name,
+                    it.parameters[0].type.asTypeName()
+                )
+            },
         groupClass.isAssignableFrom(clazz)
     )
 
-    printComponents(listOf(c))
+fun isBlockedMethod(method: Method): Boolean {
+    val name = method.name
+    val parameter = method.parameters[0].type.name
+    if (name == "setTextColor" && parameter == "android.content.res.ColorStateList") return true
+    if (name == "setHintTextColor" && parameter == "android.content.res.ColorStateList") return true
+    if (name == "setLinkTextColor" && parameter == "android.content.res.ColorStateList") return true
+    if (name == "setHint" && parameter == "int") return true
+    if (name == "setText" && parameter == "int") return true
+    return false
 }
-
-fun loadAndScanJar(jar: File, loader: URLClassLoader): List<Class<*>> =
-    JarFile(jar)
-        .entries()
-        .asSequence()
-        .filter { zipEntry -> zipEntry.name.endsWith(".class") }
-        .mapNotNull { zipEntry ->
-            val clazz = zipEntry.name
-                .replace(".class", "")
-                .replace("/", ".")
-                .let(loader::loadClass)
-
-            when {
-                clazz.isInterface -> null
-                clazz.isAnnotation -> null
-                clazz.isEnum -> null
-                else -> clazz
-            }
-        }
-        .toList()
