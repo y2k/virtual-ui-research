@@ -1,5 +1,5 @@
-
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
 import common.isOverrided
@@ -24,6 +24,8 @@ fun main(args: Array<String>) {
         .filter {
             it.name !in listOf(
                 "android.webkit.WebView",
+                "android.widget.AutoCompleteTextView",
+                "android.widget.MultiAutoCompleteTextView",
                 "android.widget.TimePicker",
                 "android.widget.AnalogClock",
                 "android.inputmethodservice.ExtractEditText",
@@ -34,7 +36,7 @@ fun main(args: Array<String>) {
         }
         .filter {
             viewClass.isAssignableFrom(it)
-                    && !it.isAnnotationPresent(java.lang.Deprecated::class.java)
+                && !it.isAnnotationPresent(java.lang.Deprecated::class.java)
         }
         .map { mkComponent(it, groupClass) }
         .forEach {
@@ -45,20 +47,28 @@ fun main(args: Array<String>) {
     println(fileSpec.build())
 }
 
-private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc =
-    ComponentDesc(
-        clazz.asClassName(),
+private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
+    val typeBound = clazz.typeParameters.firstOrNull()?.bounds?.firstOrNull()?.asTypeName()
+    val type =
+        if (typeBound != null) {
+            clazz.asClassName().parameterizedBy(typeBound)
+        } else {
+            clazz.asClassName()
+        }
+
+    return ComponentDesc(
+        type,
         clazz.superclass.asClassName(),
         clazz
             .declaredMethods
             .filter {
                 it.name.matches(Regex("set[A-Z].+"))
-                        && it.parameterCount == 1
-                        && Modifier.isPublic(it.modifiers)
-                        && !Modifier.isStatic(it.modifiers)
-                        && !it.isAnnotationPresent(java.lang.Deprecated::class.java)
-                        && !it.isOverrided()
-                        && !isBlockedMethod(it)
+                    && it.parameterCount == 1
+                    && Modifier.isPublic(it.modifiers)
+                    && !Modifier.isStatic(it.modifiers)
+                    && !it.isAnnotationPresent(java.lang.Deprecated::class.java)
+                    && !it.isOverrided()
+                    && !isBlockedMethod(it)
             }
             .map {
                 PropertyDescription(
@@ -67,8 +77,10 @@ private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc =
                 )
             },
         groupClass.isAssignableFrom(clazz),
-        Modifier.isAbstract(clazz.modifiers)
+        Modifier.isAbstract(clazz.modifiers),
+        typeBound
     )
+}
 
 fun isBlockedMethod(method: Method): Boolean {
     val name = method.name

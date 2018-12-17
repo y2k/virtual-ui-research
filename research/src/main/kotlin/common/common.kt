@@ -1,5 +1,8 @@
 package common
 
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.ParameterizedTypeName
+import com.squareup.kotlinpoet.TypeName
 import java.io.File
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
@@ -34,3 +37,17 @@ fun Method.isOverrided(): Boolean {
     }
     return isOverrided(this, declaringClass)
 }
+
+val TypeName.simpleName: String
+    get() = when (this) {
+        is ClassName -> simpleName
+        is ParameterizedTypeName -> rawType.simpleName
+        else -> throw IllegalStateException("$this")
+    }
+
+val TypeName.canonicalName: String
+    get() = when (this) {
+        is ClassName -> canonicalName
+        is ParameterizedTypeName -> rawType.canonicalName
+        else -> throw IllegalStateException("$this")
+    }

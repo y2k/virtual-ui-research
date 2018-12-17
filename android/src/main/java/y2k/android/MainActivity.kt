@@ -1,14 +1,13 @@
 package y2k.android
 
 import android.app.Activity
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Gravity
+import android.widget.ImageView
 import android.widget.LinearLayout
-import y2k.virtual.ui.linearLayout
-import y2k.virtual.ui.mkNode
-import y2k.virtual.ui.textView
-import y2k.virtual.ui.updateRealView
-import java.lang.Thread.sleep
+import y2k.virtual.ui.*
 
 class MainActivity : Activity() {
 
@@ -18,45 +17,79 @@ class MainActivity : Activity() {
         val root = LinearLayout(this)
         setContentView(root)
 
-        val s1 = stage1()
+        val s1 = stage0()
         updateRealView(root, null, s1)
-        sleep(500)
-        updateRealView(root, s1, stage2())
     }
 
-    private fun stage1() = mkNode {
+    private fun stage0() = mkNode {
         linearLayout {
-            orientation = LinearLayout.VERTICAL
+            backgroundColor = color4
             gravity = Gravity.CENTER_VERTICAL
-
-            textView {
-                textSize = 20f
-                text = "Line #1"
-            }
-            textView {
-                textSize = 20f
-                text = "Line #2"
-            }
-        }
-    }
-
-    private fun stage2() = mkNode {
-        linearLayout {
             orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_VERTICAL
 
             textView {
-                textSize = 20f
                 text = "Line #1"
-            }
-            textView {
+                textColor = color3
                 textSize = 20f
+            }
+
+            textView {
                 text = "Line #2"
+                textColor = color3
+                textSize = 16f
             }
+
             textView {
-                textSize = 20f
                 text = "Line #3"
+                textColor = color2
+                textSize = 12f
+            }
+
+            imageView {
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                imageDrawable = getDrawable(android.R.drawable.ic_menu_view)
+            }
+
+            textView {
+                textColor = color3
+                textSize = 16f
+            }
+
+            linearLayout {
+                button {
+                    background = getDrawableByAttr(android.R.attr.selectableItemBackground)
+                    text = "Line #4"
+                    textColor = color1
+                    textSize = 14f
+                }
+
+                frameLayout {
+                    button {
+                        background = getDrawableByAttr(android.R.attr.selectableItemBackground)
+                        text = "Line #5"
+                        textColor = color1
+                        textSize = 14f
+                    }
+
+                    progressBar {
+                        elevation = 10f
+                    }
+                }
             }
         }
     }
+
+    companion object {
+        const val color1 = 0xFF03a5f3.toInt()
+        const val color2 = 0xFF98A098.toInt()
+        const val color3 = 0xFFFFFFFF.toInt()
+        const val color4 = 0xFF233544.toInt()
+    }
+}
+
+private fun Context.getDrawableByAttr(selectableItemBackground: Int): Drawable {
+    val ta = obtainStyledAttributes(intArrayOf(selectableItemBackground))
+    val drawableFromTheme = ta.getDrawable(0)
+    ta.recycle()
+    return drawableFromTheme
 }

@@ -1,5 +1,7 @@
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import common.canonicalName
+import common.simpleName
 import java.io.File
 
 fun main(args: Array<String>) {
@@ -44,11 +46,12 @@ fun printComponents(components: List<ComponentDesc>) {
 }
 
 data class ComponentDesc(
-    val type: ClassName,
+    val type: TypeName,
     val parentType: ClassName?,
     val properties: List<PropertyDescription>,
     val group: Boolean,
-    val isAbstract: Boolean
+    val isAbstract: Boolean,
+    val typeBound: TypeName? = null
 )
 
 data class PropertyDescription(val methodName: String, val type: TypeName)
@@ -74,12 +77,13 @@ fun createType(comp: ComponentDesc): TypeSpec {
         .map { mkCompProps(comp.type, it.methodName, it.type) }
         .forEach { viewBuilder.addProperties(it) }
 
-    mkCreateEmpty(comp.type, comp.isAbstract)?.let { viewBuilder.addFunction(it) }
+    mkCreateEmpty(comp.type, comp.isAbstract)
+        ?.let(viewBuilder::addFunction)
 
     return viewBuilder.build()
 }
 
-private fun mkCreateEmpty(clazz: ClassName, isAbstract: Boolean): FunSpec? =
+private fun mkCreateEmpty(clazz: TypeName, isAbstract: Boolean): FunSpec? =
     if (isAbstract) null
     else FunSpec.builder("createEmpty")
         .addModifiers(KModifier.OVERRIDE)
@@ -128,18 +132,19 @@ private fun mkCompProps(inputViewClass: TypeName, methodName: String, methodType
     return listOf(p1, p2)
 }
 
-private fun fixPropertyType(methodType: TypeName): TypeName = when (methodType) {
-    ClassName.bestGuess("java.lang.CharSequence") -> ClassName.bestGuess("kotlin.CharSequence")
-    ClassName.bestGuess("java.lang.String") -> ClassName.bestGuess("kotlin.String")
-    ClassName.bestGuess("java.lang.Object") -> ClassName.bestGuess("kotlin.Any")
-    else -> {
-        if (methodType is ParameterizedTypeName)
-            methodType.rawType.parameterizedBy(
-                *methodType.typeArguments.map { fixPropertyType(it) }.toTypedArray()
-            )
-        else methodType
+private fun fixPropertyType(methodType: TypeName): TypeName =
+    when (methodType) {
+        ClassName.bestGuess("java.lang.CharSequence") -> ClassName.bestGuess("kotlin.CharSequence")
+        ClassName.bestGuess("java.lang.String") -> ClassName.bestGuess("kotlin.String")
+        ClassName.bestGuess("java.lang.Object") -> ClassName.bestGuess("kotlin.Any")
+        else -> {
+            if (methodType is ParameterizedTypeName)
+                methodType.rawType.parameterizedBy(
+                    *methodType.typeArguments.map { fixPropertyType(it) }.toTypedArray()
+                )
+            else methodType
+        }
     }
-}
 
 private fun toPropertyName(methodName: String): String =
     methodName[3].toLowerCase() + methodName.substring(4)

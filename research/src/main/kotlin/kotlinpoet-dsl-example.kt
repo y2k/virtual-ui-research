@@ -1,4 +1,5 @@
 import com.squareup.kotlinpoet.*
+import common.simpleName
 
 const val libraryPackage = "y2k.virtual.ui"
 
@@ -36,7 +37,7 @@ fun main(args: Array<String>) {
     fileSpecBuild.build().let(::println)
 }
 
-fun createTypeDsl(inputViewClass: ClassName, group: Boolean): FunSpec {
+fun createTypeDsl(inputViewClass: TypeName, group: Boolean): FunSpec {
     return FunSpec
         .builder(toDslFunName(inputViewClass))
         .addParameter(
@@ -62,7 +63,7 @@ fun createTypeDsl(inputViewClass: ClassName, group: Boolean): FunSpec {
         .build()
 }
 
-fun toDslFunName(inputViewClass: ClassName): String {
+fun toDslFunName(inputViewClass: TypeName): String {
     val x = inputViewClass.simpleName
     return x[0].toLowerCase() + x.substring(1)
 }
