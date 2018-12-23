@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
     defaultConfig {
@@ -32,4 +32,9 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    def support_libs_ver = "27.1.1"
+    implementation "com.android.support:support-v4:${support_libs_ver}"
+    implementation "com.android.support:appcompat-v7:${support_libs_ver}"
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-alpha2'
 }
