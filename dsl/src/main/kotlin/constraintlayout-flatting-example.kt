@@ -28,17 +28,39 @@ CL
 */
 
 fun main(args: Array<String>) {
-    val cl = FakeConstraintLayout()
-    test(mkExample(), cl, FakeConstraintLayoutF)
+    val example = VBox(
+        TTextView().apply {
+            text = "Login page"
+        },
+        TTextView().apply {
+            text = "User name"
+        },
+        PaddingBox(
+            8,
+            HBox(
+                TButton().apply {
+                    text = "OK"
+                },
+                TButton().apply {
+                    text = "Cancel"
+                },
+                TButton().apply {
+                    text = "Help"
+                }
+            )
+        )
+    )
 
+    val cl = FakeConstraintLayout()
+    test(example, cl, FakeConstraintLayoutF)
     printPretty(cl)
 }
 
 private var globalId = 1
 private val decoratorStack = Stack<Group>()
-private val prevViewsInGroup = Stack<TView>()
+private val prevViewsInGroup = Stack<Any>()
 
-private fun <Child, T, P> test(child: Child, constrainLayout: T, F: ConstraintLayoutF<T, P>) {
+private fun <T, P, V> test(child: Any, constrainLayout: T, F: ConstraintLayoutF<T, P, V>) {
     when (child) {
         is VBox -> {
             decoratorStack.push(child)
@@ -68,17 +90,25 @@ private fun <Child, T, P> test(child: Child, constrainLayout: T, F: ConstraintLa
             prevViewsInGroup.clear()
             decoratorStack.push(child)
             prevViewsInGroup.clear()
+
+            test(child.child, constrainLayout, F)
+
+            decoratorStack.pop()
         }
-        is TView -> {
-            F.setId(child, globalId++)
-            F.addView(constrainLayout, child, makeParams(F))
-            prevViewsInGroup.add(child)
+        else -> when {
+            F.isView(child) -> {
+                @Suppress("UNCHECKED_CAST")
+                F.setId(child as V, globalId++)
+                F.addView(constrainLayout, child, makeParams(F))
+                prevViewsInGroup.add(child)
+            }
+            else ->
+                error(child.toString())
         }
-        else -> error(child.toString())
     }
 }
 
-fun <T, P> makeParams(F: ConstraintLayoutF<T, P>): P {
+fun <T, P, V> makeParams(F: ConstraintLayoutF<T, P, V>): P {
     val totalPadding = Padding(0, 0, 0, 0)
 
     val lp = F.mkLayoutParams()
@@ -92,17 +122,17 @@ fun <T, P> makeParams(F: ConstraintLayoutF<T, P>): P {
                 totalPadding.b += g.padding
             }
             is VBox -> {
-                val prevView = getPrevView()
+                val prevView = getPrevView<V>()
                 F.bindTopToBottom(lp, prevView)
                 F.bindStartToStart(lp, prevView)
             }
             is HBox -> {
-                val prevView = getPrevView()
+                val prevView = getPrevView<V>()
                 F.bindTopToTop(lp, prevView)
                 F.bindStartToEnd(lp, prevView)
             }
             is Box -> {
-                val prevView = getPrevView()
+                val prevView = getPrevView<V>()
                 F.bindTopToTop(lp, prevView)
                 F.bindStartToStart(lp, prevView)
             }
@@ -115,26 +145,9 @@ fun <T, P> makeParams(F: ConstraintLayoutF<T, P>): P {
     return lp
 }
 
-fun getPrevView(): TView? =
-    prevViewsInGroup.lastOrNull()
-
-private fun mkExample(): Group =
-    VBox(
-        TTextView().apply {
-            text = "Login page"
-        },
-        PaddingBox(
-            8,
-            HBox(
-                TButton().apply {
-                    text = "OK"
-                },
-                TButton().apply {
-                    text = "Cancel"
-                }
-            )
-        )
-    )
+@Suppress("UNCHECKED_CAST")
+fun <TView> getPrevView(): TView? =
+    prevViewsInGroup.lastOrNull() as TView?
 
 open class TView {
     var id: Int = 0
@@ -158,22 +171,26 @@ class Box(vararg val children: Child) : Group()
 
 class PaddingBox(val padding: Int, val child: Child) : Group()
 
-interface ConstraintLayoutF<T, P> {
-    fun addView(constrainLayout: T, child: Any, params: P)
+interface ConstraintLayoutF<T, P, V> {
+    fun isView(obj: Any): Boolean
+    fun addView(constrainLayout: T, child: V, params: P)
     fun mkLayoutParams(): P
     fun setMargin(lp: P, s: Int, t: Int, e: Int, b: Int)
-    fun setId(child: TView, id: Int)
-    fun bindTopToBottom(lp: P, prevView: TView?)
-    fun bindStartToStart(lp: P, prevView: TView?)
-    fun bindTopToTop(lp: P, prevView: TView?)
-    fun bindStartToEnd(lp: P, prevView: TView?)
+    fun setId(child: V, id: Int)
+    fun bindTopToBottom(lp: P, prevView: V?)
+    fun bindStartToStart(lp: P, prevView: V?)
+    fun bindTopToTop(lp: P, prevView: V?)
+    fun bindStartToEnd(lp: P, prevView: V?)
 }
 
 private class Padding(var l: Int, var t: Int, var r: Int, var b: Int)
 
-object FakeConstraintLayoutF : ConstraintLayoutF<FakeConstraintLayout, FakeConstraintLayoutParams> {
+object FakeConstraintLayoutF : ConstraintLayoutF<FakeConstraintLayout, FakeConstraintLayoutParams, TView> {
 
-    override fun addView(constrainLayout: FakeConstraintLayout, child: Any, params: FakeConstraintLayoutParams) {
+    override fun isView(obj: Any): Boolean =
+        obj is TView
+
+    override fun addView(constrainLayout: FakeConstraintLayout, child: TView, params: FakeConstraintLayoutParams) {
         constrainLayout.children += child to params
     }
 
@@ -181,10 +198,10 @@ object FakeConstraintLayoutF : ConstraintLayoutF<FakeConstraintLayout, FakeConst
         FakeConstraintLayoutParams()
 
     override fun setMargin(lp: FakeConstraintLayoutParams, s: Int, t: Int, e: Int, b: Int) {
-        lp.startMargin = s
-        lp.topMargin = t
-        lp.endMargin = e
-        lp.bottomMargin = b
+        lp.margin[0] = s
+        lp.margin[1] = t
+        lp.margin[2] = e
+        lp.margin[3] = b
     }
 
     override fun setId(child: TView, id: Int) {
@@ -218,8 +235,5 @@ class FakeConstraintLayout {
 
 class FakeConstraintLayoutParams {
     val constraints = ArrayList<String>()
-    var startMargin: Int = 0
-    var topMargin: Int = 0
-    var endMargin: Int = 0
-    var bottomMargin: Int = 0
+    val margin = intArrayOf(0, 0, 0, 0)
 }
