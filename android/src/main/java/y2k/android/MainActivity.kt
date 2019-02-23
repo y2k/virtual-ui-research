@@ -4,10 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.ImageView
 import android.widget.LinearLayout
-import y2k.virtual.ui.*
+import y2k.virtual.ui.mkNode
+import y2k.virtual.ui.updateRealView
 
 class MainActivity : Activity() {
 
@@ -22,61 +21,61 @@ class MainActivity : Activity() {
     }
 
     private fun stage0() = mkNode {
-        linearLayout {
-            backgroundColor = color4
-            gravity = Gravity.CENTER_VERTICAL
-            orientation = LinearLayout.VERTICAL
-
-            textView {
-                text = "Line #1"
-                textColor = color3
-                textSize = 20f
-            }
-
-            textView {
-                text = "Line #2"
-                textColor = color3
-                textSize = 16f
-            }
-
-            textView {
-                text = "Line #3"
-                textColor = color2
-                textSize = 12f
-            }
-
-            imageView {
-                scaleType = ImageView.ScaleType.FIT_CENTER
-                imageDrawable = getDrawable(android.R.drawable.ic_menu_view)
-            }
-
-            textView {
-                textColor = color3
-                textSize = 16f
-            }
-
-            linearLayout {
-                button {
-                    background = getDrawableByAttr(android.R.attr.selectableItemBackground)
-                    text = "Line #4"
-                    textColor = color1
-                    textSize = 14f
-                }
-
-                frameLayout {
-                    button {
-                        background = getDrawableByAttr(android.R.attr.selectableItemBackground)
-                        text = "Line #5"
-                        textColor = color1
-                        textSize = 14f
-                    }
-
-                    progressBar {
-                        elevation = 10f
-                    }
-                }
-            }
-        }
+//        linearLayout {
+//            backgroundColor = color4
+//            gravity = Gravity.CENTER_VERTICAL
+//            orientation = LinearLayout.VERTICAL
+//
+//            textView {
+//                text = "Line #1"
+//                textColor = color3
+//                textSize = 20f
+//            }
+//
+//            textView {
+//                text = "Line #2"
+//                textColor = color3
+//                textSize = 16f
+//            }
+//
+//            textView {
+//                text = "Line #3"
+//                textColor = color2
+//                textSize = 12f
+//            }
+//
+//            imageView {
+//                scaleType = ImageView.ScaleType.FIT_CENTER
+//                imageDrawable = getDrawable(android.R.drawable.ic_menu_view)
+//            }
+//
+//            textView {
+//                textColor = color3
+//                textSize = 16f
+//            }
+//
+//            linearLayout {
+//                button {
+//                    background = getDrawableByAttr(android.R.attr.selectableItemBackground)
+//                    text = "Line #4"
+//                    textColor = color1
+//                    textSize = 14f
+//                }
+//
+//                frameLayout {
+//                    button {
+//                        background = getDrawableByAttr(android.R.attr.selectableItemBackground)
+//                        text = "Line #5"
+//                        textColor = color1
+//                        textSize = 14f
+//                    }
+//
+//                    progressBar {
+//                        elevation = 10f
+//                    }
+//                }
+//            }
+//        }
     }
 
     companion object {
