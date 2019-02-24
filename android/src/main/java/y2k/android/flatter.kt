@@ -17,7 +17,7 @@ private fun fillFromLinearLayout(
     target: ConstraintLayout,
     parentPrev: View?,
     parentOrientation: Int
-): Pair<View, Barrier> {
+): Pair<View, View> {
     val prevIds = mutableListOf<View>()
     val prevBarriers = mutableListOf<View>()
 
@@ -36,7 +36,6 @@ private fun fillFromLinearLayout(
                         ConstraintLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                             leftMargin = ll.paddingLeft
                             topMargin = ll.paddingTop
-
                             if (parentPrev != null)
                                 when (parentOrientation) {
                                     LinearLayout.HORIZONTAL -> {
@@ -82,9 +81,32 @@ private fun fillFromLinearLayout(
     barrier.id = idFactory.incrementAndGet()
     barrier.referencedIds = prevIds.map { it.id }.toIntArray()
     barrier.type = when (parentOrientation) {
-        LinearLayout.VERTICAL -> Barrier.BOTTOM
-        else -> Barrier.END
+        LinearLayout.HORIZONTAL -> Barrier.END
+        else -> Barrier.BOTTOM
     }
     target.addView(barrier)
-    return ll.children().last().clone() to barrier
+    if (ll.paddingBottom == 0 && ll.paddingRight == 0)
+        return ll.children().last().clone() to barrier
+
+    val stub = View(target.context)
+    stub.id = idFactory.incrementAndGet()
+    target.addView(
+        stub,
+        ConstraintLayout.LayoutParams(0, 0).apply {
+            leftMargin = ll.paddingRight
+            topMargin = ll.paddingBottom
+            when (parentOrientation) {
+                LinearLayout.HORIZONTAL -> {
+                    topToBottom = prevIds.last().id
+                    startToEnd = barrier.id
+                }
+                else -> {
+                    topToBottom = barrier.id
+                    startToEnd = prevIds.last().id
+                }
+            }
+        }
+    )
+
+    return stub to stub
 }
