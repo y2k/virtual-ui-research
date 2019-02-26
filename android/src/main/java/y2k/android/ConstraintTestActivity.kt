@@ -12,24 +12,27 @@ class ConstraintTestActivity : Activity() {
         setContentView(R.layout.test_constraint)
         idFactory.set(0)
 
+        val padding = 30
         val root = findViewById<FrameLayout>(R.id.frame_layout)
             .linearLayout(LinearLayout.VERTICAL) {
+                setPadding(padding, padding, padding, padding)
                 setBackgroundColor(0x40FF0000)
 
                 button("Button #1.1") {
                     minWidth = 500
                 }
                 linearLayout(LinearLayout.HORIZONTAL) {
+                    setPadding(padding, padding, padding, padding)
                     setBackgroundColor(0x4000FF00)
 
                     button("Button #2.1")
                     linearLayout(LinearLayout.VERTICAL) {
-                        setPadding(30, 30, 30, 30)
+                        setPadding(padding, padding, padding, padding)
                         setBackgroundColor(0x400000FF)
 
                         button("Button #3.1")
                         button("Button #3.2") {
-                            minWidth = 400
+                            minWidth = 450
                         }
                         button("Button #3.3")
                     }
