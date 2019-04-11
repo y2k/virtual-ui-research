@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="y2k.android">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="y2k.android">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
+
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
         <activity
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".ConstraintTestActivity"
+            android:name=".flat.ConstraintTestActivity"
             android:exported="true" />
+
+        <activity
+            android:name="y2k.virtual.ui.DslExampleActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

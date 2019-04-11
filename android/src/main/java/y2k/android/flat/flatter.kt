@@ -1,4 +1,4 @@
-package y2k.android
+package y2k.android.flat
 
 import android.support.constraint.Barrier
 import android.support.constraint.ConstraintLayout

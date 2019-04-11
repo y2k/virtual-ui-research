@@ -1,9 +1,10 @@
-package y2k.android
+package y2k.android.flat
 
 import android.app.Activity
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import y2k.android.R
 
 class ConstraintTestActivity : Activity() {
 
