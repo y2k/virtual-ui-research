@@ -1,3 +1,5 @@
+@file:Suppress("ClassName", "unused", "DEPRECATION")
+
 package y2k.virtual.ui
 
 import android.animation.LayoutTransition
@@ -10,22 +12,107 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.gesture.Gesture
 import android.gesture.GestureOverlayView
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.Rect
+import android.graphics.SurfaceTexture
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.media.tv.TvView
 import android.net.Uri
-import android.text.*
+import android.text.Editable
+import android.text.InputFilter
+import android.text.Spannable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.text.method.KeyListener
 import android.text.method.MovementMethod
 import android.text.method.TransformationMethod
-import android.view.*
+import android.view.ActionMode
+import android.view.LayoutInflater
+import android.view.SurfaceView
+import android.view.TextureView
+import android.view.TouchDelegate
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewOutlineProvider
+import android.view.ViewStub
 import android.view.animation.Animation
 import android.view.animation.Interpolator
 import android.view.animation.LayoutAnimationController
 import android.view.inputmethod.ExtractedText
-import android.widget.*
-import java.util.*
+import android.widget.AbsListView
+import android.widget.AbsSeekBar
+import android.widget.ActionMenuView
+import android.widget.Adapter
+import android.widget.AdapterView
+import android.widget.AdapterViewAnimator
+import android.widget.AdapterViewFlipper
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.CheckBox
+import android.widget.CheckedTextView
+import android.widget.Chronometer
+import android.widget.CompoundButton
+import android.widget.CursorAdapter
+import android.widget.DatePicker
+import android.widget.DialerFilter
+import android.widget.EditText
+import android.widget.ExpandableListView
+import android.widget.FrameLayout
+import android.widget.GridLayout
+import android.widget.GridView
+import android.widget.HorizontalScrollView
+import android.widget.ImageButton
+import android.widget.ImageSwitcher
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.MediaController
+import android.widget.NumberPicker
+import android.widget.ProgressBar
+import android.widget.QuickContactBadge
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.RatingBar
+import android.widget.RelativeLayout
+import android.widget.ScrollView
+import android.widget.Scroller
+import android.widget.SearchView
+import android.widget.SeekBar
+import android.widget.Space
+import android.widget.Spinner
+import android.widget.StackView
+import android.widget.Switch
+import android.widget.TabHost
+import android.widget.TabWidget
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextClock
+import android.widget.TextSwitcher
+import android.widget.TextView
+import android.widget.ToggleButton
+import android.widget.Toolbar
+import android.widget.VideoView
+import android.widget.ViewAnimator
+import android.widget.ViewFlipper
+import android.widget.ViewSwitcher
+import android.widget.ZoomButton
+import android.widget.ZoomControls
+import java.util.Locale
+import kotlin.Any
+import kotlin.Array
+import kotlin.Boolean
+import kotlin.CharSequence
+import kotlin.Deprecated
+import kotlin.Float
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Unit
 
 fun relativeLayout(f: RelativeLayout_.() -> Unit) {
     val x = RelativeLayout_()
@@ -37,6 +124,7 @@ fun relativeLayout(f: RelativeLayout_.() -> Unit) {
 
 open class RelativeLayout_ : ViewGroup_() {
     var ignoreGravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -46,10 +134,11 @@ open class RelativeLayout_ : ViewGroup_() {
         }
 
     private val _ignoreGravity: Property<Int, RelativeLayout> = Property(
-        0,
+        "ignoreGravity", 0,
         RelativeLayout::setIgnoreGravity)
 
     var gravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -58,9 +147,12 @@ open class RelativeLayout_ : ViewGroup_() {
             props += _gravity
         }
 
-    private val _gravity: Property<Int, RelativeLayout> = Property(0, RelativeLayout::setGravity)
+    private val _gravity: Property<Int, RelativeLayout> = Property(
+        "gravity", 0,
+        RelativeLayout::setGravity)
 
     var horizontalGravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -70,10 +162,11 @@ open class RelativeLayout_ : ViewGroup_() {
         }
 
     private val _horizontalGravity: Property<Int, RelativeLayout> = Property(
-        0,
+        "horizontalGravity", 0,
         RelativeLayout::setHorizontalGravity)
 
     var verticalGravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -83,7 +176,7 @@ open class RelativeLayout_ : ViewGroup_() {
         }
 
     private val _verticalGravity: Property<Int, RelativeLayout> = Property(
-        0,
+        "verticalGravity", 0,
         RelativeLayout::setVerticalGravity)
 
     override fun createEmpty(context: Context) = RelativeLayout(context)
@@ -111,6 +204,7 @@ fun listView(f: ListView_.() -> Unit) {
 
 open class ListView_ : AbsListView_() {
     var itemsCanFocus: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -120,10 +214,11 @@ open class ListView_ : AbsListView_() {
         }
 
     private val _itemsCanFocus: Property<Boolean, ListView> = Property(
-        false,
+        "itemsCanFocus", false,
         ListView::setItemsCanFocus)
 
     var divider: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -132,9 +227,12 @@ open class ListView_ : AbsListView_() {
             props += _divider
         }
 
-    private val _divider: Property<Drawable?, ListView> = Property(null, ListView::setDivider)
+    private val _divider: Property<Drawable?, ListView> = Property(
+        "divider", null,
+        ListView::setDivider)
 
     var dividerHeight: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -143,9 +241,12 @@ open class ListView_ : AbsListView_() {
             props += _dividerHeight
         }
 
-    private val _dividerHeight: Property<Int, ListView> = Property(0, ListView::setDividerHeight)
+    private val _dividerHeight: Property<Int, ListView> = Property(
+        "dividerHeight", 0,
+        ListView::setDividerHeight)
 
     var headerDividersEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -154,11 +255,11 @@ open class ListView_ : AbsListView_() {
             props += _headerDividersEnabled
         }
 
-    private val _headerDividersEnabled: Property<Boolean, ListView> = Property(
-        false,
-        ListView::setHeaderDividersEnabled)
+    private val _headerDividersEnabled: Property<Boolean, ListView> =
+        Property("headerDividersEnabled", false, ListView::setHeaderDividersEnabled)
 
     var footerDividersEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -167,11 +268,11 @@ open class ListView_ : AbsListView_() {
             props += _footerDividersEnabled
         }
 
-    private val _footerDividersEnabled: Property<Boolean, ListView> = Property(
-        false,
-        ListView::setFooterDividersEnabled)
+    private val _footerDividersEnabled: Property<Boolean, ListView> =
+        Property("footerDividersEnabled", false, ListView::setFooterDividersEnabled)
 
     var overscrollHeader: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -181,10 +282,11 @@ open class ListView_ : AbsListView_() {
         }
 
     private val _overscrollHeader: Property<Drawable?, ListView> = Property(
-        null,
-        ListView::setOverscrollHeader)
+        "overscrollHeader",
+        null, ListView::setOverscrollHeader)
 
     var overscrollFooter: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -194,8 +296,8 @@ open class ListView_ : AbsListView_() {
         }
 
     private val _overscrollFooter: Property<Drawable?, ListView> = Property(
-        null,
-        ListView::setOverscrollFooter)
+        "overscrollFooter",
+        null, ListView::setOverscrollFooter)
 
     override fun createEmpty(context: Context) = ListView(context)
 }
@@ -210,6 +312,7 @@ fun videoView(f: VideoView_.() -> Unit) {
 
 open class VideoView_ : SurfaceView_() {
     var mediaController: MediaController
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -218,37 +321,11 @@ open class VideoView_ : SurfaceView_() {
             props += _mediaController
         }
 
-    private val _mediaController: Property<MediaController?, VideoView> = Property(
-        null,
-        VideoView::setMediaController)
-
-    var onInfoListener: MediaPlayer.OnInfoListener
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _onInfoListener.set(value)
-            props += _onInfoListener
-        }
-
-    private val _onInfoListener: Property<MediaPlayer.OnInfoListener?, VideoView> = Property(
-        null,
-        VideoView::setOnInfoListener)
-
-    var onErrorListener: MediaPlayer.OnErrorListener
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _onErrorListener.set(value)
-            props += _onErrorListener
-        }
-
-    private val _onErrorListener: Property<MediaPlayer.OnErrorListener?, VideoView> = Property(
-        null,
-        VideoView::setOnErrorListener)
+    private val _mediaController: Property<MediaController?, VideoView> =
+        Property("mediaController", null, VideoView::setMediaController)
 
     var videoPath: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -257,9 +334,12 @@ open class VideoView_ : SurfaceView_() {
             props += _videoPath
         }
 
-    private val _videoPath: Property<String?, VideoView> = Property(null, VideoView::setVideoPath)
+    private val _videoPath: Property<String?, VideoView> = Property(
+        "videoPath", null,
+        VideoView::setVideoPath)
 
     var videoURI: Uri
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -268,9 +348,12 @@ open class VideoView_ : SurfaceView_() {
             props += _videoURI
         }
 
-    private val _videoURI: Property<Uri?, VideoView> = Property(null, VideoView::setVideoURI)
+    private val _videoURI: Property<Uri?, VideoView> = Property(
+        "videoURI", null,
+        VideoView::setVideoURI)
 
     var onPreparedListener: MediaPlayer.OnPreparedListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -280,9 +363,10 @@ open class VideoView_ : SurfaceView_() {
         }
 
     private val _onPreparedListener: Property<MediaPlayer.OnPreparedListener?, VideoView> =
-        Property(null, VideoView::setOnPreparedListener)
+        Property("onPreparedListener", null, VideoView::setOnPreparedListener)
 
     var onCompletionListener: MediaPlayer.OnCompletionListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -292,7 +376,33 @@ open class VideoView_ : SurfaceView_() {
         }
 
     private val _onCompletionListener: Property<MediaPlayer.OnCompletionListener?, VideoView> =
-        Property(null, VideoView::setOnCompletionListener)
+        Property("onCompletionListener", null, VideoView::setOnCompletionListener)
+
+    var onInfoListener: MediaPlayer.OnInfoListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _onInfoListener.set(value)
+            props += _onInfoListener
+        }
+
+    private val _onInfoListener: Property<MediaPlayer.OnInfoListener?, VideoView> =
+        Property("onInfoListener", null, VideoView::setOnInfoListener)
+
+    var onErrorListener: MediaPlayer.OnErrorListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _onErrorListener.set(value)
+            props += _onErrorListener
+        }
+
+    private val _onErrorListener: Property<MediaPlayer.OnErrorListener?, VideoView> =
+        Property("onErrorListener", null, VideoView::setOnErrorListener)
 
     override fun createEmpty(context: Context) = VideoView(context)
 }
@@ -307,6 +417,7 @@ fun numberPicker(f: NumberPicker_.() -> Unit) {
 
 open class NumberPicker_ : LinearLayout_() {
     var value: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -315,9 +426,10 @@ open class NumberPicker_ : LinearLayout_() {
             props += _value
         }
 
-    private val _value: Property<Int, NumberPicker> = Property(0, NumberPicker::setValue)
+    private val _value: Property<Int, NumberPicker> = Property("value", 0, NumberPicker::setValue)
 
     var onScrollListener: NumberPicker.OnScrollListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -327,9 +439,10 @@ open class NumberPicker_ : LinearLayout_() {
         }
 
     private val _onScrollListener: Property<NumberPicker.OnScrollListener?, NumberPicker> =
-        Property(null, NumberPicker::setOnScrollListener)
+        Property("onScrollListener", null, NumberPicker::setOnScrollListener)
 
     var onValueChangedListener: NumberPicker.OnValueChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -339,9 +452,10 @@ open class NumberPicker_ : LinearLayout_() {
         }
 
     private val _onValueChangedListener: Property<NumberPicker.OnValueChangeListener?, NumberPicker> =
-        Property(null, NumberPicker::setOnValueChangedListener)
+        Property("onValueChangedListener", null, NumberPicker::setOnValueChangedListener)
 
     var wrapSelectorWheel: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -351,10 +465,11 @@ open class NumberPicker_ : LinearLayout_() {
         }
 
     private val _wrapSelectorWheel: Property<Boolean, NumberPicker> = Property(
-        false,
-        NumberPicker::setWrapSelectorWheel)
+        "wrapSelectorWheel",
+        false, NumberPicker::setWrapSelectorWheel)
 
     var onLongPressUpdateInterval: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -363,11 +478,11 @@ open class NumberPicker_ : LinearLayout_() {
             props += _onLongPressUpdateInterval
         }
 
-    private val _onLongPressUpdateInterval: Property<Long, NumberPicker> = Property(
-        0L,
-        NumberPicker::setOnLongPressUpdateInterval)
+    private val _onLongPressUpdateInterval: Property<Long, NumberPicker> =
+        Property("onLongPressUpdateInterval", 0L, NumberPicker::setOnLongPressUpdateInterval)
 
     var minValue: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -376,9 +491,12 @@ open class NumberPicker_ : LinearLayout_() {
             props += _minValue
         }
 
-    private val _minValue: Property<Int, NumberPicker> = Property(0, NumberPicker::setMinValue)
+    private val _minValue: Property<Int, NumberPicker> = Property(
+        "minValue", 0,
+        NumberPicker::setMinValue)
 
     var maxValue: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -387,9 +505,12 @@ open class NumberPicker_ : LinearLayout_() {
             props += _maxValue
         }
 
-    private val _maxValue: Property<Int, NumberPicker> = Property(0, NumberPicker::setMaxValue)
+    private val _maxValue: Property<Int, NumberPicker> = Property(
+        "maxValue", 0,
+        NumberPicker::setMaxValue)
 
     var displayedValues: Array<String>
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -398,11 +519,11 @@ open class NumberPicker_ : LinearLayout_() {
             props += _displayedValues
         }
 
-    private val _displayedValues: Property<Array<String>?, NumberPicker> = Property(
-        null,
-        NumberPicker::setDisplayedValues)
+    private val _displayedValues: Property<Array<String>?, NumberPicker> =
+        Property("displayedValues", null, NumberPicker::setDisplayedValues)
 
     var formatter: NumberPicker.Formatter
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -412,8 +533,8 @@ open class NumberPicker_ : LinearLayout_() {
         }
 
     private val _formatter: Property<NumberPicker.Formatter?, NumberPicker> = Property(
-        null,
-        NumberPicker::setFormatter)
+        "formatter",
+        null, NumberPicker::setFormatter)
 
     override fun createEmpty(context: Context) = NumberPicker(context)
 }
@@ -428,6 +549,7 @@ fun zoomButton(f: ZoomButton_.() -> Unit) {
 
 open class ZoomButton_ : ImageButton_() {
     var zoomSpeed: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -436,7 +558,9 @@ open class ZoomButton_ : ImageButton_() {
             props += _zoomSpeed
         }
 
-    private val _zoomSpeed: Property<Long, ZoomButton> = Property(0L, ZoomButton::setZoomSpeed)
+    private val _zoomSpeed: Property<Long, ZoomButton> = Property(
+        "zoomSpeed", 0L,
+        ZoomButton::setZoomSpeed)
 
     override fun createEmpty(context: Context) = ZoomButton(context)
 }
@@ -451,6 +575,7 @@ fun ratingBar(f: RatingBar_.() -> Unit) {
 
 open class RatingBar_ : AbsSeekBar_() {
     var isIndicator: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -460,10 +585,25 @@ open class RatingBar_ : AbsSeekBar_() {
         }
 
     private val _isIndicator: Property<Boolean, RatingBar> = Property(
-        false,
+        "isIndicator", false,
         RatingBar::setIsIndicator)
 
+    var numStars: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _numStars.set(value)
+            props += _numStars
+        }
+
+    private val _numStars: Property<Int, RatingBar> = Property(
+        "numStars", 0,
+        RatingBar::setNumStars)
+
     var onRatingBarChangeListener: RatingBar.OnRatingBarChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -473,20 +613,12 @@ open class RatingBar_ : AbsSeekBar_() {
         }
 
     private val _onRatingBarChangeListener: Property<RatingBar.OnRatingBarChangeListener?,
-        RatingBar> = Property(null, RatingBar::setOnRatingBarChangeListener)
-
-    var numStars: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _numStars.set(value)
-            props += _numStars
-        }
-
-    private val _numStars: Property<Int, RatingBar> = Property(0, RatingBar::setNumStars)
+        RatingBar> = Property(
+        "onRatingBarChangeListener", null,
+        RatingBar::setOnRatingBarChangeListener)
 
     var rating: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -495,9 +627,10 @@ open class RatingBar_ : AbsSeekBar_() {
             props += _rating
         }
 
-    private val _rating: Property<Float, RatingBar> = Property(0.0f, RatingBar::setRating)
+    private val _rating: Property<Float, RatingBar> = Property("rating", 0.0f, RatingBar::setRating)
 
     var stepSize: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -506,7 +639,9 @@ open class RatingBar_ : AbsSeekBar_() {
             props += _stepSize
         }
 
-    private val _stepSize: Property<Float, RatingBar> = Property(0.0f, RatingBar::setStepSize)
+    private val _stepSize: Property<Float, RatingBar> = Property(
+        "stepSize", 0.0f,
+        RatingBar::setStepSize)
 
     override fun createEmpty(context: Context) = RatingBar(context)
 }
@@ -520,77 +655,8 @@ fun toolbar(f: Toolbar_.() -> Unit) {
 }
 
 open class Toolbar_ : ViewGroup_() {
-    var logo: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _logo.set(value)
-            props += _logo
-        }
-
-    private val _logo: Property<Int, Toolbar> = Property(0, Toolbar::setLogo)
-
-    var navigationIcon: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _navigationIcon.set(value)
-            props += _navigationIcon
-        }
-
-    private val _navigationIcon: Property<Int, Toolbar> = Property(0, Toolbar::setNavigationIcon)
-
-    var logoDescription: CharSequence
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _logoDescription.set(value)
-            props += _logoDescription
-        }
-
-    private val _logoDescription: Property<CharSequence?, Toolbar> = Property(
-        null,
-        Toolbar::setLogoDescription)
-
-    var navigationContentDescription: CharSequence
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _navigationContentDescription.set(value)
-            props += _navigationContentDescription
-        }
-
-    private val _navigationContentDescription: Property<CharSequence?, Toolbar> = Property(
-        null,
-        Toolbar::setNavigationContentDescription)
-
-    var subtitle: CharSequence
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _subtitle.set(value)
-            props += _subtitle
-        }
-
-    private val _subtitle: Property<CharSequence?, Toolbar> = Property(null, Toolbar::setSubtitle)
-
-    var title: CharSequence
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _title.set(value)
-            props += _title
-        }
-
-    private val _title: Property<CharSequence?, Toolbar> = Property(null, Toolbar::setTitle)
-
     var popupTheme: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -599,9 +665,12 @@ open class Toolbar_ : ViewGroup_() {
             props += _popupTheme
         }
 
-    private val _popupTheme: Property<Int, Toolbar> = Property(0, Toolbar::setPopupTheme)
+    private val _popupTheme: Property<Int, Toolbar> = Property(
+        "popupTheme", 0,
+        Toolbar::setPopupTheme)
 
     var titleTextColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -610,9 +679,12 @@ open class Toolbar_ : ViewGroup_() {
             props += _titleTextColor
         }
 
-    private val _titleTextColor: Property<Int, Toolbar> = Property(0, Toolbar::setTitleTextColor)
+    private val _titleTextColor: Property<Int, Toolbar> = Property(
+        "titleTextColor", 0,
+        Toolbar::setTitleTextColor)
 
     var subtitleTextColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -622,10 +694,11 @@ open class Toolbar_ : ViewGroup_() {
         }
 
     private val _subtitleTextColor: Property<Int, Toolbar> = Property(
-        0,
+        "subtitleTextColor", 0,
         Toolbar::setSubtitleTextColor)
 
     var navigationOnClickListener: View.OnClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -635,9 +708,10 @@ open class Toolbar_ : ViewGroup_() {
         }
 
     private val _navigationOnClickListener: Property<View.OnClickListener?, Toolbar> =
-        Property(null, Toolbar::setNavigationOnClickListener)
+        Property("navigationOnClickListener", null, Toolbar::setNavigationOnClickListener)
 
     var onMenuItemClickListener: Toolbar.OnMenuItemClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -647,7 +721,88 @@ open class Toolbar_ : ViewGroup_() {
         }
 
     private val _onMenuItemClickListener: Property<Toolbar.OnMenuItemClickListener?, Toolbar> =
-        Property(null, Toolbar::setOnMenuItemClickListener)
+        Property("onMenuItemClickListener", null, Toolbar::setOnMenuItemClickListener)
+
+    var logo: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _logo.set(value)
+            props += _logo
+        }
+
+    private val _logo: Property<Int, Toolbar> = Property("logo", 0, Toolbar::setLogo)
+
+    var navigationIcon: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _navigationIcon.set(value)
+            props += _navigationIcon
+        }
+
+    private val _navigationIcon: Property<Int, Toolbar> = Property(
+        "navigationIcon", 0,
+        Toolbar::setNavigationIcon)
+
+    var logoDescription: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _logoDescription.set(value)
+            props += _logoDescription
+        }
+
+    private val _logoDescription: Property<CharSequence?, Toolbar> = Property(
+        "logoDescription",
+        null, Toolbar::setLogoDescription)
+
+    var navigationContentDescription: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _navigationContentDescription.set(value)
+            props += _navigationContentDescription
+        }
+
+    private val _navigationContentDescription: Property<CharSequence?, Toolbar> =
+        Property("navigationContentDescription", null, Toolbar::setNavigationContentDescription)
+
+    var subtitle: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _subtitle.set(value)
+            props += _subtitle
+        }
+
+    private val _subtitle: Property<CharSequence?, Toolbar> = Property(
+        "subtitle", null,
+        Toolbar::setSubtitle)
+
+    var title: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _title.set(value)
+            props += _title
+        }
+
+    private val _title: Property<CharSequence?, Toolbar> = Property(
+        "title", null,
+        Toolbar::setTitle)
 
     override fun createEmpty(context: Context) = Toolbar(context)
 }
@@ -662,6 +817,7 @@ fun datePicker(f: DatePicker_.() -> Unit) {
 
 open class DatePicker_ : FrameLayout_() {
     var minDate: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -670,9 +826,26 @@ open class DatePicker_ : FrameLayout_() {
             props += _minDate
         }
 
-    private val _minDate: Property<Long, DatePicker> = Property(0L, DatePicker::setMinDate)
+    private val _minDate: Property<Long, DatePicker> = Property(
+        "minDate", 0L,
+        DatePicker::setMinDate)
+
+    var maxDate: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _maxDate.set(value)
+            props += _maxDate
+        }
+
+    private val _maxDate: Property<Long, DatePicker> = Property(
+        "maxDate", 0L,
+        DatePicker::setMaxDate)
 
     var calendarViewShown: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -682,10 +855,11 @@ open class DatePicker_ : FrameLayout_() {
         }
 
     private val _calendarViewShown: Property<Boolean, DatePicker> = Property(
-        false,
-        DatePicker::setCalendarViewShown)
+        "calendarViewShown",
+        false, DatePicker::setCalendarViewShown)
 
     var spinnersShown: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -695,21 +869,11 @@ open class DatePicker_ : FrameLayout_() {
         }
 
     private val _spinnersShown: Property<Boolean, DatePicker> = Property(
-        false,
+        "spinnersShown", false,
         DatePicker::setSpinnersShown)
 
-    var maxDate: Long
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _maxDate.set(value)
-            props += _maxDate
-        }
-
-    private val _maxDate: Property<Long, DatePicker> = Property(0L, DatePicker::setMaxDate)
-
     var firstDayOfWeek: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -719,7 +883,7 @@ open class DatePicker_ : FrameLayout_() {
         }
 
     private val _firstDayOfWeek: Property<Int, DatePicker> = Property(
-        0,
+        "firstDayOfWeek", 0,
         DatePicker::setFirstDayOfWeek)
 
     override fun createEmpty(context: Context) = DatePicker(context)
@@ -735,6 +899,7 @@ fun compoundButton(f: CompoundButton_.() -> Unit) {
 
 open class CompoundButton_ : Button_() {
     var checked: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -744,23 +909,24 @@ open class CompoundButton_ : Button_() {
         }
 
     private val _checked: Property<Boolean, CompoundButton> = Property(
-        false,
+        "checked", false,
         CompoundButton::setChecked)
 
-    var buttonDrawable: Int
+    var buttonTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
         set(value) {
-            _buttonDrawable.set(value)
-            props += _buttonDrawable
+            _buttonTintList.set(value)
+            props += _buttonTintList
         }
 
-    private val _buttonDrawable: Property<Int, CompoundButton> = Property(
-        0,
-        CompoundButton::setButtonDrawable)
+    private val _buttonTintList: Property<ColorStateList?, CompoundButton> =
+        Property("buttonTintList", null, CompoundButton::setButtonTintList)
 
     var onCheckedChangeListener: CompoundButton.OnCheckedChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -770,22 +936,12 @@ open class CompoundButton_ : Button_() {
         }
 
     private val _onCheckedChangeListener: Property<CompoundButton.OnCheckedChangeListener?,
-        CompoundButton> = Property(null, CompoundButton::setOnCheckedChangeListener)
-
-    var buttonTintList: ColorStateList
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _buttonTintList.set(value)
-            props += _buttonTintList
-        }
-
-    private val _buttonTintList: Property<ColorStateList?, CompoundButton> = Property(
-        null,
-        CompoundButton::setButtonTintList)
+        CompoundButton> = Property(
+        "onCheckedChangeListener", null,
+        CompoundButton::setOnCheckedChangeListener)
 
     var buttonTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -794,9 +950,22 @@ open class CompoundButton_ : Button_() {
             props += _buttonTintMode
         }
 
-    private val _buttonTintMode: Property<PorterDuff.Mode?, CompoundButton> = Property(
-        null,
-        CompoundButton::setButtonTintMode)
+    private val _buttonTintMode: Property<PorterDuff.Mode?, CompoundButton> =
+        Property("buttonTintMode", null, CompoundButton::setButtonTintMode)
+
+    var buttonDrawable: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _buttonDrawable.set(value)
+            props += _buttonDrawable
+        }
+
+    private val _buttonDrawable: Property<Int, CompoundButton> = Property(
+        "buttonDrawable", 0,
+        CompoundButton::setButtonDrawable)
 }
 
 fun imageButton(f: ImageButton_.() -> Unit) {
@@ -821,6 +990,7 @@ fun mediaController(f: MediaController_.() -> Unit) {
 
 open class MediaController_ : FrameLayout_() {
     var mediaPlayer: MediaController.MediaPlayerControl
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -830,9 +1000,10 @@ open class MediaController_ : FrameLayout_() {
         }
 
     private val _mediaPlayer: Property<MediaController.MediaPlayerControl?, MediaController> =
-        Property(null, MediaController::setMediaPlayer)
+        Property("mediaPlayer", null, MediaController::setMediaPlayer)
 
     var anchorView: View
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -842,7 +1013,7 @@ open class MediaController_ : FrameLayout_() {
         }
 
     private val _anchorView: Property<View?, MediaController> = Property(
-        null,
+        "anchorView", null,
         MediaController::setAnchorView)
 
     override fun createEmpty(context: Context) = MediaController(context)
@@ -858,6 +1029,7 @@ fun progressBar(f: ProgressBar_.() -> Unit) {
 
 open class ProgressBar_ : View_() {
     var progress: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -866,9 +1038,12 @@ open class ProgressBar_ : View_() {
             props += _progress
         }
 
-    private val _progress: Property<Int, ProgressBar> = Property(0, ProgressBar::setProgress)
+    private val _progress: Property<Int, ProgressBar> = Property(
+        "progress", 0,
+        ProgressBar::setProgress)
 
     var secondaryProgress: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -878,10 +1053,11 @@ open class ProgressBar_ : View_() {
         }
 
     private val _secondaryProgress: Property<Int, ProgressBar> = Property(
-        0,
+        "secondaryProgress", 0,
         ProgressBar::setSecondaryProgress)
 
     var max: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -890,9 +1066,10 @@ open class ProgressBar_ : View_() {
             props += _max
         }
 
-    private val _max: Property<Int, ProgressBar> = Property(0, ProgressBar::setMax)
+    private val _max: Property<Int, ProgressBar> = Property("max", 0, ProgressBar::setMax)
 
     var indeterminate: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -902,10 +1079,11 @@ open class ProgressBar_ : View_() {
         }
 
     private val _indeterminate: Property<Boolean, ProgressBar> = Property(
-        false,
+        "indeterminate", false,
         ProgressBar::setIndeterminate)
 
     var indeterminateDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -914,11 +1092,11 @@ open class ProgressBar_ : View_() {
             props += _indeterminateDrawable
         }
 
-    private val _indeterminateDrawable: Property<Drawable?, ProgressBar> = Property(
-        null,
-        ProgressBar::setIndeterminateDrawable)
+    private val _indeterminateDrawable: Property<Drawable?, ProgressBar> =
+        Property("indeterminateDrawable", null, ProgressBar::setIndeterminateDrawable)
 
     var indeterminateTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -927,11 +1105,11 @@ open class ProgressBar_ : View_() {
             props += _indeterminateTintList
         }
 
-    private val _indeterminateTintList: Property<ColorStateList?, ProgressBar> = Property(
-        null,
-        ProgressBar::setIndeterminateTintList)
+    private val _indeterminateTintList: Property<ColorStateList?, ProgressBar> =
+        Property("indeterminateTintList", null, ProgressBar::setIndeterminateTintList)
 
     var indeterminateTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -940,11 +1118,11 @@ open class ProgressBar_ : View_() {
             props += _indeterminateTintMode
         }
 
-    private val _indeterminateTintMode: Property<PorterDuff.Mode?, ProgressBar> = Property(
-        null,
-        ProgressBar::setIndeterminateTintMode)
+    private val _indeterminateTintMode: Property<PorterDuff.Mode?, ProgressBar> =
+        Property("indeterminateTintMode", null, ProgressBar::setIndeterminateTintMode)
 
     var indeterminateDrawableTiled: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -953,11 +1131,11 @@ open class ProgressBar_ : View_() {
             props += _indeterminateDrawableTiled
         }
 
-    private val _indeterminateDrawableTiled: Property<Drawable?, ProgressBar> = Property(
-        null,
-        ProgressBar::setIndeterminateDrawableTiled)
+    private val _indeterminateDrawableTiled: Property<Drawable?, ProgressBar> =
+        Property("indeterminateDrawableTiled", null, ProgressBar::setIndeterminateDrawableTiled)
 
     var progressDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -967,10 +1145,11 @@ open class ProgressBar_ : View_() {
         }
 
     private val _progressDrawable: Property<Drawable?, ProgressBar> = Property(
-        null,
-        ProgressBar::setProgressDrawable)
+        "progressDrawable",
+        null, ProgressBar::setProgressDrawable)
 
     var progressTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -979,11 +1158,11 @@ open class ProgressBar_ : View_() {
             props += _progressTintList
         }
 
-    private val _progressTintList: Property<ColorStateList?, ProgressBar> = Property(
-        null,
-        ProgressBar::setProgressTintList)
+    private val _progressTintList: Property<ColorStateList?, ProgressBar> =
+        Property("progressTintList", null, ProgressBar::setProgressTintList)
 
     var progressTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -992,11 +1171,11 @@ open class ProgressBar_ : View_() {
             props += _progressTintMode
         }
 
-    private val _progressTintMode: Property<PorterDuff.Mode?, ProgressBar> = Property(
-        null,
-        ProgressBar::setProgressTintMode)
+    private val _progressTintMode: Property<PorterDuff.Mode?, ProgressBar> =
+        Property("progressTintMode", null, ProgressBar::setProgressTintMode)
 
     var progressBackgroundTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1005,11 +1184,11 @@ open class ProgressBar_ : View_() {
             props += _progressBackgroundTintList
         }
 
-    private val _progressBackgroundTintList: Property<ColorStateList?, ProgressBar> = Property(
-        null,
-        ProgressBar::setProgressBackgroundTintList)
+    private val _progressBackgroundTintList: Property<ColorStateList?, ProgressBar> =
+        Property("progressBackgroundTintList", null, ProgressBar::setProgressBackgroundTintList)
 
     var progressBackgroundTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1019,9 +1198,10 @@ open class ProgressBar_ : View_() {
         }
 
     private val _progressBackgroundTintMode: Property<PorterDuff.Mode?, ProgressBar> =
-        Property(null, ProgressBar::setProgressBackgroundTintMode)
+        Property("progressBackgroundTintMode", null, ProgressBar::setProgressBackgroundTintMode)
 
     var secondaryProgressTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1030,11 +1210,11 @@ open class ProgressBar_ : View_() {
             props += _secondaryProgressTintList
         }
 
-    private val _secondaryProgressTintList: Property<ColorStateList?, ProgressBar> = Property(
-        null,
-        ProgressBar::setSecondaryProgressTintList)
+    private val _secondaryProgressTintList: Property<ColorStateList?, ProgressBar> =
+        Property("secondaryProgressTintList", null, ProgressBar::setSecondaryProgressTintList)
 
     var secondaryProgressTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1043,11 +1223,11 @@ open class ProgressBar_ : View_() {
             props += _secondaryProgressTintMode
         }
 
-    private val _secondaryProgressTintMode: Property<PorterDuff.Mode?, ProgressBar> = Property(
-        null,
-        ProgressBar::setSecondaryProgressTintMode)
+    private val _secondaryProgressTintMode: Property<PorterDuff.Mode?, ProgressBar> =
+        Property("secondaryProgressTintMode", null, ProgressBar::setSecondaryProgressTintMode)
 
     var progressDrawableTiled: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1056,11 +1236,11 @@ open class ProgressBar_ : View_() {
             props += _progressDrawableTiled
         }
 
-    private val _progressDrawableTiled: Property<Drawable?, ProgressBar> = Property(
-        null,
-        ProgressBar::setProgressDrawableTiled)
+    private val _progressDrawableTiled: Property<Drawable?, ProgressBar> =
+        Property("progressDrawableTiled", null, ProgressBar::setProgressDrawableTiled)
 
     var interpolator: Interpolator
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1070,7 +1250,7 @@ open class ProgressBar_ : View_() {
         }
 
     private val _interpolator: Property<Interpolator?, ProgressBar> = Property(
-        null,
+        "interpolator", null,
         ProgressBar::setInterpolator)
 
     override fun createEmpty(context: Context) = ProgressBar(context)
@@ -1086,6 +1266,7 @@ fun textView(f: TextView_.() -> Unit) {
 
 open class TextView_ : View_() {
     var error: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1094,9 +1275,24 @@ open class TextView_ : View_() {
             props += _error
         }
 
-    private val _error: Property<CharSequence?, TextView> = Property(null, TextView::setError)
+    private val _error: Property<CharSequence?, TextView> = Property(
+        "error", null,
+        TextView::setError)
+
+    var gravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _gravity.set(value)
+            props += _gravity
+        }
+
+    private val _gravity: Property<Int, TextView> = Property("gravity", 0, TextView::setGravity)
 
     var ellipsize: TextUtils.TruncateAt
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1106,10 +1302,11 @@ open class TextView_ : View_() {
         }
 
     private val _ellipsize: Property<TextUtils.TruncateAt?, TextView> = Property(
-        null,
+        "ellipsize", null,
         TextView::setEllipsize)
 
     var typeface: Typeface
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1118,9 +1315,12 @@ open class TextView_ : View_() {
             props += _typeface
         }
 
-    private val _typeface: Property<Typeface?, TextView> = Property(null, TextView::setTypeface)
+    private val _typeface: Property<Typeface?, TextView> = Property(
+        "typeface", null,
+        TextView::setTypeface)
 
     var keyListener: KeyListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1130,10 +1330,11 @@ open class TextView_ : View_() {
         }
 
     private val _keyListener: Property<KeyListener?, TextView> = Property(
-        null,
+        "keyListener", null,
         TextView::setKeyListener)
 
     var movementMethod: MovementMethod
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1143,10 +1344,11 @@ open class TextView_ : View_() {
         }
 
     private val _movementMethod: Property<MovementMethod?, TextView> = Property(
-        null,
-        TextView::setMovementMethod)
+        "movementMethod",
+        null, TextView::setMovementMethod)
 
     var transformationMethod: TransformationMethod
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1155,11 +1357,11 @@ open class TextView_ : View_() {
             props += _transformationMethod
         }
 
-    private val _transformationMethod: Property<TransformationMethod?, TextView> = Property(
-        null,
-        TextView::setTransformationMethod)
+    private val _transformationMethod: Property<TransformationMethod?, TextView> =
+        Property("transformationMethod", null, TextView::setTransformationMethod)
 
     var compoundDrawablePadding: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1168,11 +1370,11 @@ open class TextView_ : View_() {
             props += _compoundDrawablePadding
         }
 
-    private val _compoundDrawablePadding: Property<Int, TextView> = Property(
-        0,
-        TextView::setCompoundDrawablePadding)
+    private val _compoundDrawablePadding: Property<Int, TextView> =
+        Property("compoundDrawablePadding", 0, TextView::setCompoundDrawablePadding)
 
     var textLocale: Locale
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1181,9 +1383,12 @@ open class TextView_ : View_() {
             props += _textLocale
         }
 
-    private val _textLocale: Property<Locale?, TextView> = Property(null, TextView::setTextLocale)
+    private val _textLocale: Property<Locale?, TextView> = Property(
+        "textLocale", null,
+        TextView::setTextLocale)
 
     var textSize: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1192,9 +1397,12 @@ open class TextView_ : View_() {
             props += _textSize
         }
 
-    private val _textSize: Property<Float, TextView> = Property(0.0f, TextView::setTextSize)
+    private val _textSize: Property<Float, TextView> = Property(
+        "textSize", 0.0f,
+        TextView::setTextSize)
 
     var textScaleX: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1203,9 +1411,12 @@ open class TextView_ : View_() {
             props += _textScaleX
         }
 
-    private val _textScaleX: Property<Float, TextView> = Property(0.0f, TextView::setTextScaleX)
+    private val _textScaleX: Property<Float, TextView> = Property(
+        "textScaleX", 0.0f,
+        TextView::setTextScaleX)
 
     var elegantTextHeight: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1215,10 +1426,11 @@ open class TextView_ : View_() {
         }
 
     private val _elegantTextHeight: Property<Boolean, TextView> = Property(
-        false,
-        TextView::setElegantTextHeight)
+        "elegantTextHeight",
+        false, TextView::setElegantTextHeight)
 
     var letterSpacing: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1228,10 +1440,11 @@ open class TextView_ : View_() {
         }
 
     private val _letterSpacing: Property<Float, TextView> = Property(
-        0.0f,
+        "letterSpacing", 0.0f,
         TextView::setLetterSpacing)
 
     var fontFeatureSettings: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1241,10 +1454,11 @@ open class TextView_ : View_() {
         }
 
     private val _fontFeatureSettings: Property<String?, TextView> = Property(
-        null,
-        TextView::setFontFeatureSettings)
+        "fontFeatureSettings",
+        null, TextView::setFontFeatureSettings)
 
     var highlightColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1253,9 +1467,12 @@ open class TextView_ : View_() {
             props += _highlightColor
         }
 
-    private val _highlightColor: Property<Int, TextView> = Property(0, TextView::setHighlightColor)
+    private val _highlightColor: Property<Int, TextView> = Property(
+        "highlightColor", 0,
+        TextView::setHighlightColor)
 
     var showSoftInputOnFocus: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1264,11 +1481,11 @@ open class TextView_ : View_() {
             props += _showSoftInputOnFocus
         }
 
-    private val _showSoftInputOnFocus: Property<Boolean, TextView> = Property(
-        false,
-        TextView::setShowSoftInputOnFocus)
+    private val _showSoftInputOnFocus: Property<Boolean, TextView> =
+        Property("showSoftInputOnFocus", false, TextView::setShowSoftInputOnFocus)
 
     var autoLinkMask: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1277,9 +1494,12 @@ open class TextView_ : View_() {
             props += _autoLinkMask
         }
 
-    private val _autoLinkMask: Property<Int, TextView> = Property(0, TextView::setAutoLinkMask)
+    private val _autoLinkMask: Property<Int, TextView> = Property(
+        "autoLinkMask", 0,
+        TextView::setAutoLinkMask)
 
     var linksClickable: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1289,10 +1509,11 @@ open class TextView_ : View_() {
         }
 
     private val _linksClickable: Property<Boolean, TextView> = Property(
-        false,
+        "linksClickable", false,
         TextView::setLinksClickable)
 
     var paintFlags: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1301,9 +1522,12 @@ open class TextView_ : View_() {
             props += _paintFlags
         }
 
-    private val _paintFlags: Property<Int, TextView> = Property(0, TextView::setPaintFlags)
+    private val _paintFlags: Property<Int, TextView> = Property(
+        "paintFlags", 0,
+        TextView::setPaintFlags)
 
     var horizontallyScrolling: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1312,11 +1536,11 @@ open class TextView_ : View_() {
             props += _horizontallyScrolling
         }
 
-    private val _horizontallyScrolling: Property<Boolean, TextView> = Property(
-        false,
-        TextView::setHorizontallyScrolling)
+    private val _horizontallyScrolling: Property<Boolean, TextView> =
+        Property("horizontallyScrolling", false, TextView::setHorizontallyScrolling)
 
     var minLines: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1325,9 +1549,10 @@ open class TextView_ : View_() {
             props += _minLines
         }
 
-    private val _minLines: Property<Int, TextView> = Property(0, TextView::setMinLines)
+    private val _minLines: Property<Int, TextView> = Property("minLines", 0, TextView::setMinLines)
 
     var minHeight: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1336,9 +1561,12 @@ open class TextView_ : View_() {
             props += _minHeight
         }
 
-    private val _minHeight: Property<Int, TextView> = Property(0, TextView::setMinHeight)
+    private val _minHeight: Property<Int, TextView> = Property(
+        "minHeight", 0,
+        TextView::setMinHeight)
 
     var maxLines: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1347,9 +1575,10 @@ open class TextView_ : View_() {
             props += _maxLines
         }
 
-    private val _maxLines: Property<Int, TextView> = Property(0, TextView::setMaxLines)
+    private val _maxLines: Property<Int, TextView> = Property("maxLines", 0, TextView::setMaxLines)
 
     var maxHeight: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1358,9 +1587,12 @@ open class TextView_ : View_() {
             props += _maxHeight
         }
 
-    private val _maxHeight: Property<Int, TextView> = Property(0, TextView::setMaxHeight)
+    private val _maxHeight: Property<Int, TextView> = Property(
+        "maxHeight", 0,
+        TextView::setMaxHeight)
 
     var lines: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1369,9 +1601,10 @@ open class TextView_ : View_() {
             props += _lines
         }
 
-    private val _lines: Property<Int, TextView> = Property(0, TextView::setLines)
+    private val _lines: Property<Int, TextView> = Property("lines", 0, TextView::setLines)
 
     var height: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1380,9 +1613,10 @@ open class TextView_ : View_() {
             props += _height
         }
 
-    private val _height: Property<Int, TextView> = Property(0, TextView::setHeight)
+    private val _height: Property<Int, TextView> = Property("height", 0, TextView::setHeight)
 
     var minEms: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1391,9 +1625,10 @@ open class TextView_ : View_() {
             props += _minEms
         }
 
-    private val _minEms: Property<Int, TextView> = Property(0, TextView::setMinEms)
+    private val _minEms: Property<Int, TextView> = Property("minEms", 0, TextView::setMinEms)
 
     var minWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1402,9 +1637,10 @@ open class TextView_ : View_() {
             props += _minWidth
         }
 
-    private val _minWidth: Property<Int, TextView> = Property(0, TextView::setMinWidth)
+    private val _minWidth: Property<Int, TextView> = Property("minWidth", 0, TextView::setMinWidth)
 
     var maxEms: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1413,9 +1649,10 @@ open class TextView_ : View_() {
             props += _maxEms
         }
 
-    private val _maxEms: Property<Int, TextView> = Property(0, TextView::setMaxEms)
+    private val _maxEms: Property<Int, TextView> = Property("maxEms", 0, TextView::setMaxEms)
 
     var maxWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1424,9 +1661,10 @@ open class TextView_ : View_() {
             props += _maxWidth
         }
 
-    private val _maxWidth: Property<Int, TextView> = Property(0, TextView::setMaxWidth)
+    private val _maxWidth: Property<Int, TextView> = Property("maxWidth", 0, TextView::setMaxWidth)
 
     var ems: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1435,9 +1673,10 @@ open class TextView_ : View_() {
             props += _ems
         }
 
-    private val _ems: Property<Int, TextView> = Property(0, TextView::setEms)
+    private val _ems: Property<Int, TextView> = Property("ems", 0, TextView::setEms)
 
     var width: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1446,9 +1685,10 @@ open class TextView_ : View_() {
             props += _width
         }
 
-    private val _width: Property<Int, TextView> = Property(0, TextView::setWidth)
+    private val _width: Property<Int, TextView> = Property("width", 0, TextView::setWidth)
 
     var freezesText: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1458,10 +1698,11 @@ open class TextView_ : View_() {
         }
 
     private val _freezesText: Property<Boolean, TextView> = Property(
-        false,
+        "freezesText", false,
         TextView::setFreezesText)
 
     var editableFactory: Editable.Factory
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1470,11 +1711,11 @@ open class TextView_ : View_() {
             props += _editableFactory
         }
 
-    private val _editableFactory: Property<Editable.Factory?, TextView> = Property(
-        null,
-        TextView::setEditableFactory)
+    private val _editableFactory: Property<Editable.Factory?, TextView> =
+        Property("editableFactory", null, TextView::setEditableFactory)
 
     var spannableFactory: Spannable.Factory
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1483,11 +1724,11 @@ open class TextView_ : View_() {
             props += _spannableFactory
         }
 
-    private val _spannableFactory: Property<Spannable.Factory?, TextView> = Property(
-        null,
-        TextView::setSpannableFactory)
+    private val _spannableFactory: Property<Spannable.Factory?, TextView> =
+        Property("spannableFactory", null, TextView::setSpannableFactory)
 
     var textKeepState: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1497,10 +1738,11 @@ open class TextView_ : View_() {
         }
 
     private val _textKeepState: Property<CharSequence?, TextView> = Property(
-        null,
+        "textKeepState", null,
         TextView::setTextKeepState)
 
     var inputType: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1509,9 +1751,12 @@ open class TextView_ : View_() {
             props += _inputType
         }
 
-    private val _inputType: Property<Int, TextView> = Property(0, TextView::setInputType)
+    private val _inputType: Property<Int, TextView> = Property(
+        "inputType", 0,
+        TextView::setInputType)
 
     var rawInputType: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1520,9 +1765,12 @@ open class TextView_ : View_() {
             props += _rawInputType
         }
 
-    private val _rawInputType: Property<Int, TextView> = Property(0, TextView::setRawInputType)
+    private val _rawInputType: Property<Int, TextView> = Property(
+        "rawInputType", 0,
+        TextView::setRawInputType)
 
     var imeOptions: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1531,9 +1779,12 @@ open class TextView_ : View_() {
             props += _imeOptions
         }
 
-    private val _imeOptions: Property<Int, TextView> = Property(0, TextView::setImeOptions)
+    private val _imeOptions: Property<Int, TextView> = Property(
+        "imeOptions", 0,
+        TextView::setImeOptions)
 
     var onEditorActionListener: TextView.OnEditorActionListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1543,9 +1794,10 @@ open class TextView_ : View_() {
         }
 
     private val _onEditorActionListener: Property<TextView.OnEditorActionListener?, TextView> =
-        Property(null, TextView::setOnEditorActionListener)
+        Property("onEditorActionListener", null, TextView::setOnEditorActionListener)
 
     var privateImeOptions: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1555,10 +1807,11 @@ open class TextView_ : View_() {
         }
 
     private val _privateImeOptions: Property<String?, TextView> = Property(
-        null,
-        TextView::setPrivateImeOptions)
+        "privateImeOptions",
+        null, TextView::setPrivateImeOptions)
 
     var inputExtras: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1567,9 +1820,12 @@ open class TextView_ : View_() {
             props += _inputExtras
         }
 
-    private val _inputExtras: Property<Int, TextView> = Property(0, TextView::setInputExtras)
+    private val _inputExtras: Property<Int, TextView> = Property(
+        "inputExtras", 0,
+        TextView::setInputExtras)
 
     var filters: Array<InputFilter>
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1579,10 +1835,11 @@ open class TextView_ : View_() {
         }
 
     private val _filters: Property<Array<InputFilter>?, TextView> = Property(
-        null,
+        "filters", null,
         TextView::setFilters)
 
     var textIsSelectable: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1592,10 +1849,11 @@ open class TextView_ : View_() {
         }
 
     private val _textIsSelectable: Property<Boolean, TextView> = Property(
-        false,
+        "textIsSelectable", false,
         TextView::setTextIsSelectable)
 
     var extractedText: ExtractedText
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1605,10 +1863,11 @@ open class TextView_ : View_() {
         }
 
     private val _extractedText: Property<ExtractedText?, TextView> = Property(
-        null,
+        "extractedText", null,
         TextView::setExtractedText)
 
     var includeFontPadding: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1618,10 +1877,11 @@ open class TextView_ : View_() {
         }
 
     private val _includeFontPadding: Property<Boolean, TextView> = Property(
-        false,
-        TextView::setIncludeFontPadding)
+        "includeFontPadding",
+        false, TextView::setIncludeFontPadding)
 
     var singleLine: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1630,9 +1890,12 @@ open class TextView_ : View_() {
             props += _singleLine
         }
 
-    private val _singleLine: Property<Boolean, TextView> = Property(false, TextView::setSingleLine)
+    private val _singleLine: Property<Boolean, TextView> = Property(
+        "singleLine", false,
+        TextView::setSingleLine)
 
     var allCaps: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1641,9 +1904,12 @@ open class TextView_ : View_() {
             props += _allCaps
         }
 
-    private val _allCaps: Property<Boolean, TextView> = Property(false, TextView::setAllCaps)
+    private val _allCaps: Property<Boolean, TextView> = Property(
+        "allCaps", false,
+        TextView::setAllCaps)
 
     var marqueeRepeatLimit: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1653,10 +1919,11 @@ open class TextView_ : View_() {
         }
 
     private val _marqueeRepeatLimit: Property<Int, TextView> = Property(
-        0,
+        "marqueeRepeatLimit", 0,
         TextView::setMarqueeRepeatLimit)
 
     var selectAllOnFocus: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1666,10 +1933,11 @@ open class TextView_ : View_() {
         }
 
     private val _selectAllOnFocus: Property<Boolean, TextView> = Property(
-        false,
+        "selectAllOnFocus", false,
         TextView::setSelectAllOnFocus)
 
     var cursorVisible: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1679,10 +1947,11 @@ open class TextView_ : View_() {
         }
 
     private val _cursorVisible: Property<Boolean, TextView> = Property(
-        false,
+        "cursorVisible", false,
         TextView::setCursorVisible)
 
     var scroller: Scroller
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1691,9 +1960,12 @@ open class TextView_ : View_() {
             props += _scroller
         }
 
-    private val _scroller: Property<Scroller?, TextView> = Property(null, TextView::setScroller)
+    private val _scroller: Property<Scroller?, TextView> = Property(
+        "scroller", null,
+        TextView::setScroller)
 
     var customSelectionActionModeCallback: ActionMode.Callback
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1703,9 +1975,12 @@ open class TextView_ : View_() {
         }
 
     private val _customSelectionActionModeCallback: Property<ActionMode.Callback?, TextView> =
-        Property(null, TextView::setCustomSelectionActionModeCallback)
+        Property(
+            "customSelectionActionModeCallback", null,
+            TextView::setCustomSelectionActionModeCallback)
 
     var hintTextColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1714,9 +1989,12 @@ open class TextView_ : View_() {
             props += _hintTextColor
         }
 
-    private val _hintTextColor: Property<Int, TextView> = Property(0, TextView::setHintTextColor)
+    private val _hintTextColor: Property<Int, TextView> = Property(
+        "hintTextColor", 0,
+        TextView::setHintTextColor)
 
     var linkTextColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1725,9 +2003,12 @@ open class TextView_ : View_() {
             props += _linkTextColor
         }
 
-    private val _linkTextColor: Property<Int, TextView> = Property(0, TextView::setLinkTextColor)
+    private val _linkTextColor: Property<Int, TextView> = Property(
+        "linkTextColor", 0,
+        TextView::setLinkTextColor)
 
     var textColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1736,9 +2017,12 @@ open class TextView_ : View_() {
             props += _textColor
         }
 
-    private val _textColor: Property<Int, TextView> = Property(0, TextView::setTextColor)
+    private val _textColor: Property<Int, TextView> = Property(
+        "textColor", 0,
+        TextView::setTextColor)
 
     var hint: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1747,9 +2031,10 @@ open class TextView_ : View_() {
             props += _hint
         }
 
-    private val _hint: Property<CharSequence?, TextView> = Property(null, TextView::setHint)
+    private val _hint: Property<CharSequence?, TextView> = Property("hint", null, TextView::setHint)
 
     var text: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1758,18 +2043,7 @@ open class TextView_ : View_() {
             props += _text
         }
 
-    private val _text: Property<CharSequence?, TextView> = Property(null, TextView::setText)
-
-    var gravity: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _gravity.set(value)
-            props += _gravity
-        }
-
-    private val _gravity: Property<Int, TextView> = Property(0, TextView::setGravity)
+    private val _text: Property<CharSequence?, TextView> = Property("text", null, TextView::setText)
 
     override fun createEmpty(context: Context) = TextView(context)
 }
@@ -1783,7 +2057,20 @@ fun spinner(f: Spinner_.() -> Unit) {
 }
 
 open class Spinner_ : AbsSpinner_() {
+    var gravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _gravity.set(value)
+            props += _gravity
+        }
+
+    private val _gravity: Property<Int, Spinner> = Property("gravity", 0, Spinner::setGravity)
+
     var dropDownWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1792,9 +2079,12 @@ open class Spinner_ : AbsSpinner_() {
             props += _dropDownWidth
         }
 
-    private val _dropDownWidth: Property<Int, Spinner> = Property(0, Spinner::setDropDownWidth)
+    private val _dropDownWidth: Property<Int, Spinner> = Property(
+        "dropDownWidth", 0,
+        Spinner::setDropDownWidth)
 
     var dropDownVerticalOffset: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1804,10 +2094,11 @@ open class Spinner_ : AbsSpinner_() {
         }
 
     private val _dropDownVerticalOffset: Property<Int, Spinner> = Property(
-        0,
-        Spinner::setDropDownVerticalOffset)
+        "dropDownVerticalOffset",
+        0, Spinner::setDropDownVerticalOffset)
 
     var dropDownHorizontalOffset: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1816,22 +2107,11 @@ open class Spinner_ : AbsSpinner_() {
             props += _dropDownHorizontalOffset
         }
 
-    private val _dropDownHorizontalOffset: Property<Int, Spinner> = Property(
-        0,
-        Spinner::setDropDownHorizontalOffset)
-
-    var gravity: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _gravity.set(value)
-            props += _gravity
-        }
-
-    private val _gravity: Property<Int, Spinner> = Property(0, Spinner::setGravity)
+    private val _dropDownHorizontalOffset: Property<Int, Spinner> =
+        Property("dropDownHorizontalOffset", 0, Spinner::setDropDownHorizontalOffset)
 
     var popupBackgroundDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1840,11 +2120,11 @@ open class Spinner_ : AbsSpinner_() {
             props += _popupBackgroundDrawable
         }
 
-    private val _popupBackgroundDrawable: Property<Drawable?, Spinner> = Property(
-        null,
-        Spinner::setPopupBackgroundDrawable)
+    private val _popupBackgroundDrawable: Property<Drawable?, Spinner> =
+        Property("popupBackgroundDrawable", null, Spinner::setPopupBackgroundDrawable)
 
     var popupBackgroundResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1853,11 +2133,11 @@ open class Spinner_ : AbsSpinner_() {
             props += _popupBackgroundResource
         }
 
-    private val _popupBackgroundResource: Property<Int, Spinner> = Property(
-        0,
-        Spinner::setPopupBackgroundResource)
+    private val _popupBackgroundResource: Property<Int, Spinner> =
+        Property("popupBackgroundResource", 0, Spinner::setPopupBackgroundResource)
 
     var prompt: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1866,9 +2146,12 @@ open class Spinner_ : AbsSpinner_() {
             props += _prompt
         }
 
-    private val _prompt: Property<CharSequence?, Spinner> = Property(null, Spinner::setPrompt)
+    private val _prompt: Property<CharSequence?, Spinner> = Property(
+        "prompt", null,
+        Spinner::setPrompt)
 
     var promptId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1877,7 +2160,7 @@ open class Spinner_ : AbsSpinner_() {
             props += _promptId
         }
 
-    private val _promptId: Property<Int, Spinner> = Property(0, Spinner::setPromptId)
+    private val _promptId: Property<Int, Spinner> = Property("promptId", 0, Spinner::setPromptId)
 
     override fun createEmpty(context: Context) = Spinner(context)
 }
@@ -1902,6 +2185,7 @@ fun quickContactBadge(f: QuickContactBadge_.() -> Unit) {
 
 open class QuickContactBadge_ : ImageView_() {
     var overlay: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1911,10 +2195,11 @@ open class QuickContactBadge_ : ImageView_() {
         }
 
     private val _overlay: Property<Drawable?, QuickContactBadge> = Property(
-        null,
+        "overlay", null,
         QuickContactBadge::setOverlay)
 
     var excludeMimes: Array<String>
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1923,11 +2208,11 @@ open class QuickContactBadge_ : ImageView_() {
             props += _excludeMimes
         }
 
-    private val _excludeMimes: Property<Array<String>?, QuickContactBadge> = Property(
-        null,
-        QuickContactBadge::setExcludeMimes)
+    private val _excludeMimes: Property<Array<String>?, QuickContactBadge> =
+        Property("excludeMimes", null, QuickContactBadge::setExcludeMimes)
 
     var mode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1936,7 +2221,9 @@ open class QuickContactBadge_ : ImageView_() {
             props += _mode
         }
 
-    private val _mode: Property<Int, QuickContactBadge> = Property(0, QuickContactBadge::setMode)
+    private val _mode: Property<Int, QuickContactBadge> = Property(
+        "mode", 0,
+        QuickContactBadge::setMode)
 
     override fun createEmpty(context: Context) = QuickContactBadge(context)
 }
@@ -1950,18 +2237,8 @@ fun textSwitcher(f: TextSwitcher_.() -> Unit) {
 }
 
 open class TextSwitcher_ : ViewSwitcher_() {
-    var text: CharSequence
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _text.set(value)
-            props += _text
-        }
-
-    private val _text: Property<CharSequence?, TextSwitcher> = Property(null, TextSwitcher::setText)
-
     var currentText: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1971,8 +2248,22 @@ open class TextSwitcher_ : ViewSwitcher_() {
         }
 
     private val _currentText: Property<CharSequence?, TextSwitcher> = Property(
-        null,
+        "currentText", null,
         TextSwitcher::setCurrentText)
+
+    var text: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _text.set(value)
+            props += _text
+        }
+
+    private val _text: Property<CharSequence?, TextSwitcher> = Property(
+        "text", null,
+        TextSwitcher::setText)
 
     override fun createEmpty(context: Context) = TextSwitcher(context)
 }
@@ -1987,6 +2278,7 @@ fun adapterViewFlipper(f: AdapterViewFlipper_.() -> Unit) {
 
 open class AdapterViewFlipper_ : AdapterViewAnimator_() {
     var flipInterval: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -1996,10 +2288,11 @@ open class AdapterViewFlipper_ : AdapterViewAnimator_() {
         }
 
     private val _flipInterval: Property<Int, AdapterViewFlipper> = Property(
-        0,
+        "flipInterval", 0,
         AdapterViewFlipper::setFlipInterval)
 
     var autoStart: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2009,7 +2302,7 @@ open class AdapterViewFlipper_ : AdapterViewAnimator_() {
         }
 
     private val _autoStart: Property<Boolean, AdapterViewFlipper> = Property(
-        false,
+        "autoStart", false,
         AdapterViewFlipper::setAutoStart)
 
     override fun createEmpty(context: Context) = AdapterViewFlipper(context)
@@ -2025,6 +2318,7 @@ fun expandableListView(f: ExpandableListView_.() -> Unit) {
 
 open class ExpandableListView_ : ListView_() {
     var childDivider: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2034,10 +2328,11 @@ open class ExpandableListView_ : ListView_() {
         }
 
     private val _childDivider: Property<Drawable?, ExpandableListView> = Property(
-        null,
-        ExpandableListView::setChildDivider)
+        "childDivider",
+        null, ExpandableListView::setChildDivider)
 
     var onGroupCollapseListener: ExpandableListView.OnGroupCollapseListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2047,9 +2342,12 @@ open class ExpandableListView_ : ListView_() {
         }
 
     private val _onGroupCollapseListener: Property<ExpandableListView.OnGroupCollapseListener?,
-        ExpandableListView> = Property(null, ExpandableListView::setOnGroupCollapseListener)
+        ExpandableListView> = Property(
+        "onGroupCollapseListener", null,
+        ExpandableListView::setOnGroupCollapseListener)
 
     var onGroupExpandListener: ExpandableListView.OnGroupExpandListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2059,9 +2357,12 @@ open class ExpandableListView_ : ListView_() {
         }
 
     private val _onGroupExpandListener: Property<ExpandableListView.OnGroupExpandListener?,
-        ExpandableListView> = Property(null, ExpandableListView::setOnGroupExpandListener)
+        ExpandableListView> = Property(
+        "onGroupExpandListener", null,
+        ExpandableListView::setOnGroupExpandListener)
 
     var onGroupClickListener: ExpandableListView.OnGroupClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2071,9 +2372,12 @@ open class ExpandableListView_ : ListView_() {
         }
 
     private val _onGroupClickListener: Property<ExpandableListView.OnGroupClickListener?,
-        ExpandableListView> = Property(null, ExpandableListView::setOnGroupClickListener)
+        ExpandableListView> = Property(
+        "onGroupClickListener", null,
+        ExpandableListView::setOnGroupClickListener)
 
     var onChildClickListener: ExpandableListView.OnChildClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2083,9 +2387,12 @@ open class ExpandableListView_ : ListView_() {
         }
 
     private val _onChildClickListener: Property<ExpandableListView.OnChildClickListener?,
-        ExpandableListView> = Property(null, ExpandableListView::setOnChildClickListener)
+        ExpandableListView> = Property(
+        "onChildClickListener", null,
+        ExpandableListView::setOnChildClickListener)
 
     var selectedGroup: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2095,10 +2402,11 @@ open class ExpandableListView_ : ListView_() {
         }
 
     private val _selectedGroup: Property<Int, ExpandableListView> = Property(
-        0,
+        "selectedGroup", 0,
         ExpandableListView::setSelectedGroup)
 
     var childIndicator: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2107,11 +2415,11 @@ open class ExpandableListView_ : ListView_() {
             props += _childIndicator
         }
 
-    private val _childIndicator: Property<Drawable?, ExpandableListView> = Property(
-        null,
-        ExpandableListView::setChildIndicator)
+    private val _childIndicator: Property<Drawable?, ExpandableListView> =
+        Property("childIndicator", null, ExpandableListView::setChildIndicator)
 
     var groupIndicator: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2120,9 +2428,8 @@ open class ExpandableListView_ : ListView_() {
             props += _groupIndicator
         }
 
-    private val _groupIndicator: Property<Drawable?, ExpandableListView> = Property(
-        null,
-        ExpandableListView::setGroupIndicator)
+    private val _groupIndicator: Property<Drawable?, ExpandableListView> =
+        Property("groupIndicator", null, ExpandableListView::setGroupIndicator)
 
     override fun createEmpty(context: Context) = ExpandableListView(context)
 }
@@ -2149,6 +2456,7 @@ fun frameLayout(f: FrameLayout_.() -> Unit) {
 
 open class FrameLayout_ : ViewGroup_() {
     var foregroundGravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2158,10 +2466,11 @@ open class FrameLayout_ : ViewGroup_() {
         }
 
     private val _foregroundGravity: Property<Int, FrameLayout> = Property(
-        0,
+        "foregroundGravity", 0,
         FrameLayout::setForegroundGravity)
 
     var foreground: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2171,10 +2480,11 @@ open class FrameLayout_ : ViewGroup_() {
         }
 
     private val _foreground: Property<Drawable?, FrameLayout> = Property(
-        null,
+        "foreground", null,
         FrameLayout::setForeground)
 
     var foregroundTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2183,11 +2493,11 @@ open class FrameLayout_ : ViewGroup_() {
             props += _foregroundTintList
         }
 
-    private val _foregroundTintList: Property<ColorStateList?, FrameLayout> = Property(
-        null,
-        FrameLayout::setForegroundTintList)
+    private val _foregroundTintList: Property<ColorStateList?, FrameLayout> =
+        Property("foregroundTintList", null, FrameLayout::setForegroundTintList)
 
     var foregroundTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2196,11 +2506,11 @@ open class FrameLayout_ : ViewGroup_() {
             props += _foregroundTintMode
         }
 
-    private val _foregroundTintMode: Property<PorterDuff.Mode?, FrameLayout> = Property(
-        null,
-        FrameLayout::setForegroundTintMode)
+    private val _foregroundTintMode: Property<PorterDuff.Mode?, FrameLayout> =
+        Property("foregroundTintMode", null, FrameLayout::setForegroundTintMode)
 
     var measureAllChildren: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2210,8 +2520,8 @@ open class FrameLayout_ : ViewGroup_() {
         }
 
     private val _measureAllChildren: Property<Boolean, FrameLayout> = Property(
-        false,
-        FrameLayout::setMeasureAllChildren)
+        "measureAllChildren",
+        false, FrameLayout::setMeasureAllChildren)
 
     override fun createEmpty(context: Context) = FrameLayout(context)
 }
@@ -2226,6 +2536,7 @@ fun chronometer(f: Chronometer_.() -> Unit) {
 
 open class Chronometer_ : TextView_() {
     var base: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2234,9 +2545,10 @@ open class Chronometer_ : TextView_() {
             props += _base
         }
 
-    private val _base: Property<Long, Chronometer> = Property(0L, Chronometer::setBase)
+    private val _base: Property<Long, Chronometer> = Property("base", 0L, Chronometer::setBase)
 
     var onChronometerTickListener: Chronometer.OnChronometerTickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2246,9 +2558,12 @@ open class Chronometer_ : TextView_() {
         }
 
     private val _onChronometerTickListener: Property<Chronometer.OnChronometerTickListener?,
-        Chronometer> = Property(null, Chronometer::setOnChronometerTickListener)
+        Chronometer> = Property(
+        "onChronometerTickListener", null,
+        Chronometer::setOnChronometerTickListener)
 
     var format: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2257,7 +2572,9 @@ open class Chronometer_ : TextView_() {
             props += _format
         }
 
-    private val _format: Property<String?, Chronometer> = Property(null, Chronometer::setFormat)
+    private val _format: Property<String?, Chronometer> = Property(
+        "format", null,
+        Chronometer::setFormat)
 
     override fun createEmpty(context: Context) = Chronometer(context)
 }
@@ -2272,6 +2589,7 @@ fun viewFlipper(f: ViewFlipper_.() -> Unit) {
 
 open class ViewFlipper_ : ViewAnimator_() {
     var flipInterval: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2281,10 +2599,11 @@ open class ViewFlipper_ : ViewAnimator_() {
         }
 
     private val _flipInterval: Property<Int, ViewFlipper> = Property(
-        0,
+        "flipInterval", 0,
         ViewFlipper::setFlipInterval)
 
     var autoStart: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2294,7 +2613,7 @@ open class ViewFlipper_ : ViewAnimator_() {
         }
 
     private val _autoStart: Property<Boolean, ViewFlipper> = Property(
-        false,
+        "autoStart", false,
         ViewFlipper::setAutoStart)
 
     override fun createEmpty(context: Context) = ViewFlipper(context)
@@ -2310,6 +2629,7 @@ fun textClock(f: TextClock_.() -> Unit) {
 
 open class TextClock_ : TextView_() {
     var format12Hour: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2319,10 +2639,11 @@ open class TextClock_ : TextView_() {
         }
 
     private val _format12Hour: Property<CharSequence?, TextClock> = Property(
-        null,
+        "format12Hour", null,
         TextClock::setFormat12Hour)
 
     var format24Hour: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2332,10 +2653,11 @@ open class TextClock_ : TextView_() {
         }
 
     private val _format24Hour: Property<CharSequence?, TextClock> = Property(
-        null,
+        "format24Hour", null,
         TextClock::setFormat24Hour)
 
     var timeZone: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2344,7 +2666,9 @@ open class TextClock_ : TextView_() {
             props += _timeZone
         }
 
-    private val _timeZone: Property<String?, TextClock> = Property(null, TextClock::setTimeZone)
+    private val _timeZone: Property<String?, TextClock> = Property(
+        "timeZone", null,
+        TextClock::setTimeZone)
 
     override fun createEmpty(context: Context) = TextClock(context)
 }
@@ -2359,6 +2683,7 @@ fun tableLayout(f: TableLayout_.() -> Unit) {
 
 open class TableLayout_ : LinearLayout_() {
     var shrinkAllColumns: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2368,10 +2693,11 @@ open class TableLayout_ : LinearLayout_() {
         }
 
     private val _shrinkAllColumns: Property<Boolean, TableLayout> = Property(
-        false,
-        TableLayout::setShrinkAllColumns)
+        "shrinkAllColumns",
+        false, TableLayout::setShrinkAllColumns)
 
     var stretchAllColumns: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2381,8 +2707,8 @@ open class TableLayout_ : LinearLayout_() {
         }
 
     private val _stretchAllColumns: Property<Boolean, TableLayout> = Property(
-        false,
-        TableLayout::setStretchAllColumns)
+        "stretchAllColumns",
+        false, TableLayout::setStretchAllColumns)
 
     override fun createEmpty(context: Context) = TableLayout(context)
 }
@@ -2396,33 +2722,8 @@ fun checkedTextView(f: CheckedTextView_.() -> Unit) {
 }
 
 open class CheckedTextView_ : TextView_() {
-    var checkMarkTintList: ColorStateList
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _checkMarkTintList.set(value)
-            props += _checkMarkTintList
-        }
-
-    private val _checkMarkTintList: Property<ColorStateList?, CheckedTextView> = Property(
-        null,
-        CheckedTextView::setCheckMarkTintList)
-
-    var checkMarkTintMode: PorterDuff.Mode
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _checkMarkTintMode.set(value)
-            props += _checkMarkTintMode
-        }
-
-    private val _checkMarkTintMode: Property<PorterDuff.Mode?, CheckedTextView> = Property(
-        null,
-        CheckedTextView::setCheckMarkTintMode)
-
     var checked: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2432,10 +2733,37 @@ open class CheckedTextView_ : TextView_() {
         }
 
     private val _checked: Property<Boolean, CheckedTextView> = Property(
-        false,
+        "checked", false,
         CheckedTextView::setChecked)
 
+    var checkMarkTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _checkMarkTintList.set(value)
+            props += _checkMarkTintList
+        }
+
+    private val _checkMarkTintList: Property<ColorStateList?, CheckedTextView> =
+        Property("checkMarkTintList", null, CheckedTextView::setCheckMarkTintList)
+
+    var checkMarkTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _checkMarkTintMode.set(value)
+            props += _checkMarkTintMode
+        }
+
+    private val _checkMarkTintMode: Property<PorterDuff.Mode?, CheckedTextView> =
+        Property("checkMarkTintMode", null, CheckedTextView::setCheckMarkTintMode)
+
     var checkMarkDrawable: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2445,8 +2773,8 @@ open class CheckedTextView_ : TextView_() {
         }
 
     private val _checkMarkDrawable: Property<Int, CheckedTextView> = Property(
-        0,
-        CheckedTextView::setCheckMarkDrawable)
+        "checkMarkDrawable",
+        0, CheckedTextView::setCheckMarkDrawable)
 
     override fun createEmpty(context: Context) = CheckedTextView(context)
 }
@@ -2461,6 +2789,7 @@ fun viewAnimator(f: ViewAnimator_.() -> Unit) {
 
 open class ViewAnimator_ : FrameLayout_() {
     var displayedChild: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2470,10 +2799,11 @@ open class ViewAnimator_ : FrameLayout_() {
         }
 
     private val _displayedChild: Property<Int, ViewAnimator> = Property(
-        0,
+        "displayedChild", 0,
         ViewAnimator::setDisplayedChild)
 
     var inAnimation: Animation
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2483,10 +2813,11 @@ open class ViewAnimator_ : FrameLayout_() {
         }
 
     private val _inAnimation: Property<Animation?, ViewAnimator> = Property(
-        null,
+        "inAnimation", null,
         ViewAnimator::setInAnimation)
 
     var outAnimation: Animation
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2496,10 +2827,11 @@ open class ViewAnimator_ : FrameLayout_() {
         }
 
     private val _outAnimation: Property<Animation?, ViewAnimator> = Property(
-        null,
+        "outAnimation", null,
         ViewAnimator::setOutAnimation)
 
     var animateFirstView: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2509,8 +2841,8 @@ open class ViewAnimator_ : FrameLayout_() {
         }
 
     private val _animateFirstView: Property<Boolean, ViewAnimator> = Property(
-        false,
-        ViewAnimator::setAnimateFirstView)
+        "animateFirstView",
+        false, ViewAnimator::setAnimateFirstView)
 
     override fun createEmpty(context: Context) = ViewAnimator(context)
 }
@@ -2525,6 +2857,7 @@ fun viewSwitcher(f: ViewSwitcher_.() -> Unit) {
 
 open class ViewSwitcher_ : ViewAnimator_() {
     var factory: ViewSwitcher.ViewFactory
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2534,8 +2867,8 @@ open class ViewSwitcher_ : ViewAnimator_() {
         }
 
     private val _factory: Property<ViewSwitcher.ViewFactory?, ViewSwitcher> = Property(
-        null,
-        ViewSwitcher::setFactory)
+        "factory",
+        null, ViewSwitcher::setFactory)
 
     override fun createEmpty(context: Context) = ViewSwitcher(context)
 }
@@ -2550,6 +2883,7 @@ fun absListView(f: AbsListView_.() -> Unit) {
 
 open class AbsListView_ : AdapterView_() {
     var friction: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2558,9 +2892,12 @@ open class AbsListView_ : AdapterView_() {
             props += _friction
         }
 
-    private val _friction: Property<Float, AbsListView> = Property(0.0f, AbsListView::setFriction)
+    private val _friction: Property<Float, AbsListView> = Property(
+        "friction", 0.0f,
+        AbsListView::setFriction)
 
     var remoteViewsAdapter: Intent
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2570,10 +2907,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _remoteViewsAdapter: Property<Intent?, AbsListView> = Property(
-        null,
-        AbsListView::setRemoteViewsAdapter)
+        "remoteViewsAdapter",
+        null, AbsListView::setRemoteViewsAdapter)
 
     var cacheColorHint: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2583,10 +2921,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _cacheColorHint: Property<Int, AbsListView> = Property(
-        0,
+        "cacheColorHint", 0,
         AbsListView::setCacheColorHint)
 
     var choiceMode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2595,9 +2934,12 @@ open class AbsListView_ : AdapterView_() {
             props += _choiceMode
         }
 
-    private val _choiceMode: Property<Int, AbsListView> = Property(0, AbsListView::setChoiceMode)
+    private val _choiceMode: Property<Int, AbsListView> = Property(
+        "choiceMode", 0,
+        AbsListView::setChoiceMode)
 
     var multiChoiceModeListener: AbsListView.MultiChoiceModeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2607,9 +2949,12 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _multiChoiceModeListener: Property<AbsListView.MultiChoiceModeListener?,
-        AbsListView> = Property(null, AbsListView::setMultiChoiceModeListener)
+        AbsListView> = Property(
+        "multiChoiceModeListener", null,
+        AbsListView::setMultiChoiceModeListener)
 
     var fastScrollEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2619,10 +2964,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _fastScrollEnabled: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setFastScrollEnabled)
+        "fastScrollEnabled",
+        false, AbsListView::setFastScrollEnabled)
 
     var fastScrollStyle: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2632,10 +2978,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _fastScrollStyle: Property<Int, AbsListView> = Property(
-        0,
+        "fastScrollStyle", 0,
         AbsListView::setFastScrollStyle)
 
     var fastScrollAlwaysVisible: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2644,11 +2991,11 @@ open class AbsListView_ : AdapterView_() {
             props += _fastScrollAlwaysVisible
         }
 
-    private val _fastScrollAlwaysVisible: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setFastScrollAlwaysVisible)
+    private val _fastScrollAlwaysVisible: Property<Boolean, AbsListView> =
+        Property("fastScrollAlwaysVisible", false, AbsListView::setFastScrollAlwaysVisible)
 
     var smoothScrollbarEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2657,11 +3004,11 @@ open class AbsListView_ : AdapterView_() {
             props += _smoothScrollbarEnabled
         }
 
-    private val _smoothScrollbarEnabled: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setSmoothScrollbarEnabled)
+    private val _smoothScrollbarEnabled: Property<Boolean, AbsListView> =
+        Property("smoothScrollbarEnabled", false, AbsListView::setSmoothScrollbarEnabled)
 
     var onScrollListener: AbsListView.OnScrollListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2671,9 +3018,10 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _onScrollListener: Property<AbsListView.OnScrollListener?, AbsListView> =
-        Property(null, AbsListView::setOnScrollListener)
+        Property("onScrollListener", null, AbsListView::setOnScrollListener)
 
     var scrollingCacheEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2682,11 +3030,11 @@ open class AbsListView_ : AdapterView_() {
             props += _scrollingCacheEnabled
         }
 
-    private val _scrollingCacheEnabled: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setScrollingCacheEnabled)
+    private val _scrollingCacheEnabled: Property<Boolean, AbsListView> =
+        Property("scrollingCacheEnabled", false, AbsListView::setScrollingCacheEnabled)
 
     var textFilterEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2696,10 +3044,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _textFilterEnabled: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setTextFilterEnabled)
+        "textFilterEnabled",
+        false, AbsListView::setTextFilterEnabled)
 
     var stackFromBottom: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2709,10 +3058,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _stackFromBottom: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setStackFromBottom)
+        "stackFromBottom",
+        false, AbsListView::setStackFromBottom)
 
     var filterText: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2722,10 +3072,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _filterText: Property<String?, AbsListView> = Property(
-        null,
+        "filterText", null,
         AbsListView::setFilterText)
 
     var drawSelectorOnTop: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2735,10 +3086,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _drawSelectorOnTop: Property<Boolean, AbsListView> = Property(
-        false,
-        AbsListView::setDrawSelectorOnTop)
+        "drawSelectorOnTop",
+        false, AbsListView::setDrawSelectorOnTop)
 
     var velocityScale: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2748,10 +3100,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _velocityScale: Property<Float, AbsListView> = Property(
-        0.0f,
+        "velocityScale", 0.0f,
         AbsListView::setVelocityScale)
 
     var transcriptMode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2761,10 +3114,11 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _transcriptMode: Property<Int, AbsListView> = Property(
-        0,
+        "transcriptMode", 0,
         AbsListView::setTranscriptMode)
 
     var recyclerListener: AbsListView.RecyclerListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2774,9 +3128,10 @@ open class AbsListView_ : AdapterView_() {
         }
 
     private val _recyclerListener: Property<AbsListView.RecyclerListener?, AbsListView> =
-        Property(null, AbsListView::setRecyclerListener)
+        Property("recyclerListener", null, AbsListView::setRecyclerListener)
 
     var selector: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2785,7 +3140,9 @@ open class AbsListView_ : AdapterView_() {
             props += _selector
         }
 
-    private val _selector: Property<Int, AbsListView> = Property(0, AbsListView::setSelector)
+    private val _selector: Property<Int, AbsListView> = Property(
+        "selector", 0,
+        AbsListView::setSelector)
 }
 
 fun zoomControls(f: ZoomControls_.() -> Unit) {
@@ -2798,6 +3155,7 @@ fun zoomControls(f: ZoomControls_.() -> Unit) {
 
 open class ZoomControls_ : LinearLayout_() {
     var zoomSpeed: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2806,9 +3164,12 @@ open class ZoomControls_ : LinearLayout_() {
             props += _zoomSpeed
         }
 
-    private val _zoomSpeed: Property<Long, ZoomControls> = Property(0L, ZoomControls::setZoomSpeed)
+    private val _zoomSpeed: Property<Long, ZoomControls> = Property(
+        "zoomSpeed", 0L,
+        ZoomControls::setZoomSpeed)
 
     var isZoomInEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2818,23 +3179,11 @@ open class ZoomControls_ : LinearLayout_() {
         }
 
     private val _isZoomInEnabled: Property<Boolean, ZoomControls> = Property(
-        false,
-        ZoomControls::setIsZoomInEnabled)
-
-    var isZoomOutEnabled: Boolean
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _isZoomOutEnabled.set(value)
-            props += _isZoomOutEnabled
-        }
-
-    private val _isZoomOutEnabled: Property<Boolean, ZoomControls> = Property(
-        false,
-        ZoomControls::setIsZoomOutEnabled)
+        "isZoomInEnabled",
+        false, ZoomControls::setIsZoomInEnabled)
 
     var onZoomInClickListener: View.OnClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2844,9 +3193,10 @@ open class ZoomControls_ : LinearLayout_() {
         }
 
     private val _onZoomInClickListener: Property<View.OnClickListener?, ZoomControls> =
-        Property(null, ZoomControls::setOnZoomInClickListener)
+        Property("onZoomInClickListener", null, ZoomControls::setOnZoomInClickListener)
 
     var onZoomOutClickListener: View.OnClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2856,7 +3206,21 @@ open class ZoomControls_ : LinearLayout_() {
         }
 
     private val _onZoomOutClickListener: Property<View.OnClickListener?, ZoomControls> =
-        Property(null, ZoomControls::setOnZoomOutClickListener)
+        Property("onZoomOutClickListener", null, ZoomControls::setOnZoomOutClickListener)
+
+    var isZoomOutEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _isZoomOutEnabled.set(value)
+            props += _isZoomOutEnabled
+        }
+
+    private val _isZoomOutEnabled: Property<Boolean, ZoomControls> = Property(
+        "isZoomOutEnabled",
+        false, ZoomControls::setIsZoomOutEnabled)
 
     override fun createEmpty(context: Context) = ZoomControls(context)
 }
@@ -2871,6 +3235,7 @@ fun horizontalScrollView(f: HorizontalScrollView_.() -> Unit) {
 
 open class HorizontalScrollView_ : FrameLayout_() {
     var fillViewport: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2880,10 +3245,11 @@ open class HorizontalScrollView_ : FrameLayout_() {
         }
 
     private val _fillViewport: Property<Boolean, HorizontalScrollView> = Property(
-        false,
-        HorizontalScrollView::setFillViewport)
+        "fillViewport",
+        false, HorizontalScrollView::setFillViewport)
 
     var smoothScrollingEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2892,9 +3258,10 @@ open class HorizontalScrollView_ : FrameLayout_() {
             props += _smoothScrollingEnabled
         }
 
-    private val _smoothScrollingEnabled: Property<Boolean, HorizontalScrollView> = Property(
-        false,
-        HorizontalScrollView::setSmoothScrollingEnabled)
+    private val _smoothScrollingEnabled: Property<Boolean, HorizontalScrollView> =
+        Property(
+            "smoothScrollingEnabled", false,
+            HorizontalScrollView::setSmoothScrollingEnabled)
 
     override fun createEmpty(context: Context) = HorizontalScrollView(context)
 }
@@ -2909,6 +3276,7 @@ fun imageView(f: ImageView_.() -> Unit) {
 
 open class ImageView_ : View_() {
     var maxHeight: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2917,9 +3285,12 @@ open class ImageView_ : View_() {
             props += _maxHeight
         }
 
-    private val _maxHeight: Property<Int, ImageView> = Property(0, ImageView::setMaxHeight)
+    private val _maxHeight: Property<Int, ImageView> = Property(
+        "maxHeight", 0,
+        ImageView::setMaxHeight)
 
     var maxWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2928,9 +3299,12 @@ open class ImageView_ : View_() {
             props += _maxWidth
         }
 
-    private val _maxWidth: Property<Int, ImageView> = Property(0, ImageView::setMaxWidth)
+    private val _maxWidth: Property<Int, ImageView> = Property(
+        "maxWidth", 0,
+        ImageView::setMaxWidth)
 
     var adjustViewBounds: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2940,10 +3314,11 @@ open class ImageView_ : View_() {
         }
 
     private val _adjustViewBounds: Property<Boolean, ImageView> = Property(
-        false,
-        ImageView::setAdjustViewBounds)
+        "adjustViewBounds",
+        false, ImageView::setAdjustViewBounds)
 
     var imageResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2952,9 +3327,12 @@ open class ImageView_ : View_() {
             props += _imageResource
         }
 
-    private val _imageResource: Property<Int, ImageView> = Property(0, ImageView::setImageResource)
+    private val _imageResource: Property<Int, ImageView> = Property(
+        "imageResource", 0,
+        ImageView::setImageResource)
 
     var imageURI: Uri
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2963,9 +3341,12 @@ open class ImageView_ : View_() {
             props += _imageURI
         }
 
-    private val _imageURI: Property<Uri?, ImageView> = Property(null, ImageView::setImageURI)
+    private val _imageURI: Property<Uri?, ImageView> = Property(
+        "imageURI", null,
+        ImageView::setImageURI)
 
     var imageDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2975,10 +3356,11 @@ open class ImageView_ : View_() {
         }
 
     private val _imageDrawable: Property<Drawable?, ImageView> = Property(
-        null,
+        "imageDrawable", null,
         ImageView::setImageDrawable)
 
     var imageTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -2988,10 +3370,11 @@ open class ImageView_ : View_() {
         }
 
     private val _imageTintList: Property<ColorStateList?, ImageView> = Property(
-        null,
-        ImageView::setImageTintList)
+        "imageTintList",
+        null, ImageView::setImageTintList)
 
     var imageTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3001,10 +3384,11 @@ open class ImageView_ : View_() {
         }
 
     private val _imageTintMode: Property<PorterDuff.Mode?, ImageView> = Property(
-        null,
-        ImageView::setImageTintMode)
+        "imageTintMode",
+        null, ImageView::setImageTintMode)
 
     var imageBitmap: Bitmap
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3014,10 +3398,11 @@ open class ImageView_ : View_() {
         }
 
     private val _imageBitmap: Property<Bitmap?, ImageView> = Property(
-        null,
+        "imageBitmap", null,
         ImageView::setImageBitmap)
 
     var imageLevel: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3026,9 +3411,12 @@ open class ImageView_ : View_() {
             props += _imageLevel
         }
 
-    private val _imageLevel: Property<Int, ImageView> = Property(0, ImageView::setImageLevel)
+    private val _imageLevel: Property<Int, ImageView> = Property(
+        "imageLevel", 0,
+        ImageView::setImageLevel)
 
     var scaleType: ImageView.ScaleType
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3038,10 +3426,11 @@ open class ImageView_ : View_() {
         }
 
     private val _scaleType: Property<ImageView.ScaleType?, ImageView> = Property(
-        null,
+        "scaleType", null,
         ImageView::setScaleType)
 
     var imageMatrix: Matrix
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3051,10 +3440,11 @@ open class ImageView_ : View_() {
         }
 
     private val _imageMatrix: Property<Matrix?, ImageView> = Property(
-        null,
+        "imageMatrix", null,
         ImageView::setImageMatrix)
 
     var cropToPadding: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3064,10 +3454,11 @@ open class ImageView_ : View_() {
         }
 
     private val _cropToPadding: Property<Boolean, ImageView> = Property(
-        false,
+        "cropToPadding", false,
         ImageView::setCropToPadding)
 
     var baseline: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3076,9 +3467,12 @@ open class ImageView_ : View_() {
             props += _baseline
         }
 
-    private val _baseline: Property<Int, ImageView> = Property(0, ImageView::setBaseline)
+    private val _baseline: Property<Int, ImageView> = Property(
+        "baseline", 0,
+        ImageView::setBaseline)
 
     var baselineAlignBottom: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3088,10 +3482,11 @@ open class ImageView_ : View_() {
         }
 
     private val _baselineAlignBottom: Property<Boolean, ImageView> = Property(
-        false,
-        ImageView::setBaselineAlignBottom)
+        "baselineAlignBottom",
+        false, ImageView::setBaselineAlignBottom)
 
     var imageAlpha: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3100,9 +3495,12 @@ open class ImageView_ : View_() {
             props += _imageAlpha
         }
 
-    private val _imageAlpha: Property<Int, ImageView> = Property(0, ImageView::setImageAlpha)
+    private val _imageAlpha: Property<Int, ImageView> = Property(
+        "imageAlpha", 0,
+        ImageView::setImageAlpha)
 
     var colorFilter: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3111,7 +3509,9 @@ open class ImageView_ : View_() {
             props += _colorFilter
         }
 
-    private val _colorFilter: Property<Int, ImageView> = Property(0, ImageView::setColorFilter)
+    private val _colorFilter: Property<Int, ImageView> = Property(
+        "colorFilter", 0,
+        ImageView::setColorFilter)
 
     override fun createEmpty(context: Context) = ImageView(context)
 }
@@ -3126,6 +3526,7 @@ fun adapterView(f: AdapterView_.() -> Unit) {
 
 open class AdapterView_ : ViewGroup_() {
     var adapter: Adapter
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3135,10 +3536,11 @@ open class AdapterView_ : ViewGroup_() {
         }
 
     private val _adapter: Property<Adapter?, AdapterView<Adapter>> = Property(
-        null,
+        "adapter", null,
         AdapterView<Adapter>::setAdapter)
 
     var selection: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3148,10 +3550,11 @@ open class AdapterView_ : ViewGroup_() {
         }
 
     private val _selection: Property<Int, AdapterView<Adapter>> = Property(
-        0,
+        "selection", 0,
         AdapterView<Adapter>::setSelection)
 
     var onItemClickListener: AdapterView.OnItemClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3161,9 +3564,12 @@ open class AdapterView_ : ViewGroup_() {
         }
 
     private val _onItemClickListener: Property<AdapterView.OnItemClickListener?,
-        AdapterView<Adapter>> = Property(null, AdapterView<Adapter>::setOnItemClickListener)
+        AdapterView<Adapter>> = Property(
+        "onItemClickListener", null,
+        AdapterView<Adapter>::setOnItemClickListener)
 
     var onItemLongClickListener: AdapterView.OnItemLongClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3173,9 +3579,12 @@ open class AdapterView_ : ViewGroup_() {
         }
 
     private val _onItemLongClickListener: Property<AdapterView.OnItemLongClickListener?,
-        AdapterView<Adapter>> = Property(null, AdapterView<Adapter>::setOnItemLongClickListener)
+        AdapterView<Adapter>> = Property(
+        "onItemLongClickListener", null,
+        AdapterView<Adapter>::setOnItemLongClickListener)
 
     var onItemSelectedListener: AdapterView.OnItemSelectedListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3185,9 +3594,12 @@ open class AdapterView_ : ViewGroup_() {
         }
 
     private val _onItemSelectedListener: Property<AdapterView.OnItemSelectedListener?,
-        AdapterView<Adapter>> = Property(null, AdapterView<Adapter>::setOnItemSelectedListener)
+        AdapterView<Adapter>> = Property(
+        "onItemSelectedListener", null,
+        AdapterView<Adapter>::setOnItemSelectedListener)
 
     var emptyView: View
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3197,7 +3609,7 @@ open class AdapterView_ : ViewGroup_() {
         }
 
     private val _emptyView: Property<View?, AdapterView<Adapter>> = Property(
-        null,
+        "emptyView", null,
         AdapterView<Adapter>::setEmptyView)
 }
 
@@ -3211,6 +3623,7 @@ fun switch(f: Switch_.() -> Unit) {
 
 open class Switch_ : CompoundButton_() {
     var splitTrack: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3219,9 +3632,12 @@ open class Switch_ : CompoundButton_() {
             props += _splitTrack
         }
 
-    private val _splitTrack: Property<Boolean, Switch> = Property(false, Switch::setSplitTrack)
+    private val _splitTrack: Property<Boolean, Switch> = Property(
+        "splitTrack", false,
+        Switch::setSplitTrack)
 
     var switchTypeface: Typeface
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3231,10 +3647,11 @@ open class Switch_ : CompoundButton_() {
         }
 
     private val _switchTypeface: Property<Typeface?, Switch> = Property(
-        null,
+        "switchTypeface", null,
         Switch::setSwitchTypeface)
 
     var switchPadding: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3243,9 +3660,12 @@ open class Switch_ : CompoundButton_() {
             props += _switchPadding
         }
 
-    private val _switchPadding: Property<Int, Switch> = Property(0, Switch::setSwitchPadding)
+    private val _switchPadding: Property<Int, Switch> = Property(
+        "switchPadding", 0,
+        Switch::setSwitchPadding)
 
     var switchMinWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3254,9 +3674,12 @@ open class Switch_ : CompoundButton_() {
             props += _switchMinWidth
         }
 
-    private val _switchMinWidth: Property<Int, Switch> = Property(0, Switch::setSwitchMinWidth)
+    private val _switchMinWidth: Property<Int, Switch> = Property(
+        "switchMinWidth", 0,
+        Switch::setSwitchMinWidth)
 
     var thumbTextPadding: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3265,9 +3688,12 @@ open class Switch_ : CompoundButton_() {
             props += _thumbTextPadding
         }
 
-    private val _thumbTextPadding: Property<Int, Switch> = Property(0, Switch::setThumbTextPadding)
+    private val _thumbTextPadding: Property<Int, Switch> = Property(
+        "thumbTextPadding", 0,
+        Switch::setThumbTextPadding)
 
     var trackDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3277,10 +3703,11 @@ open class Switch_ : CompoundButton_() {
         }
 
     private val _trackDrawable: Property<Drawable?, Switch> = Property(
-        null,
+        "trackDrawable", null,
         Switch::setTrackDrawable)
 
     var trackResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3289,9 +3716,12 @@ open class Switch_ : CompoundButton_() {
             props += _trackResource
         }
 
-    private val _trackResource: Property<Int, Switch> = Property(0, Switch::setTrackResource)
+    private val _trackResource: Property<Int, Switch> = Property(
+        "trackResource", 0,
+        Switch::setTrackResource)
 
     var thumbDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3301,10 +3731,11 @@ open class Switch_ : CompoundButton_() {
         }
 
     private val _thumbDrawable: Property<Drawable?, Switch> = Property(
-        null,
+        "thumbDrawable", null,
         Switch::setThumbDrawable)
 
     var thumbResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3313,9 +3744,12 @@ open class Switch_ : CompoundButton_() {
             props += _thumbResource
         }
 
-    private val _thumbResource: Property<Int, Switch> = Property(0, Switch::setThumbResource)
+    private val _thumbResource: Property<Int, Switch> = Property(
+        "thumbResource", 0,
+        Switch::setThumbResource)
 
     var textOn: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3324,9 +3758,12 @@ open class Switch_ : CompoundButton_() {
             props += _textOn
         }
 
-    private val _textOn: Property<CharSequence?, Switch> = Property(null, Switch::setTextOn)
+    private val _textOn: Property<CharSequence?, Switch> = Property(
+        "textOn", null,
+        Switch::setTextOn)
 
     var textOff: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3335,9 +3772,12 @@ open class Switch_ : CompoundButton_() {
             props += _textOff
         }
 
-    private val _textOff: Property<CharSequence?, Switch> = Property(null, Switch::setTextOff)
+    private val _textOff: Property<CharSequence?, Switch> = Property(
+        "textOff", null,
+        Switch::setTextOff)
 
     var showText: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3346,7 +3786,9 @@ open class Switch_ : CompoundButton_() {
             props += _showText
         }
 
-    private val _showText: Property<Boolean, Switch> = Property(false, Switch::setShowText)
+    private val _showText: Property<Boolean, Switch> = Property(
+        "showText", false,
+        Switch::setShowText)
 
     override fun createEmpty(context: Context) = Switch(context)
 }
@@ -3373,6 +3815,7 @@ fun adapterViewAnimator(f: AdapterViewAnimator_.() -> Unit) {
 
 open class AdapterViewAnimator_ : AdapterView_() {
     var remoteViewsAdapter: Intent
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3381,11 +3824,11 @@ open class AdapterViewAnimator_ : AdapterView_() {
             props += _remoteViewsAdapter
         }
 
-    private val _remoteViewsAdapter: Property<Intent?, AdapterViewAnimator> = Property(
-        null,
-        AdapterViewAnimator::setRemoteViewsAdapter)
+    private val _remoteViewsAdapter: Property<Intent?, AdapterViewAnimator> =
+        Property("remoteViewsAdapter", null, AdapterViewAnimator::setRemoteViewsAdapter)
 
     var displayedChild: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3395,10 +3838,11 @@ open class AdapterViewAnimator_ : AdapterView_() {
         }
 
     private val _displayedChild: Property<Int, AdapterViewAnimator> = Property(
-        0,
+        "displayedChild", 0,
         AdapterViewAnimator::setDisplayedChild)
 
     var inAnimation: ObjectAnimator
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3407,11 +3851,11 @@ open class AdapterViewAnimator_ : AdapterView_() {
             props += _inAnimation
         }
 
-    private val _inAnimation: Property<ObjectAnimator?, AdapterViewAnimator> = Property(
-        null,
-        AdapterViewAnimator::setInAnimation)
+    private val _inAnimation: Property<ObjectAnimator?, AdapterViewAnimator> =
+        Property("inAnimation", null, AdapterViewAnimator::setInAnimation)
 
     var outAnimation: ObjectAnimator
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3420,11 +3864,11 @@ open class AdapterViewAnimator_ : AdapterView_() {
             props += _outAnimation
         }
 
-    private val _outAnimation: Property<ObjectAnimator?, AdapterViewAnimator> = Property(
-        null,
-        AdapterViewAnimator::setOutAnimation)
+    private val _outAnimation: Property<ObjectAnimator?, AdapterViewAnimator> =
+        Property("outAnimation", null, AdapterViewAnimator::setOutAnimation)
 
     var animateFirstView: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3433,9 +3877,8 @@ open class AdapterViewAnimator_ : AdapterView_() {
             props += _animateFirstView
         }
 
-    private val _animateFirstView: Property<Boolean, AdapterViewAnimator> = Property(
-        false,
-        AdapterViewAnimator::setAnimateFirstView)
+    private val _animateFirstView: Property<Boolean, AdapterViewAnimator> =
+        Property("animateFirstView", false, AdapterViewAnimator::setAnimateFirstView)
 }
 
 fun dialerFilter(f: DialerFilter_.() -> Unit) {
@@ -3448,6 +3891,7 @@ fun dialerFilter(f: DialerFilter_.() -> Unit) {
 
 open class DialerFilter_ : RelativeLayout_() {
     var lettersWatcher: TextWatcher
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3457,10 +3901,11 @@ open class DialerFilter_ : RelativeLayout_() {
         }
 
     private val _lettersWatcher: Property<TextWatcher?, DialerFilter> = Property(
-        null,
-        DialerFilter::setLettersWatcher)
+        "lettersWatcher",
+        null, DialerFilter::setLettersWatcher)
 
     var digitsWatcher: TextWatcher
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3470,10 +3915,11 @@ open class DialerFilter_ : RelativeLayout_() {
         }
 
     private val _digitsWatcher: Property<TextWatcher?, DialerFilter> = Property(
-        null,
-        DialerFilter::setDigitsWatcher)
+        "digitsWatcher",
+        null, DialerFilter::setDigitsWatcher)
 
     var filterWatcher: TextWatcher
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3483,10 +3929,11 @@ open class DialerFilter_ : RelativeLayout_() {
         }
 
     private val _filterWatcher: Property<TextWatcher?, DialerFilter> = Property(
-        null,
-        DialerFilter::setFilterWatcher)
+        "filterWatcher",
+        null, DialerFilter::setFilterWatcher)
 
     var mode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3495,7 +3942,7 @@ open class DialerFilter_ : RelativeLayout_() {
             props += _mode
         }
 
-    private val _mode: Property<Int, DialerFilter> = Property(0, DialerFilter::setMode)
+    private val _mode: Property<Int, DialerFilter> = Property("mode", 0, DialerFilter::setMode)
 
     override fun createEmpty(context: Context) = DialerFilter(context)
 }
@@ -3510,6 +3957,7 @@ fun seekBar(f: SeekBar_.() -> Unit) {
 
 open class SeekBar_ : AbsSeekBar_() {
     var onSeekBarChangeListener: SeekBar.OnSeekBarChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3519,7 +3967,7 @@ open class SeekBar_ : AbsSeekBar_() {
         }
 
     private val _onSeekBarChangeListener: Property<SeekBar.OnSeekBarChangeListener?, SeekBar> =
-        Property(null, SeekBar::setOnSeekBarChangeListener)
+        Property("onSeekBarChangeListener", null, SeekBar::setOnSeekBarChangeListener)
 
     override fun createEmpty(context: Context) = SeekBar(context)
 }
@@ -3546,6 +3994,7 @@ fun searchView(f: SearchView_.() -> Unit) {
 
 open class SearchView_ : LinearLayout_() {
     var maxWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3554,9 +4003,12 @@ open class SearchView_ : LinearLayout_() {
             props += _maxWidth
         }
 
-    private val _maxWidth: Property<Int, SearchView> = Property(0, SearchView::setMaxWidth)
+    private val _maxWidth: Property<Int, SearchView> = Property(
+        "maxWidth", 0,
+        SearchView::setMaxWidth)
 
     var inputType: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3565,9 +4017,12 @@ open class SearchView_ : LinearLayout_() {
             props += _inputType
         }
 
-    private val _inputType: Property<Int, SearchView> = Property(0, SearchView::setInputType)
+    private val _inputType: Property<Int, SearchView> = Property(
+        "inputType", 0,
+        SearchView::setInputType)
 
     var imeOptions: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3576,9 +4031,12 @@ open class SearchView_ : LinearLayout_() {
             props += _imeOptions
         }
 
-    private val _imeOptions: Property<Int, SearchView> = Property(0, SearchView::setImeOptions)
+    private val _imeOptions: Property<Int, SearchView> = Property(
+        "imeOptions", 0,
+        SearchView::setImeOptions)
 
     var searchableInfo: SearchableInfo
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3588,10 +4046,11 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _searchableInfo: Property<SearchableInfo?, SearchView> = Property(
-        null,
-        SearchView::setSearchableInfo)
+        "searchableInfo",
+        null, SearchView::setSearchableInfo)
 
     var onQueryTextListener: SearchView.OnQueryTextListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3601,9 +4060,10 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _onQueryTextListener: Property<SearchView.OnQueryTextListener?, SearchView> =
-        Property(null, SearchView::setOnQueryTextListener)
+        Property("onQueryTextListener", null, SearchView::setOnQueryTextListener)
 
     var onCloseListener: SearchView.OnCloseListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3612,11 +4072,11 @@ open class SearchView_ : LinearLayout_() {
             props += _onCloseListener
         }
 
-    private val _onCloseListener: Property<SearchView.OnCloseListener?, SearchView> = Property(
-        null,
-        SearchView::setOnCloseListener)
+    private val _onCloseListener: Property<SearchView.OnCloseListener?, SearchView> =
+        Property("onCloseListener", null, SearchView::setOnCloseListener)
 
     var onQueryTextFocusChangeListener: View.OnFocusChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3626,9 +4086,12 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _onQueryTextFocusChangeListener: Property<View.OnFocusChangeListener?, SearchView> =
-        Property(null, SearchView::setOnQueryTextFocusChangeListener)
+        Property(
+            "onQueryTextFocusChangeListener", null,
+            SearchView::setOnQueryTextFocusChangeListener)
 
     var onSuggestionListener: SearchView.OnSuggestionListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3638,9 +4101,10 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _onSuggestionListener: Property<SearchView.OnSuggestionListener?, SearchView> =
-        Property(null, SearchView::setOnSuggestionListener)
+        Property("onSuggestionListener", null, SearchView::setOnSuggestionListener)
 
     var onSearchClickListener: View.OnClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3649,11 +4113,11 @@ open class SearchView_ : LinearLayout_() {
             props += _onSearchClickListener
         }
 
-    private val _onSearchClickListener: Property<View.OnClickListener?, SearchView> = Property(
-        null,
-        SearchView::setOnSearchClickListener)
+    private val _onSearchClickListener: Property<View.OnClickListener?, SearchView> =
+        Property("onSearchClickListener", null, SearchView::setOnSearchClickListener)
 
     var queryHint: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3663,10 +4127,11 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _queryHint: Property<CharSequence?, SearchView> = Property(
-        null,
+        "queryHint", null,
         SearchView::setQueryHint)
 
     var iconifiedByDefault: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3676,10 +4141,11 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _iconifiedByDefault: Property<Boolean, SearchView> = Property(
-        false,
-        SearchView::setIconifiedByDefault)
+        "iconifiedByDefault",
+        false, SearchView::setIconifiedByDefault)
 
     var iconified: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3689,10 +4155,11 @@ open class SearchView_ : LinearLayout_() {
         }
 
     private val _iconified: Property<Boolean, SearchView> = Property(
-        false,
+        "iconified", false,
         SearchView::setIconified)
 
     var submitButtonEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3701,11 +4168,11 @@ open class SearchView_ : LinearLayout_() {
             props += _submitButtonEnabled
         }
 
-    private val _submitButtonEnabled: Property<Boolean, SearchView> = Property(
-        false,
-        SearchView::setSubmitButtonEnabled)
+    private val _submitButtonEnabled: Property<Boolean, SearchView> =
+        Property("submitButtonEnabled", false, SearchView::setSubmitButtonEnabled)
 
     var queryRefinementEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3714,11 +4181,11 @@ open class SearchView_ : LinearLayout_() {
             props += _queryRefinementEnabled
         }
 
-    private val _queryRefinementEnabled: Property<Boolean, SearchView> = Property(
-        false,
-        SearchView::setQueryRefinementEnabled)
+    private val _queryRefinementEnabled: Property<Boolean, SearchView> =
+        Property("queryRefinementEnabled", false, SearchView::setQueryRefinementEnabled)
 
     var suggestionsAdapter: CursorAdapter
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3727,9 +4194,8 @@ open class SearchView_ : LinearLayout_() {
             props += _suggestionsAdapter
         }
 
-    private val _suggestionsAdapter: Property<CursorAdapter?, SearchView> = Property(
-        null,
-        SearchView::setSuggestionsAdapter)
+    private val _suggestionsAdapter: Property<CursorAdapter?, SearchView> =
+        Property("suggestionsAdapter", null, SearchView::setSuggestionsAdapter)
 
     override fun createEmpty(context: Context) = SearchView(context)
 }
@@ -3756,6 +4222,7 @@ fun imageSwitcher(f: ImageSwitcher_.() -> Unit) {
 
 open class ImageSwitcher_ : ViewSwitcher_() {
     var imageResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3765,10 +4232,11 @@ open class ImageSwitcher_ : ViewSwitcher_() {
         }
 
     private val _imageResource: Property<Int, ImageSwitcher> = Property(
-        0,
+        "imageResource", 0,
         ImageSwitcher::setImageResource)
 
     var imageURI: Uri
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3778,10 +4246,11 @@ open class ImageSwitcher_ : ViewSwitcher_() {
         }
 
     private val _imageURI: Property<Uri?, ImageSwitcher> = Property(
-        null,
+        "imageURI", null,
         ImageSwitcher::setImageURI)
 
     var imageDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3791,7 +4260,7 @@ open class ImageSwitcher_ : ViewSwitcher_() {
         }
 
     private val _imageDrawable: Property<Drawable?, ImageSwitcher> = Property(
-        null,
+        "imageDrawable", null,
         ImageSwitcher::setImageDrawable)
 
     override fun createEmpty(context: Context) = ImageSwitcher(context)
@@ -3807,6 +4276,7 @@ fun toggleButton(f: ToggleButton_.() -> Unit) {
 
 open class ToggleButton_ : CompoundButton_() {
     var textOn: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3816,10 +4286,11 @@ open class ToggleButton_ : CompoundButton_() {
         }
 
     private val _textOn: Property<CharSequence?, ToggleButton> = Property(
-        null,
+        "textOn", null,
         ToggleButton::setTextOn)
 
     var textOff: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3829,7 +4300,7 @@ open class ToggleButton_ : CompoundButton_() {
         }
 
     private val _textOff: Property<CharSequence?, ToggleButton> = Property(
-        null,
+        "textOff", null,
         ToggleButton::setTextOff)
 
     override fun createEmpty(context: Context) = ToggleButton(context)
@@ -3844,55 +4315,8 @@ fun calendarView(f: CalendarView_.() -> Unit) {
 }
 
 open class CalendarView_ : FrameLayout_() {
-    var minDate: Long
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _minDate.set(value)
-            props += _minDate
-        }
-
-    private val _minDate: Property<Long, CalendarView> = Property(0L, CalendarView::setMinDate)
-
-    var maxDate: Long
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _maxDate.set(value)
-            props += _maxDate
-        }
-
-    private val _maxDate: Property<Long, CalendarView> = Property(0L, CalendarView::setMaxDate)
-
-    var selectedWeekBackgroundColor: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _selectedWeekBackgroundColor.set(value)
-            props += _selectedWeekBackgroundColor
-        }
-
-    private val _selectedWeekBackgroundColor: Property<Int, CalendarView> = Property(
-        0,
-        CalendarView::setSelectedWeekBackgroundColor)
-
-    var focusedMonthDateColor: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _focusedMonthDateColor.set(value)
-            props += _focusedMonthDateColor
-        }
-
-    private val _focusedMonthDateColor: Property<Int, CalendarView> = Property(
-        0,
-        CalendarView::setFocusedMonthDateColor)
-
     var shownWeekCount: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3902,10 +4326,37 @@ open class CalendarView_ : FrameLayout_() {
         }
 
     private val _shownWeekCount: Property<Int, CalendarView> = Property(
-        0,
+        "shownWeekCount", 0,
         CalendarView::setShownWeekCount)
 
+    var selectedWeekBackgroundColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _selectedWeekBackgroundColor.set(value)
+            props += _selectedWeekBackgroundColor
+        }
+
+    private val _selectedWeekBackgroundColor: Property<Int, CalendarView> =
+        Property("selectedWeekBackgroundColor", 0, CalendarView::setSelectedWeekBackgroundColor)
+
+    var focusedMonthDateColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _focusedMonthDateColor.set(value)
+            props += _focusedMonthDateColor
+        }
+
+    private val _focusedMonthDateColor: Property<Int, CalendarView> =
+        Property("focusedMonthDateColor", 0, CalendarView::setFocusedMonthDateColor)
+
     var unfocusedMonthDateColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3914,11 +4365,11 @@ open class CalendarView_ : FrameLayout_() {
             props += _unfocusedMonthDateColor
         }
 
-    private val _unfocusedMonthDateColor: Property<Int, CalendarView> = Property(
-        0,
-        CalendarView::setUnfocusedMonthDateColor)
+    private val _unfocusedMonthDateColor: Property<Int, CalendarView> =
+        Property("unfocusedMonthDateColor", 0, CalendarView::setUnfocusedMonthDateColor)
 
     var weekNumberColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3928,10 +4379,11 @@ open class CalendarView_ : FrameLayout_() {
         }
 
     private val _weekNumberColor: Property<Int, CalendarView> = Property(
-        0,
+        "weekNumberColor", 0,
         CalendarView::setWeekNumberColor)
 
     var weekSeparatorLineColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3940,11 +4392,11 @@ open class CalendarView_ : FrameLayout_() {
             props += _weekSeparatorLineColor
         }
 
-    private val _weekSeparatorLineColor: Property<Int, CalendarView> = Property(
-        0,
-        CalendarView::setWeekSeparatorLineColor)
+    private val _weekSeparatorLineColor: Property<Int, CalendarView> =
+        Property("weekSeparatorLineColor", 0, CalendarView::setWeekSeparatorLineColor)
 
     var weekDayTextAppearance: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3953,11 +4405,11 @@ open class CalendarView_ : FrameLayout_() {
             props += _weekDayTextAppearance
         }
 
-    private val _weekDayTextAppearance: Property<Int, CalendarView> = Property(
-        0,
-        CalendarView::setWeekDayTextAppearance)
+    private val _weekDayTextAppearance: Property<Int, CalendarView> =
+        Property("weekDayTextAppearance", 0, CalendarView::setWeekDayTextAppearance)
 
     var dateTextAppearance: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3967,10 +4419,11 @@ open class CalendarView_ : FrameLayout_() {
         }
 
     private val _dateTextAppearance: Property<Int, CalendarView> = Property(
-        0,
+        "dateTextAppearance", 0,
         CalendarView::setDateTextAppearance)
 
     var showWeekNumber: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3980,10 +4433,11 @@ open class CalendarView_ : FrameLayout_() {
         }
 
     private val _showWeekNumber: Property<Boolean, CalendarView> = Property(
-        false,
+        "showWeekNumber", false,
         CalendarView::setShowWeekNumber)
 
     var onDateChangeListener: CalendarView.OnDateChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -3993,9 +4447,38 @@ open class CalendarView_ : FrameLayout_() {
         }
 
     private val _onDateChangeListener: Property<CalendarView.OnDateChangeListener?, CalendarView> =
-        Property(null, CalendarView::setOnDateChangeListener)
+        Property("onDateChangeListener", null, CalendarView::setOnDateChangeListener)
+
+    var minDate: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _minDate.set(value)
+            props += _minDate
+        }
+
+    private val _minDate: Property<Long, CalendarView> = Property(
+        "minDate", 0L,
+        CalendarView::setMinDate)
+
+    var maxDate: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _maxDate.set(value)
+            props += _maxDate
+        }
+
+    private val _maxDate: Property<Long, CalendarView> = Property(
+        "maxDate", 0L,
+        CalendarView::setMaxDate)
 
     var selectedDateVerticalBar: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4004,22 +4487,11 @@ open class CalendarView_ : FrameLayout_() {
             props += _selectedDateVerticalBar
         }
 
-    private val _selectedDateVerticalBar: Property<Int, CalendarView> = Property(
-        0,
-        CalendarView::setSelectedDateVerticalBar)
-
-    var date: Long
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _date.set(value)
-            props += _date
-        }
-
-    private val _date: Property<Long, CalendarView> = Property(0L, CalendarView::setDate)
+    private val _selectedDateVerticalBar: Property<Int, CalendarView> =
+        Property("selectedDateVerticalBar", 0, CalendarView::setSelectedDateVerticalBar)
 
     var firstDayOfWeek: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4029,8 +4501,20 @@ open class CalendarView_ : FrameLayout_() {
         }
 
     private val _firstDayOfWeek: Property<Int, CalendarView> = Property(
-        0,
+        "firstDayOfWeek", 0,
         CalendarView::setFirstDayOfWeek)
+
+    var date: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _date.set(value)
+            props += _date
+        }
+
+    private val _date: Property<Long, CalendarView> = Property("date", 0L, CalendarView::setDate)
 
     override fun createEmpty(context: Context) = CalendarView(context)
 }
@@ -4045,6 +4529,7 @@ fun actionMenuView(f: ActionMenuView_.() -> Unit) {
 
 open class ActionMenuView_ : LinearLayout_() {
     var popupTheme: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4054,10 +4539,11 @@ open class ActionMenuView_ : LinearLayout_() {
         }
 
     private val _popupTheme: Property<Int, ActionMenuView> = Property(
-        0,
+        "popupTheme", 0,
         ActionMenuView::setPopupTheme)
 
     var onMenuItemClickListener: ActionMenuView.OnMenuItemClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4067,7 +4553,9 @@ open class ActionMenuView_ : LinearLayout_() {
         }
 
     private val _onMenuItemClickListener: Property<ActionMenuView.OnMenuItemClickListener?,
-        ActionMenuView> = Property(null, ActionMenuView::setOnMenuItemClickListener)
+        ActionMenuView> = Property(
+        "onMenuItemClickListener", null,
+        ActionMenuView::setOnMenuItemClickListener)
 
     override fun createEmpty(context: Context) = ActionMenuView(context)
 }
@@ -4094,6 +4582,7 @@ fun gridLayout(f: GridLayout_.() -> Unit) {
 
 open class GridLayout_ : ViewGroup_() {
     var orientation: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4102,9 +4591,12 @@ open class GridLayout_ : ViewGroup_() {
             props += _orientation
         }
 
-    private val _orientation: Property<Int, GridLayout> = Property(0, GridLayout::setOrientation)
+    private val _orientation: Property<Int, GridLayout> = Property(
+        "orientation", 0,
+        GridLayout::setOrientation)
 
     var rowCount: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4113,9 +4605,12 @@ open class GridLayout_ : ViewGroup_() {
             props += _rowCount
         }
 
-    private val _rowCount: Property<Int, GridLayout> = Property(0, GridLayout::setRowCount)
+    private val _rowCount: Property<Int, GridLayout> = Property(
+        "rowCount", 0,
+        GridLayout::setRowCount)
 
     var useDefaultMargins: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4125,10 +4620,11 @@ open class GridLayout_ : ViewGroup_() {
         }
 
     private val _useDefaultMargins: Property<Boolean, GridLayout> = Property(
-        false,
-        GridLayout::setUseDefaultMargins)
+        "useDefaultMargins",
+        false, GridLayout::setUseDefaultMargins)
 
     var alignmentMode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4138,10 +4634,11 @@ open class GridLayout_ : ViewGroup_() {
         }
 
     private val _alignmentMode: Property<Int, GridLayout> = Property(
-        0,
+        "alignmentMode", 0,
         GridLayout::setAlignmentMode)
 
     var rowOrderPreserved: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4151,10 +4648,11 @@ open class GridLayout_ : ViewGroup_() {
         }
 
     private val _rowOrderPreserved: Property<Boolean, GridLayout> = Property(
-        false,
-        GridLayout::setRowOrderPreserved)
+        "rowOrderPreserved",
+        false, GridLayout::setRowOrderPreserved)
 
     var columnOrderPreserved: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4163,11 +4661,11 @@ open class GridLayout_ : ViewGroup_() {
             props += _columnOrderPreserved
         }
 
-    private val _columnOrderPreserved: Property<Boolean, GridLayout> = Property(
-        false,
-        GridLayout::setColumnOrderPreserved)
+    private val _columnOrderPreserved: Property<Boolean, GridLayout> =
+        Property("columnOrderPreserved", false, GridLayout::setColumnOrderPreserved)
 
     var columnCount: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4176,7 +4674,9 @@ open class GridLayout_ : ViewGroup_() {
             props += _columnCount
         }
 
-    private val _columnCount: Property<Int, GridLayout> = Property(0, GridLayout::setColumnCount)
+    private val _columnCount: Property<Int, GridLayout> = Property(
+        "columnCount", 0,
+        GridLayout::setColumnCount)
 
     override fun createEmpty(context: Context) = GridLayout(context)
 }
@@ -4191,6 +4691,7 @@ fun editText(f: EditText_.() -> Unit) {
 
 open class EditText_ : TextView_() {
     var selection: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4199,7 +4700,9 @@ open class EditText_ : TextView_() {
             props += _selection
         }
 
-    private val _selection: Property<Int, EditText> = Property(0, EditText::setSelection)
+    private val _selection: Property<Int, EditText> = Property(
+        "selection", 0,
+        EditText::setSelection)
 
     override fun createEmpty(context: Context) = EditText(context)
 }
@@ -4214,6 +4717,7 @@ fun gridView(f: GridView_.() -> Unit) {
 
 open class GridView_ : AbsListView_() {
     var gravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4222,9 +4726,10 @@ open class GridView_ : AbsListView_() {
             props += _gravity
         }
 
-    private val _gravity: Property<Int, GridView> = Property(0, GridView::setGravity)
+    private val _gravity: Property<Int, GridView> = Property("gravity", 0, GridView::setGravity)
 
     var horizontalSpacing: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4234,10 +4739,11 @@ open class GridView_ : AbsListView_() {
         }
 
     private val _horizontalSpacing: Property<Int, GridView> = Property(
-        0,
+        "horizontalSpacing", 0,
         GridView::setHorizontalSpacing)
 
     var verticalSpacing: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4247,10 +4753,11 @@ open class GridView_ : AbsListView_() {
         }
 
     private val _verticalSpacing: Property<Int, GridView> = Property(
-        0,
+        "verticalSpacing", 0,
         GridView::setVerticalSpacing)
 
     var stretchMode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4259,9 +4766,12 @@ open class GridView_ : AbsListView_() {
             props += _stretchMode
         }
 
-    private val _stretchMode: Property<Int, GridView> = Property(0, GridView::setStretchMode)
+    private val _stretchMode: Property<Int, GridView> = Property(
+        "stretchMode", 0,
+        GridView::setStretchMode)
 
     var columnWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4270,9 +4780,12 @@ open class GridView_ : AbsListView_() {
             props += _columnWidth
         }
 
-    private val _columnWidth: Property<Int, GridView> = Property(0, GridView::setColumnWidth)
+    private val _columnWidth: Property<Int, GridView> = Property(
+        "columnWidth", 0,
+        GridView::setColumnWidth)
 
     var numColumns: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4281,7 +4794,9 @@ open class GridView_ : AbsListView_() {
             props += _numColumns
         }
 
-    private val _numColumns: Property<Int, GridView> = Property(0, GridView::setNumColumns)
+    private val _numColumns: Property<Int, GridView> = Property(
+        "numColumns", 0,
+        GridView::setNumColumns)
 
     override fun createEmpty(context: Context) = GridView(context)
 }
@@ -4295,33 +4810,8 @@ fun tabWidget(f: TabWidget_.() -> Unit) {
 }
 
 open class TabWidget_ : LinearLayout_() {
-    var leftStripDrawable: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _leftStripDrawable.set(value)
-            props += _leftStripDrawable
-        }
-
-    private val _leftStripDrawable: Property<Int, TabWidget> = Property(
-        0,
-        TabWidget::setLeftStripDrawable)
-
-    var rightStripDrawable: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _rightStripDrawable.set(value)
-            props += _rightStripDrawable
-        }
-
-    private val _rightStripDrawable: Property<Int, TabWidget> = Property(
-        0,
-        TabWidget::setRightStripDrawable)
-
     var stripEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4331,10 +4821,11 @@ open class TabWidget_ : LinearLayout_() {
         }
 
     private val _stripEnabled: Property<Boolean, TabWidget> = Property(
-        false,
+        "stripEnabled", false,
         TabWidget::setStripEnabled)
 
     var currentTab: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4343,7 +4834,37 @@ open class TabWidget_ : LinearLayout_() {
             props += _currentTab
         }
 
-    private val _currentTab: Property<Int, TabWidget> = Property(0, TabWidget::setCurrentTab)
+    private val _currentTab: Property<Int, TabWidget> = Property(
+        "currentTab", 0,
+        TabWidget::setCurrentTab)
+
+    var leftStripDrawable: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _leftStripDrawable.set(value)
+            props += _leftStripDrawable
+        }
+
+    private val _leftStripDrawable: Property<Int, TabWidget> = Property(
+        "leftStripDrawable", 0,
+        TabWidget::setLeftStripDrawable)
+
+    var rightStripDrawable: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _rightStripDrawable.set(value)
+            props += _rightStripDrawable
+        }
+
+    private val _rightStripDrawable: Property<Int, TabWidget> = Property(
+        "rightStripDrawable", 0,
+        TabWidget::setRightStripDrawable)
 
     override fun createEmpty(context: Context) = TabWidget(context)
 }
@@ -4358,6 +4879,7 @@ fun tabHost(f: TabHost_.() -> Unit) {
 
 open class TabHost_ : FrameLayout_() {
     var currentTab: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4366,9 +4888,12 @@ open class TabHost_ : FrameLayout_() {
             props += _currentTab
         }
 
-    private val _currentTab: Property<Int, TabHost> = Property(0, TabHost::setCurrentTab)
+    private val _currentTab: Property<Int, TabHost> = Property(
+        "currentTab", 0,
+        TabHost::setCurrentTab)
 
     var currentTabByTag: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4378,10 +4903,11 @@ open class TabHost_ : FrameLayout_() {
         }
 
     private val _currentTabByTag: Property<String?, TabHost> = Property(
-        null,
+        "currentTabByTag", null,
         TabHost::setCurrentTabByTag)
 
     var onTabChangedListener: TabHost.OnTabChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4391,7 +4917,7 @@ open class TabHost_ : FrameLayout_() {
         }
 
     private val _onTabChangedListener: Property<TabHost.OnTabChangeListener?, TabHost> =
-        Property(null, TabHost::setOnTabChangedListener)
+        Property("onTabChangedListener", null, TabHost::setOnTabChangedListener)
 
     override fun createEmpty(context: Context) = TabHost(context)
 }
@@ -4406,6 +4932,7 @@ fun radioGroup(f: RadioGroup_.() -> Unit) {
 
 open class RadioGroup_ : LinearLayout_() {
     var onCheckedChangeListener: RadioGroup.OnCheckedChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4415,7 +4942,7 @@ open class RadioGroup_ : LinearLayout_() {
         }
 
     private val _onCheckedChangeListener: Property<RadioGroup.OnCheckedChangeListener?, RadioGroup> =
-        Property(null, RadioGroup::setOnCheckedChangeListener)
+        Property("onCheckedChangeListener", null, RadioGroup::setOnCheckedChangeListener)
 
     override fun createEmpty(context: Context) = RadioGroup(context)
 }
@@ -4430,6 +4957,7 @@ fun scrollView(f: ScrollView_.() -> Unit) {
 
 open class ScrollView_ : FrameLayout_() {
     var fillViewport: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4439,10 +4967,11 @@ open class ScrollView_ : FrameLayout_() {
         }
 
     private val _fillViewport: Property<Boolean, ScrollView> = Property(
-        false,
+        "fillViewport", false,
         ScrollView::setFillViewport)
 
     var smoothScrollingEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4451,9 +4980,8 @@ open class ScrollView_ : FrameLayout_() {
             props += _smoothScrollingEnabled
         }
 
-    private val _smoothScrollingEnabled: Property<Boolean, ScrollView> = Property(
-        false,
-        ScrollView::setSmoothScrollingEnabled)
+    private val _smoothScrollingEnabled: Property<Boolean, ScrollView> =
+        Property("smoothScrollingEnabled", false, ScrollView::setSmoothScrollingEnabled)
 
     override fun createEmpty(context: Context) = ScrollView(context)
 }
@@ -4467,7 +4995,22 @@ fun absSeekBar(f: AbsSeekBar_.() -> Unit) {
 }
 
 open class AbsSeekBar_ : ProgressBar_() {
+    var thumb: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _thumb.set(value)
+            props += _thumb
+        }
+
+    private val _thumb: Property<Drawable?, AbsSeekBar> = Property(
+        "thumb", null,
+        AbsSeekBar::setThumb)
+
     var thumbTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4477,21 +5020,11 @@ open class AbsSeekBar_ : ProgressBar_() {
         }
 
     private val _thumbTintList: Property<ColorStateList?, AbsSeekBar> = Property(
-        null,
-        AbsSeekBar::setThumbTintList)
-
-    var thumb: Drawable
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _thumb.set(value)
-            props += _thumb
-        }
-
-    private val _thumb: Property<Drawable?, AbsSeekBar> = Property(null, AbsSeekBar::setThumb)
+        "thumbTintList",
+        null, AbsSeekBar::setThumbTintList)
 
     var thumbTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4501,10 +5034,11 @@ open class AbsSeekBar_ : ProgressBar_() {
         }
 
     private val _thumbTintMode: Property<PorterDuff.Mode?, AbsSeekBar> = Property(
-        null,
-        AbsSeekBar::setThumbTintMode)
+        "thumbTintMode",
+        null, AbsSeekBar::setThumbTintMode)
 
     var thumbOffset: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4513,9 +5047,12 @@ open class AbsSeekBar_ : ProgressBar_() {
             props += _thumbOffset
         }
 
-    private val _thumbOffset: Property<Int, AbsSeekBar> = Property(0, AbsSeekBar::setThumbOffset)
+    private val _thumbOffset: Property<Int, AbsSeekBar> = Property(
+        "thumbOffset", 0,
+        AbsSeekBar::setThumbOffset)
 
     var splitTrack: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4525,10 +5062,11 @@ open class AbsSeekBar_ : ProgressBar_() {
         }
 
     private val _splitTrack: Property<Boolean, AbsSeekBar> = Property(
-        false,
+        "splitTrack", false,
         AbsSeekBar::setSplitTrack)
 
     var keyProgressIncrement: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4538,8 +5076,8 @@ open class AbsSeekBar_ : ProgressBar_() {
         }
 
     private val _keyProgressIncrement: Property<Int, AbsSeekBar> = Property(
-        0,
-        AbsSeekBar::setKeyProgressIncrement)
+        "keyProgressIncrement",
+        0, AbsSeekBar::setKeyProgressIncrement)
 }
 
 fun linearLayout(f: LinearLayout_.() -> Unit) {
@@ -4551,111 +5089,8 @@ fun linearLayout(f: LinearLayout_.() -> Unit) {
 }
 
 open class LinearLayout_ : ViewGroup_() {
-    var showDividers: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _showDividers.set(value)
-            props += _showDividers
-        }
-
-    private val _showDividers: Property<Int, LinearLayout> = Property(
-        0,
-        LinearLayout::setShowDividers)
-
-    var dividerDrawable: Drawable
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _dividerDrawable.set(value)
-            props += _dividerDrawable
-        }
-
-    private val _dividerDrawable: Property<Drawable?, LinearLayout> = Property(
-        null,
-        LinearLayout::setDividerDrawable)
-
-    var dividerPadding: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _dividerPadding.set(value)
-            props += _dividerPadding
-        }
-
-    private val _dividerPadding: Property<Int, LinearLayout> = Property(
-        0,
-        LinearLayout::setDividerPadding)
-
-    var baselineAligned: Boolean
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _baselineAligned.set(value)
-            props += _baselineAligned
-        }
-
-    private val _baselineAligned: Property<Boolean, LinearLayout> = Property(
-        false,
-        LinearLayout::setBaselineAligned)
-
-    var measureWithLargestChildEnabled: Boolean
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _measureWithLargestChildEnabled.set(value)
-            props += _measureWithLargestChildEnabled
-        }
-
-    private val _measureWithLargestChildEnabled: Property<Boolean, LinearLayout> = Property(
-        false,
-        LinearLayout::setMeasureWithLargestChildEnabled)
-
-    var baselineAlignedChildIndex: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _baselineAlignedChildIndex.set(value)
-            props += _baselineAlignedChildIndex
-        }
-
-    private val _baselineAlignedChildIndex: Property<Int, LinearLayout> = Property(
-        0,
-        LinearLayout::setBaselineAlignedChildIndex)
-
-    var weightSum: Float
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _weightSum.set(value)
-            props += _weightSum
-        }
-
-    private val _weightSum: Property<Float, LinearLayout> = Property(
-        0.0f,
-        LinearLayout::setWeightSum)
-
-    var orientation: Int
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _orientation.set(value)
-            props += _orientation
-        }
-
-    private val _orientation: Property<Int, LinearLayout> = Property(
-        0,
-        LinearLayout::setOrientation)
-
     var gravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4664,9 +5099,12 @@ open class LinearLayout_ : ViewGroup_() {
             props += _gravity
         }
 
-    private val _gravity: Property<Int, LinearLayout> = Property(0, LinearLayout::setGravity)
+    private val _gravity: Property<Int, LinearLayout> = Property(
+        "gravity", 0,
+        LinearLayout::setGravity)
 
     var horizontalGravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4676,10 +5114,11 @@ open class LinearLayout_ : ViewGroup_() {
         }
 
     private val _horizontalGravity: Property<Int, LinearLayout> = Property(
-        0,
+        "horizontalGravity", 0,
         LinearLayout::setHorizontalGravity)
 
     var verticalGravity: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4689,8 +5128,120 @@ open class LinearLayout_ : ViewGroup_() {
         }
 
     private val _verticalGravity: Property<Int, LinearLayout> = Property(
-        0,
+        "verticalGravity", 0,
         LinearLayout::setVerticalGravity)
+
+    var showDividers: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _showDividers.set(value)
+            props += _showDividers
+        }
+
+    private val _showDividers: Property<Int, LinearLayout> = Property(
+        "showDividers", 0,
+        LinearLayout::setShowDividers)
+
+    var dividerDrawable: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _dividerDrawable.set(value)
+            props += _dividerDrawable
+        }
+
+    private val _dividerDrawable: Property<Drawable?, LinearLayout> = Property(
+        "dividerDrawable",
+        null, LinearLayout::setDividerDrawable)
+
+    var dividerPadding: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _dividerPadding.set(value)
+            props += _dividerPadding
+        }
+
+    private val _dividerPadding: Property<Int, LinearLayout> = Property(
+        "dividerPadding", 0,
+        LinearLayout::setDividerPadding)
+
+    var baselineAligned: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _baselineAligned.set(value)
+            props += _baselineAligned
+        }
+
+    private val _baselineAligned: Property<Boolean, LinearLayout> = Property(
+        "baselineAligned",
+        false, LinearLayout::setBaselineAligned)
+
+    var measureWithLargestChildEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _measureWithLargestChildEnabled.set(value)
+            props += _measureWithLargestChildEnabled
+        }
+
+    private val _measureWithLargestChildEnabled: Property<Boolean, LinearLayout> =
+        Property(
+            "measureWithLargestChildEnabled", false,
+            LinearLayout::setMeasureWithLargestChildEnabled)
+
+    var baselineAlignedChildIndex: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _baselineAlignedChildIndex.set(value)
+            props += _baselineAlignedChildIndex
+        }
+
+    private val _baselineAlignedChildIndex: Property<Int, LinearLayout> =
+        Property("baselineAlignedChildIndex", 0, LinearLayout::setBaselineAlignedChildIndex)
+
+    var weightSum: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _weightSum.set(value)
+            props += _weightSum
+        }
+
+    private val _weightSum: Property<Float, LinearLayout> = Property(
+        "weightSum", 0.0f,
+        LinearLayout::setWeightSum)
+
+    var orientation: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _orientation.set(value)
+            props += _orientation
+        }
+
+    private val _orientation: Property<Int, LinearLayout> = Property(
+        "orientation", 0,
+        LinearLayout::setOrientation)
 
     override fun createEmpty(context: Context) = LinearLayout(context)
 }
@@ -4705,6 +5256,7 @@ fun mediaRouteButton(f: MediaRouteButton_.() -> Unit) {
 
 open class MediaRouteButton_ : View_() {
     var routeTypes: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4714,10 +5266,11 @@ open class MediaRouteButton_ : View_() {
         }
 
     private val _routeTypes: Property<Int, MediaRouteButton> = Property(
-        0,
+        "routeTypes", 0,
         MediaRouteButton::setRouteTypes)
 
     var extendedSettingsClickListener: View.OnClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4727,7 +5280,9 @@ open class MediaRouteButton_ : View_() {
         }
 
     private val _extendedSettingsClickListener: Property<View.OnClickListener?, MediaRouteButton> =
-        Property(null, MediaRouteButton::setExtendedSettingsClickListener)
+        Property(
+            "extendedSettingsClickListener", null,
+            MediaRouteButton::setExtendedSettingsClickListener)
 
     override fun createEmpty(context: Context) = MediaRouteButton(context)
 }
@@ -4741,31 +5296,8 @@ fun tvView(f: TvView_.() -> Unit) {
 }
 
 open class TvView_ : ViewGroup_() {
-    var callback: TvView.TvInputCallback
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _callback.set(value)
-            props += _callback
-        }
-
-    private val _callback: Property<TvView.TvInputCallback?, TvView> = Property(
-        null,
-        TvView::setCallback)
-
-    var streamVolume: Float
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _streamVolume.set(value)
-            props += _streamVolume
-        }
-
-    private val _streamVolume: Property<Float, TvView> = Property(0.0f, TvView::setStreamVolume)
-
     var captionEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4775,10 +5307,39 @@ open class TvView_ : ViewGroup_() {
         }
 
     private val _captionEnabled: Property<Boolean, TvView> = Property(
-        false,
+        "captionEnabled", false,
         TvView::setCaptionEnabled)
 
+    var callback: TvView.TvInputCallback
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _callback.set(value)
+            props += _callback
+        }
+
+    private val _callback: Property<TvView.TvInputCallback?, TvView> = Property(
+        "callback", null,
+        TvView::setCallback)
+
+    var streamVolume: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _streamVolume.set(value)
+            props += _streamVolume
+        }
+
+    private val _streamVolume: Property<Float, TvView> = Property(
+        "streamVolume", 0.0f,
+        TvView::setStreamVolume)
+
     var onUnhandledInputEventListener: TvView.OnUnhandledInputEventListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4788,7 +5349,9 @@ open class TvView_ : ViewGroup_() {
         }
 
     private val _onUnhandledInputEventListener: Property<TvView.OnUnhandledInputEventListener?,
-        TvView> = Property(null, TvView::setOnUnhandledInputEventListener)
+        TvView> = Property(
+        "onUnhandledInputEventListener", null,
+        TvView::setOnUnhandledInputEventListener)
 
     override fun createEmpty(context: Context) = TvView(context)
 }
@@ -4803,6 +5366,7 @@ fun gestureOverlayView(f: GestureOverlayView_.() -> Unit) {
 
 open class GestureOverlayView_ : FrameLayout_() {
     var orientation: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4812,10 +5376,11 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _orientation: Property<Int, GestureOverlayView> = Property(
-        0,
+        "orientation", 0,
         GestureOverlayView::setOrientation)
 
     var gestureColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4825,10 +5390,11 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _gestureColor: Property<Int, GestureOverlayView> = Property(
-        0,
+        "gestureColor", 0,
         GestureOverlayView::setGestureColor)
 
     var uncertainGestureColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4837,11 +5403,11 @@ open class GestureOverlayView_ : FrameLayout_() {
             props += _uncertainGestureColor
         }
 
-    private val _uncertainGestureColor: Property<Int, GestureOverlayView> = Property(
-        0,
-        GestureOverlayView::setUncertainGestureColor)
+    private val _uncertainGestureColor: Property<Int, GestureOverlayView> =
+        Property("uncertainGestureColor", 0, GestureOverlayView::setUncertainGestureColor)
 
     var gestureStrokeWidth: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4850,11 +5416,11 @@ open class GestureOverlayView_ : FrameLayout_() {
             props += _gestureStrokeWidth
         }
 
-    private val _gestureStrokeWidth: Property<Float, GestureOverlayView> = Property(
-        0.0f,
-        GestureOverlayView::setGestureStrokeWidth)
+    private val _gestureStrokeWidth: Property<Float, GestureOverlayView> =
+        Property("gestureStrokeWidth", 0.0f, GestureOverlayView::setGestureStrokeWidth)
 
     var gestureStrokeType: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4863,11 +5429,11 @@ open class GestureOverlayView_ : FrameLayout_() {
             props += _gestureStrokeType
         }
 
-    private val _gestureStrokeType: Property<Int, GestureOverlayView> = Property(
-        0,
-        GestureOverlayView::setGestureStrokeType)
+    private val _gestureStrokeType: Property<Int, GestureOverlayView> =
+        Property("gestureStrokeType", 0, GestureOverlayView::setGestureStrokeType)
 
     var gestureStrokeLengthThreshold: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4876,11 +5442,13 @@ open class GestureOverlayView_ : FrameLayout_() {
             props += _gestureStrokeLengthThreshold
         }
 
-    private val _gestureStrokeLengthThreshold: Property<Float, GestureOverlayView> = Property(
-        0.0f,
-        GestureOverlayView::setGestureStrokeLengthThreshold)
+    private val _gestureStrokeLengthThreshold: Property<Float, GestureOverlayView> =
+        Property(
+            "gestureStrokeLengthThreshold", 0.0f,
+            GestureOverlayView::setGestureStrokeLengthThreshold)
 
     var gestureStrokeSquarenessTreshold: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4890,9 +5458,12 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _gestureStrokeSquarenessTreshold: Property<Float, GestureOverlayView> =
-        Property(0.0f, GestureOverlayView::setGestureStrokeSquarenessTreshold)
+        Property(
+            "gestureStrokeSquarenessTreshold", 0.0f,
+            GestureOverlayView::setGestureStrokeSquarenessTreshold)
 
     var gestureStrokeAngleThreshold: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4901,11 +5472,13 @@ open class GestureOverlayView_ : FrameLayout_() {
             props += _gestureStrokeAngleThreshold
         }
 
-    private val _gestureStrokeAngleThreshold: Property<Float, GestureOverlayView> = Property(
-        0.0f,
-        GestureOverlayView::setGestureStrokeAngleThreshold)
+    private val _gestureStrokeAngleThreshold: Property<Float, GestureOverlayView> =
+        Property(
+            "gestureStrokeAngleThreshold", 0.0f,
+            GestureOverlayView::setGestureStrokeAngleThreshold)
 
     var eventsInterceptionEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4914,11 +5487,13 @@ open class GestureOverlayView_ : FrameLayout_() {
             props += _eventsInterceptionEnabled
         }
 
-    private val _eventsInterceptionEnabled: Property<Boolean, GestureOverlayView> = Property(
-        false,
-        GestureOverlayView::setEventsInterceptionEnabled)
+    private val _eventsInterceptionEnabled: Property<Boolean, GestureOverlayView> =
+        Property(
+            "eventsInterceptionEnabled", false,
+            GestureOverlayView::setEventsInterceptionEnabled)
 
     var fadeEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4928,10 +5503,11 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _fadeEnabled: Property<Boolean, GestureOverlayView> = Property(
-        false,
+        "fadeEnabled", false,
         GestureOverlayView::setFadeEnabled)
 
     var gesture: Gesture
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4941,10 +5517,11 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _gesture: Property<Gesture?, GestureOverlayView> = Property(
-        null,
+        "gesture", null,
         GestureOverlayView::setGesture)
 
     var gestureVisible: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4954,10 +5531,11 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _gestureVisible: Property<Boolean, GestureOverlayView> = Property(
-        false,
-        GestureOverlayView::setGestureVisible)
+        "gestureVisible",
+        false, GestureOverlayView::setGestureVisible)
 
     var fadeOffset: Long
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4967,7 +5545,7 @@ open class GestureOverlayView_ : FrameLayout_() {
         }
 
     private val _fadeOffset: Property<Long, GestureOverlayView> = Property(
-        0L,
+        "fadeOffset", 0L,
         GestureOverlayView::setFadeOffset)
 
     override fun createEmpty(context: Context) = GestureOverlayView(context)
@@ -4983,6 +5561,7 @@ fun surfaceView(f: SurfaceView_.() -> Unit) {
 
 open class SurfaceView_ : View_() {
     var zOrderMediaOverlay: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -4992,10 +5571,11 @@ open class SurfaceView_ : View_() {
         }
 
     private val _zOrderMediaOverlay: Property<Boolean, SurfaceView> = Property(
-        false,
-        SurfaceView::setZOrderMediaOverlay)
+        "zOrderMediaOverlay",
+        false, SurfaceView::setZOrderMediaOverlay)
 
     var zOrderOnTop: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5005,10 +5585,11 @@ open class SurfaceView_ : View_() {
         }
 
     private val _zOrderOnTop: Property<Boolean, SurfaceView> = Property(
-        false,
+        "zOrderOnTop", false,
         SurfaceView::setZOrderOnTop)
 
     var secure: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5017,7 +5598,9 @@ open class SurfaceView_ : View_() {
             props += _secure
         }
 
-    private val _secure: Property<Boolean, SurfaceView> = Property(false, SurfaceView::setSecure)
+    private val _secure: Property<Boolean, SurfaceView> = Property(
+        "secure", false,
+        SurfaceView::setSecure)
 
     override fun createEmpty(context: Context) = SurfaceView(context)
 }
@@ -5032,6 +5615,7 @@ fun view(f: View_.() -> Unit) {
 
 open class View_ : VirtualNode() {
     var fadingEdgeLength: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5040,9 +5624,12 @@ open class View_ : VirtualNode() {
             props += _fadingEdgeLength
         }
 
-    private val _fadingEdgeLength: Property<Int, View> = Property(0, View::setFadingEdgeLength)
+    private val _fadingEdgeLength: Property<Int, View> = Property(
+        "fadingEdgeLength", 0,
+        View::setFadingEdgeLength)
 
     var verticalScrollbarPosition: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5051,11 +5638,11 @@ open class View_ : VirtualNode() {
             props += _verticalScrollbarPosition
         }
 
-    private val _verticalScrollbarPosition: Property<Int, View> = Property(
-        0,
-        View::setVerticalScrollbarPosition)
+    private val _verticalScrollbarPosition: Property<Int, View> =
+        Property("verticalScrollbarPosition", 0, View::setVerticalScrollbarPosition)
 
     var onFocusChangeListener: View.OnFocusChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5064,11 +5651,11 @@ open class View_ : VirtualNode() {
             props += _onFocusChangeListener
         }
 
-    private val _onFocusChangeListener: Property<View.OnFocusChangeListener?, View> = Property(
-        null,
-        View::setOnFocusChangeListener)
+    private val _onFocusChangeListener: Property<View.OnFocusChangeListener?, View> =
+        Property("onFocusChangeListener", null, View::setOnFocusChangeListener)
 
     var onClickListener: View.OnClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5077,11 +5664,11 @@ open class View_ : VirtualNode() {
             props += _onClickListener
         }
 
-    private val _onClickListener: Property<View.OnClickListener?, View> = Property(
-        null,
-        View::setOnClickListener)
+    private val _onClickListener: Property<View.OnClickListener?, View> =
+        Property("onClickListener", null, View::setOnClickListener)
 
     var onLongClickListener: View.OnLongClickListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5090,11 +5677,11 @@ open class View_ : VirtualNode() {
             props += _onLongClickListener
         }
 
-    private val _onLongClickListener: Property<View.OnLongClickListener?, View> = Property(
-        null,
-        View::setOnLongClickListener)
+    private val _onLongClickListener: Property<View.OnLongClickListener?, View> =
+        Property("onLongClickListener", null, View::setOnLongClickListener)
 
     var onCreateContextMenuListener: View.OnCreateContextMenuListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5104,9 +5691,10 @@ open class View_ : VirtualNode() {
         }
 
     private val _onCreateContextMenuListener: Property<View.OnCreateContextMenuListener?, View> =
-        Property(null, View::setOnCreateContextMenuListener)
+        Property("onCreateContextMenuListener", null, View::setOnCreateContextMenuListener)
 
     var onKeyListener: View.OnKeyListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5116,10 +5704,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _onKeyListener: Property<View.OnKeyListener?, View> = Property(
-        null,
-        View::setOnKeyListener)
+        "onKeyListener",
+        null, View::setOnKeyListener)
 
     var onTouchListener: View.OnTouchListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5128,11 +5717,11 @@ open class View_ : VirtualNode() {
             props += _onTouchListener
         }
 
-    private val _onTouchListener: Property<View.OnTouchListener?, View> = Property(
-        null,
-        View::setOnTouchListener)
+    private val _onTouchListener: Property<View.OnTouchListener?, View> =
+        Property("onTouchListener", null, View::setOnTouchListener)
 
     var onGenericMotionListener: View.OnGenericMotionListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5142,9 +5731,10 @@ open class View_ : VirtualNode() {
         }
 
     private val _onGenericMotionListener: Property<View.OnGenericMotionListener?, View> =
-        Property(null, View::setOnGenericMotionListener)
+        Property("onGenericMotionListener", null, View::setOnGenericMotionListener)
 
     var onHoverListener: View.OnHoverListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5153,11 +5743,11 @@ open class View_ : VirtualNode() {
             props += _onHoverListener
         }
 
-    private val _onHoverListener: Property<View.OnHoverListener?, View> = Property(
-        null,
-        View::setOnHoverListener)
+    private val _onHoverListener: Property<View.OnHoverListener?, View> =
+        Property("onHoverListener", null, View::setOnHoverListener)
 
     var onDragListener: View.OnDragListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5167,10 +5757,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _onDragListener: Property<View.OnDragListener?, View> = Property(
-        null,
-        View::setOnDragListener)
+        "onDragListener",
+        null, View::setOnDragListener)
 
     var accessibilityDelegate: View.AccessibilityDelegate
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5179,11 +5770,11 @@ open class View_ : VirtualNode() {
             props += _accessibilityDelegate
         }
 
-    private val _accessibilityDelegate: Property<View.AccessibilityDelegate?, View> = Property(
-        null,
-        View::setAccessibilityDelegate)
+    private val _accessibilityDelegate: Property<View.AccessibilityDelegate?, View> =
+        Property("accessibilityDelegate", null, View::setAccessibilityDelegate)
 
     var contentDescription: CharSequence
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5193,10 +5784,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _contentDescription: Property<CharSequence?, View> = Property(
-        null,
-        View::setContentDescription)
+        "contentDescription",
+        null, View::setContentDescription)
 
     var accessibilityTraversalBefore: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5205,11 +5797,11 @@ open class View_ : VirtualNode() {
             props += _accessibilityTraversalBefore
         }
 
-    private val _accessibilityTraversalBefore: Property<Int, View> = Property(
-        0,
-        View::setAccessibilityTraversalBefore)
+    private val _accessibilityTraversalBefore: Property<Int, View> =
+        Property("accessibilityTraversalBefore", 0, View::setAccessibilityTraversalBefore)
 
     var accessibilityTraversalAfter: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5218,11 +5810,11 @@ open class View_ : VirtualNode() {
             props += _accessibilityTraversalAfter
         }
 
-    private val _accessibilityTraversalAfter: Property<Int, View> = Property(
-        0,
-        View::setAccessibilityTraversalAfter)
+    private val _accessibilityTraversalAfter: Property<Int, View> =
+        Property("accessibilityTraversalAfter", 0, View::setAccessibilityTraversalAfter)
 
     var labelFor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5231,9 +5823,10 @@ open class View_ : VirtualNode() {
             props += _labelFor
         }
 
-    private val _labelFor: Property<Int, View> = Property(0, View::setLabelFor)
+    private val _labelFor: Property<Int, View> = Property("labelFor", 0, View::setLabelFor)
 
     var scrollContainer: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5243,10 +5836,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _scrollContainer: Property<Boolean, View> = Property(
-        false,
+        "scrollContainer", false,
         View::setScrollContainer)
 
     var drawingCacheQuality: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5256,10 +5850,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _drawingCacheQuality: Property<Int, View> = Property(
-        0,
+        "drawingCacheQuality", 0,
         View::setDrawingCacheQuality)
 
     var keepScreenOn: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5268,9 +5863,12 @@ open class View_ : VirtualNode() {
             props += _keepScreenOn
         }
 
-    private val _keepScreenOn: Property<Boolean, View> = Property(false, View::setKeepScreenOn)
+    private val _keepScreenOn: Property<Boolean, View> = Property(
+        "keepScreenOn", false,
+        View::setKeepScreenOn)
 
     var nextFocusLeftId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5279,9 +5877,12 @@ open class View_ : VirtualNode() {
             props += _nextFocusLeftId
         }
 
-    private val _nextFocusLeftId: Property<Int, View> = Property(0, View::setNextFocusLeftId)
+    private val _nextFocusLeftId: Property<Int, View> = Property(
+        "nextFocusLeftId", 0,
+        View::setNextFocusLeftId)
 
     var nextFocusRightId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5290,9 +5891,12 @@ open class View_ : VirtualNode() {
             props += _nextFocusRightId
         }
 
-    private val _nextFocusRightId: Property<Int, View> = Property(0, View::setNextFocusRightId)
+    private val _nextFocusRightId: Property<Int, View> = Property(
+        "nextFocusRightId", 0,
+        View::setNextFocusRightId)
 
     var nextFocusUpId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5301,9 +5905,12 @@ open class View_ : VirtualNode() {
             props += _nextFocusUpId
         }
 
-    private val _nextFocusUpId: Property<Int, View> = Property(0, View::setNextFocusUpId)
+    private val _nextFocusUpId: Property<Int, View> = Property(
+        "nextFocusUpId", 0,
+        View::setNextFocusUpId)
 
     var nextFocusDownId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5312,9 +5919,12 @@ open class View_ : VirtualNode() {
             props += _nextFocusDownId
         }
 
-    private val _nextFocusDownId: Property<Int, View> = Property(0, View::setNextFocusDownId)
+    private val _nextFocusDownId: Property<Int, View> = Property(
+        "nextFocusDownId", 0,
+        View::setNextFocusDownId)
 
     var nextFocusForwardId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5323,9 +5933,12 @@ open class View_ : VirtualNode() {
             props += _nextFocusForwardId
         }
 
-    private val _nextFocusForwardId: Property<Int, View> = Property(0, View::setNextFocusForwardId)
+    private val _nextFocusForwardId: Property<Int, View> = Property(
+        "nextFocusForwardId", 0,
+        View::setNextFocusForwardId)
 
     var onApplyWindowInsetsListener: View.OnApplyWindowInsetsListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5335,9 +5948,10 @@ open class View_ : VirtualNode() {
         }
 
     private val _onApplyWindowInsetsListener: Property<View.OnApplyWindowInsetsListener?, View> =
-        Property(null, View::setOnApplyWindowInsetsListener)
+        Property("onApplyWindowInsetsListener", null, View::setOnApplyWindowInsetsListener)
 
     var fitsSystemWindows: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5347,10 +5961,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _fitsSystemWindows: Property<Boolean, View> = Property(
-        false,
+        "fitsSystemWindows", false,
         View::setFitsSystemWindows)
 
     var visibility: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5359,9 +5974,10 @@ open class View_ : VirtualNode() {
             props += _visibility
         }
 
-    private val _visibility: Property<Int, View> = Property(0, View::setVisibility)
+    private val _visibility: Property<Int, View> = Property("visibility", 0, View::setVisibility)
 
     var enabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5370,9 +5986,10 @@ open class View_ : VirtualNode() {
             props += _enabled
         }
 
-    private val _enabled: Property<Boolean, View> = Property(false, View::setEnabled)
+    private val _enabled: Property<Boolean, View> = Property("enabled", false, View::setEnabled)
 
     var focusable: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5381,9 +5998,12 @@ open class View_ : VirtualNode() {
             props += _focusable
         }
 
-    private val _focusable: Property<Boolean, View> = Property(false, View::setFocusable)
+    private val _focusable: Property<Boolean, View> = Property(
+        "focusable", false,
+        View::setFocusable)
 
     var focusableInTouchMode: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5393,10 +6013,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _focusableInTouchMode: Property<Boolean, View> = Property(
-        false,
-        View::setFocusableInTouchMode)
+        "focusableInTouchMode",
+        false, View::setFocusableInTouchMode)
 
     var soundEffectsEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5406,10 +6027,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _soundEffectsEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setSoundEffectsEnabled)
+        "soundEffectsEnabled",
+        false, View::setSoundEffectsEnabled)
 
     var hapticFeedbackEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5419,10 +6041,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _hapticFeedbackEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setHapticFeedbackEnabled)
+        "hapticFeedbackEnabled",
+        false, View::setHapticFeedbackEnabled)
 
     var layoutDirection: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5431,9 +6054,12 @@ open class View_ : VirtualNode() {
             props += _layoutDirection
         }
 
-    private val _layoutDirection: Property<Int, View> = Property(0, View::setLayoutDirection)
+    private val _layoutDirection: Property<Int, View> = Property(
+        "layoutDirection", 0,
+        View::setLayoutDirection)
 
     var hasTransientState: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5443,10 +6069,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _hasTransientState: Property<Boolean, View> = Property(
-        false,
+        "hasTransientState", false,
         View::setHasTransientState)
 
     var willNotDraw: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5455,9 +6082,12 @@ open class View_ : VirtualNode() {
             props += _willNotDraw
         }
 
-    private val _willNotDraw: Property<Boolean, View> = Property(false, View::setWillNotDraw)
+    private val _willNotDraw: Property<Boolean, View> = Property(
+        "willNotDraw", false,
+        View::setWillNotDraw)
 
     var willNotCacheDrawing: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5467,10 +6097,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _willNotCacheDrawing: Property<Boolean, View> = Property(
-        false,
-        View::setWillNotCacheDrawing)
+        "willNotCacheDrawing",
+        false, View::setWillNotCacheDrawing)
 
     var clickable: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5479,9 +6110,12 @@ open class View_ : VirtualNode() {
             props += _clickable
         }
 
-    private val _clickable: Property<Boolean, View> = Property(false, View::setClickable)
+    private val _clickable: Property<Boolean, View> = Property(
+        "clickable", false,
+        View::setClickable)
 
     var longClickable: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5490,9 +6124,12 @@ open class View_ : VirtualNode() {
             props += _longClickable
         }
 
-    private val _longClickable: Property<Boolean, View> = Property(false, View::setLongClickable)
+    private val _longClickable: Property<Boolean, View> = Property(
+        "longClickable", false,
+        View::setLongClickable)
 
     var pressed: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5501,9 +6138,10 @@ open class View_ : VirtualNode() {
             props += _pressed
         }
 
-    private val _pressed: Property<Boolean, View> = Property(false, View::setPressed)
+    private val _pressed: Property<Boolean, View> = Property("pressed", false, View::setPressed)
 
     var saveEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5512,9 +6150,12 @@ open class View_ : VirtualNode() {
             props += _saveEnabled
         }
 
-    private val _saveEnabled: Property<Boolean, View> = Property(false, View::setSaveEnabled)
+    private val _saveEnabled: Property<Boolean, View> = Property(
+        "saveEnabled", false,
+        View::setSaveEnabled)
 
     var filterTouchesWhenObscured: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5523,11 +6164,11 @@ open class View_ : VirtualNode() {
             props += _filterTouchesWhenObscured
         }
 
-    private val _filterTouchesWhenObscured: Property<Boolean, View> = Property(
-        false,
-        View::setFilterTouchesWhenObscured)
+    private val _filterTouchesWhenObscured: Property<Boolean, View> =
+        Property("filterTouchesWhenObscured", false, View::setFilterTouchesWhenObscured)
 
     var saveFromParentEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5537,10 +6178,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _saveFromParentEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setSaveFromParentEnabled)
+        "saveFromParentEnabled",
+        false, View::setSaveFromParentEnabled)
 
     var accessibilityLiveRegion: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5550,10 +6192,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _accessibilityLiveRegion: Property<Int, View> = Property(
-        0,
-        View::setAccessibilityLiveRegion)
+        "accessibilityLiveRegion",
+        0, View::setAccessibilityLiveRegion)
 
     var importantForAccessibility: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5562,11 +6205,11 @@ open class View_ : VirtualNode() {
             props += _importantForAccessibility
         }
 
-    private val _importantForAccessibility: Property<Int, View> = Property(
-        0,
-        View::setImportantForAccessibility)
+    private val _importantForAccessibility: Property<Int, View> =
+        Property("importantForAccessibility", 0, View::setImportantForAccessibility)
 
     var hovered: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5575,9 +6218,10 @@ open class View_ : VirtualNode() {
             props += _hovered
         }
 
-    private val _hovered: Property<Boolean, View> = Property(false, View::setHovered)
+    private val _hovered: Property<Boolean, View> = Property("hovered", false, View::setHovered)
 
     var touchDelegate: TouchDelegate
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5587,10 +6231,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _touchDelegate: Property<TouchDelegate?, View> = Property(
-        null,
+        "touchDelegate", null,
         View::setTouchDelegate)
 
     var scrollX: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5599,9 +6244,10 @@ open class View_ : VirtualNode() {
             props += _scrollX
         }
 
-    private val _scrollX: Property<Int, View> = Property(0, View::setScrollX)
+    private val _scrollX: Property<Int, View> = Property("scrollX", 0, View::setScrollX)
 
     var scrollY: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5610,9 +6256,10 @@ open class View_ : VirtualNode() {
             props += _scrollY
         }
 
-    private val _scrollY: Property<Int, View> = Property(0, View::setScrollY)
+    private val _scrollY: Property<Int, View> = Property("scrollY", 0, View::setScrollY)
 
     var cameraDistance: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5621,9 +6268,12 @@ open class View_ : VirtualNode() {
             props += _cameraDistance
         }
 
-    private val _cameraDistance: Property<Float, View> = Property(0.0f, View::setCameraDistance)
+    private val _cameraDistance: Property<Float, View> = Property(
+        "cameraDistance", 0.0f,
+        View::setCameraDistance)
 
     var rotation: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5632,9 +6282,10 @@ open class View_ : VirtualNode() {
             props += _rotation
         }
 
-    private val _rotation: Property<Float, View> = Property(0.0f, View::setRotation)
+    private val _rotation: Property<Float, View> = Property("rotation", 0.0f, View::setRotation)
 
     var rotationY: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5643,9 +6294,10 @@ open class View_ : VirtualNode() {
             props += _rotationY
         }
 
-    private val _rotationY: Property<Float, View> = Property(0.0f, View::setRotationY)
+    private val _rotationY: Property<Float, View> = Property("rotationY", 0.0f, View::setRotationY)
 
     var rotationX: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5654,9 +6306,10 @@ open class View_ : VirtualNode() {
             props += _rotationX
         }
 
-    private val _rotationX: Property<Float, View> = Property(0.0f, View::setRotationX)
+    private val _rotationX: Property<Float, View> = Property("rotationX", 0.0f, View::setRotationX)
 
     var scaleX: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5665,9 +6318,10 @@ open class View_ : VirtualNode() {
             props += _scaleX
         }
 
-    private val _scaleX: Property<Float, View> = Property(0.0f, View::setScaleX)
+    private val _scaleX: Property<Float, View> = Property("scaleX", 0.0f, View::setScaleX)
 
     var scaleY: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5676,9 +6330,10 @@ open class View_ : VirtualNode() {
             props += _scaleY
         }
 
-    private val _scaleY: Property<Float, View> = Property(0.0f, View::setScaleY)
+    private val _scaleY: Property<Float, View> = Property("scaleY", 0.0f, View::setScaleY)
 
     var pivotX: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5687,9 +6342,10 @@ open class View_ : VirtualNode() {
             props += _pivotX
         }
 
-    private val _pivotX: Property<Float, View> = Property(0.0f, View::setPivotX)
+    private val _pivotX: Property<Float, View> = Property("pivotX", 0.0f, View::setPivotX)
 
     var pivotY: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5698,9 +6354,10 @@ open class View_ : VirtualNode() {
             props += _pivotY
         }
 
-    private val _pivotY: Property<Float, View> = Property(0.0f, View::setPivotY)
+    private val _pivotY: Property<Float, View> = Property("pivotY", 0.0f, View::setPivotY)
 
     var alpha: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5709,9 +6366,10 @@ open class View_ : VirtualNode() {
             props += _alpha
         }
 
-    private val _alpha: Property<Float, View> = Property(0.0f, View::setAlpha)
+    private val _alpha: Property<Float, View> = Property("alpha", 0.0f, View::setAlpha)
 
     var top: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5720,9 +6378,10 @@ open class View_ : VirtualNode() {
             props += _top
         }
 
-    private val _top: Property<Int, View> = Property(0, View::setTop)
+    private val _top: Property<Int, View> = Property("top", 0, View::setTop)
 
     var bottom: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5731,9 +6390,10 @@ open class View_ : VirtualNode() {
             props += _bottom
         }
 
-    private val _bottom: Property<Int, View> = Property(0, View::setBottom)
+    private val _bottom: Property<Int, View> = Property("bottom", 0, View::setBottom)
 
     var left: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5742,9 +6402,10 @@ open class View_ : VirtualNode() {
             props += _left
         }
 
-    private val _left: Property<Int, View> = Property(0, View::setLeft)
+    private val _left: Property<Int, View> = Property("left", 0, View::setLeft)
 
     var right: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5753,9 +6414,10 @@ open class View_ : VirtualNode() {
             props += _right
         }
 
-    private val _right: Property<Int, View> = Property(0, View::setRight)
+    private val _right: Property<Int, View> = Property("right", 0, View::setRight)
 
     var elevation: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5764,9 +6426,10 @@ open class View_ : VirtualNode() {
             props += _elevation
         }
 
-    private val _elevation: Property<Float, View> = Property(0.0f, View::setElevation)
+    private val _elevation: Property<Float, View> = Property("elevation", 0.0f, View::setElevation)
 
     var translationX: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5775,9 +6438,12 @@ open class View_ : VirtualNode() {
             props += _translationX
         }
 
-    private val _translationX: Property<Float, View> = Property(0.0f, View::setTranslationX)
+    private val _translationX: Property<Float, View> = Property(
+        "translationX", 0.0f,
+        View::setTranslationX)
 
     var translationY: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5786,9 +6452,12 @@ open class View_ : VirtualNode() {
             props += _translationY
         }
 
-    private val _translationY: Property<Float, View> = Property(0.0f, View::setTranslationY)
+    private val _translationY: Property<Float, View> = Property(
+        "translationY", 0.0f,
+        View::setTranslationY)
 
     var translationZ: Float
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5797,9 +6466,12 @@ open class View_ : VirtualNode() {
             props += _translationZ
         }
 
-    private val _translationZ: Property<Float, View> = Property(0.0f, View::setTranslationZ)
+    private val _translationZ: Property<Float, View> = Property(
+        "translationZ", 0.0f,
+        View::setTranslationZ)
 
     var stateListAnimator: StateListAnimator
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5808,11 +6480,11 @@ open class View_ : VirtualNode() {
             props += _stateListAnimator
         }
 
-    private val _stateListAnimator: Property<StateListAnimator?, View> = Property(
-        null,
-        View::setStateListAnimator)
+    private val _stateListAnimator: Property<StateListAnimator?, View> =
+        Property("stateListAnimator", null, View::setStateListAnimator)
 
     var clipToOutline: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5821,9 +6493,12 @@ open class View_ : VirtualNode() {
             props += _clipToOutline
         }
 
-    private val _clipToOutline: Property<Boolean, View> = Property(false, View::setClipToOutline)
+    private val _clipToOutline: Property<Boolean, View> = Property(
+        "clipToOutline", false,
+        View::setClipToOutline)
 
     var outlineProvider: ViewOutlineProvider
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5833,10 +6508,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _outlineProvider: Property<ViewOutlineProvider?, View> = Property(
-        null,
-        View::setOutlineProvider)
+        "outlineProvider",
+        null, View::setOutlineProvider)
 
     var layoutParams: ViewGroup.LayoutParams
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5846,10 +6522,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _layoutParams: Property<ViewGroup.LayoutParams?, View> = Property(
-        null,
-        View::setLayoutParams)
+        "layoutParams",
+        null, View::setLayoutParams)
 
     var horizontalFadingEdgeEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5858,11 +6535,11 @@ open class View_ : VirtualNode() {
             props += _horizontalFadingEdgeEnabled
         }
 
-    private val _horizontalFadingEdgeEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setHorizontalFadingEdgeEnabled)
+    private val _horizontalFadingEdgeEnabled: Property<Boolean, View> =
+        Property("horizontalFadingEdgeEnabled", false, View::setHorizontalFadingEdgeEnabled)
 
     var verticalFadingEdgeEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5871,11 +6548,11 @@ open class View_ : VirtualNode() {
             props += _verticalFadingEdgeEnabled
         }
 
-    private val _verticalFadingEdgeEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setVerticalFadingEdgeEnabled)
+    private val _verticalFadingEdgeEnabled: Property<Boolean, View> =
+        Property("verticalFadingEdgeEnabled", false, View::setVerticalFadingEdgeEnabled)
 
     var horizontalScrollBarEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5884,11 +6561,11 @@ open class View_ : VirtualNode() {
             props += _horizontalScrollBarEnabled
         }
 
-    private val _horizontalScrollBarEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setHorizontalScrollBarEnabled)
+    private val _horizontalScrollBarEnabled: Property<Boolean, View> =
+        Property("horizontalScrollBarEnabled", false, View::setHorizontalScrollBarEnabled)
 
     var verticalScrollBarEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5897,11 +6574,11 @@ open class View_ : VirtualNode() {
             props += _verticalScrollBarEnabled
         }
 
-    private val _verticalScrollBarEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setVerticalScrollBarEnabled)
+    private val _verticalScrollBarEnabled: Property<Boolean, View> =
+        Property("verticalScrollBarEnabled", false, View::setVerticalScrollBarEnabled)
 
     var scrollbarFadingEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5910,11 +6587,11 @@ open class View_ : VirtualNode() {
             props += _scrollbarFadingEnabled
         }
 
-    private val _scrollbarFadingEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setScrollbarFadingEnabled)
+    private val _scrollbarFadingEnabled: Property<Boolean, View> =
+        Property("scrollbarFadingEnabled", false, View::setScrollbarFadingEnabled)
 
     var scrollBarDefaultDelayBeforeFade: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5923,11 +6600,11 @@ open class View_ : VirtualNode() {
             props += _scrollBarDefaultDelayBeforeFade
         }
 
-    private val _scrollBarDefaultDelayBeforeFade: Property<Int, View> = Property(
-        0,
-        View::setScrollBarDefaultDelayBeforeFade)
+    private val _scrollBarDefaultDelayBeforeFade: Property<Int, View> =
+        Property("scrollBarDefaultDelayBeforeFade", 0, View::setScrollBarDefaultDelayBeforeFade)
 
     var scrollBarFadeDuration: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5937,10 +6614,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _scrollBarFadeDuration: Property<Int, View> = Property(
-        0,
+        "scrollBarFadeDuration", 0,
         View::setScrollBarFadeDuration)
 
     var scrollBarSize: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5949,9 +6627,12 @@ open class View_ : VirtualNode() {
             props += _scrollBarSize
         }
 
-    private val _scrollBarSize: Property<Int, View> = Property(0, View::setScrollBarSize)
+    private val _scrollBarSize: Property<Int, View> = Property(
+        "scrollBarSize", 0,
+        View::setScrollBarSize)
 
     var scrollBarStyle: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5960,9 +6641,12 @@ open class View_ : VirtualNode() {
             props += _scrollBarStyle
         }
 
-    private val _scrollBarStyle: Property<Int, View> = Property(0, View::setScrollBarStyle)
+    private val _scrollBarStyle: Property<Int, View> = Property(
+        "scrollBarStyle", 0,
+        View::setScrollBarStyle)
 
     var duplicateParentStateEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5971,11 +6655,11 @@ open class View_ : VirtualNode() {
             props += _duplicateParentStateEnabled
         }
 
-    private val _duplicateParentStateEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setDuplicateParentStateEnabled)
+    private val _duplicateParentStateEnabled: Property<Boolean, View> =
+        Property("duplicateParentStateEnabled", false, View::setDuplicateParentStateEnabled)
 
     var layerPaint: Paint
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5984,9 +6668,12 @@ open class View_ : VirtualNode() {
             props += _layerPaint
         }
 
-    private val _layerPaint: Property<Paint?, View> = Property(null, View::setLayerPaint)
+    private val _layerPaint: Property<Paint?, View> = Property(
+        "layerPaint", null,
+        View::setLayerPaint)
 
     var drawingCacheEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -5996,10 +6683,11 @@ open class View_ : VirtualNode() {
         }
 
     private val _drawingCacheEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setDrawingCacheEnabled)
+        "drawingCacheEnabled",
+        false, View::setDrawingCacheEnabled)
 
     var drawingCacheBackgroundColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6008,11 +6696,11 @@ open class View_ : VirtualNode() {
             props += _drawingCacheBackgroundColor
         }
 
-    private val _drawingCacheBackgroundColor: Property<Int, View> = Property(
-        0,
-        View::setDrawingCacheBackgroundColor)
+    private val _drawingCacheBackgroundColor: Property<Int, View> =
+        Property("drawingCacheBackgroundColor", 0, View::setDrawingCacheBackgroundColor)
 
     var clipBounds: Rect
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6021,9 +6709,12 @@ open class View_ : VirtualNode() {
             props += _clipBounds
         }
 
-    private val _clipBounds: Property<Rect?, View> = Property(null, View::setClipBounds)
+    private val _clipBounds: Property<Rect?, View> = Property(
+        "clipBounds", null,
+        View::setClipBounds)
 
     var backgroundColor: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6032,9 +6723,12 @@ open class View_ : VirtualNode() {
             props += _backgroundColor
         }
 
-    private val _backgroundColor: Property<Int, View> = Property(0, View::setBackgroundColor)
+    private val _backgroundColor: Property<Int, View> = Property(
+        "backgroundColor", 0,
+        View::setBackgroundColor)
 
     var backgroundResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6043,9 +6737,12 @@ open class View_ : VirtualNode() {
             props += _backgroundResource
         }
 
-    private val _backgroundResource: Property<Int, View> = Property(0, View::setBackgroundResource)
+    private val _backgroundResource: Property<Int, View> = Property(
+        "backgroundResource", 0,
+        View::setBackgroundResource)
 
     var background: Drawable
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6054,9 +6751,12 @@ open class View_ : VirtualNode() {
             props += _background
         }
 
-    private val _background: Property<Drawable?, View> = Property(null, View::setBackground)
+    private val _background: Property<Drawable?, View> = Property(
+        "background", null,
+        View::setBackground)
 
     var backgroundTintList: ColorStateList
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6065,11 +6765,11 @@ open class View_ : VirtualNode() {
             props += _backgroundTintList
         }
 
-    private val _backgroundTintList: Property<ColorStateList?, View> = Property(
-        null,
-        View::setBackgroundTintList)
+    private val _backgroundTintList: Property<ColorStateList?, View> =
+        Property("backgroundTintList", null, View::setBackgroundTintList)
 
     var backgroundTintMode: PorterDuff.Mode
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6078,11 +6778,11 @@ open class View_ : VirtualNode() {
             props += _backgroundTintMode
         }
 
-    private val _backgroundTintMode: Property<PorterDuff.Mode?, View> = Property(
-        null,
-        View::setBackgroundTintMode)
+    private val _backgroundTintMode: Property<PorterDuff.Mode?, View> =
+        Property("backgroundTintMode", null, View::setBackgroundTintMode)
 
     var selected: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6091,9 +6791,10 @@ open class View_ : VirtualNode() {
             props += _selected
         }
 
-    private val _selected: Property<Boolean, View> = Property(false, View::setSelected)
+    private val _selected: Property<Boolean, View> = Property("selected", false, View::setSelected)
 
     var activated: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6102,9 +6803,12 @@ open class View_ : VirtualNode() {
             props += _activated
         }
 
-    private val _activated: Property<Boolean, View> = Property(false, View::setActivated)
+    private val _activated: Property<Boolean, View> = Property(
+        "activated", false,
+        View::setActivated)
 
     var id: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6113,9 +6817,10 @@ open class View_ : VirtualNode() {
             props += _id
         }
 
-    private val _id: Property<Int, View> = Property(0, View::setId)
+    private val _id: Property<Int, View> = Property("id", 0, View::setId)
 
     var tag: Any
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6124,9 +6829,10 @@ open class View_ : VirtualNode() {
             props += _tag
         }
 
-    private val _tag: Property<Any?, View> = Property(null, View::setTag)
+    private val _tag: Property<Any?, View> = Property("tag", null, View::setTag)
 
     var minimumHeight: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6135,9 +6841,12 @@ open class View_ : VirtualNode() {
             props += _minimumHeight
         }
 
-    private val _minimumHeight: Property<Int, View> = Property(0, View::setMinimumHeight)
+    private val _minimumHeight: Property<Int, View> = Property(
+        "minimumHeight", 0,
+        View::setMinimumHeight)
 
     var minimumWidth: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6146,9 +6855,12 @@ open class View_ : VirtualNode() {
             props += _minimumWidth
         }
 
-    private val _minimumWidth: Property<Int, View> = Property(0, View::setMinimumWidth)
+    private val _minimumWidth: Property<Int, View> = Property(
+        "minimumWidth", 0,
+        View::setMinimumWidth)
 
     var animation: Animation
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6157,9 +6869,12 @@ open class View_ : VirtualNode() {
             props += _animation
         }
 
-    private val _animation: Property<Animation?, View> = Property(null, View::setAnimation)
+    private val _animation: Property<Animation?, View> = Property(
+        "animation", null,
+        View::setAnimation)
 
     var systemUiVisibility: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6168,9 +6883,12 @@ open class View_ : VirtualNode() {
             props += _systemUiVisibility
         }
 
-    private val _systemUiVisibility: Property<Int, View> = Property(0, View::setSystemUiVisibility)
+    private val _systemUiVisibility: Property<Int, View> = Property(
+        "systemUiVisibility", 0,
+        View::setSystemUiVisibility)
 
     var onSystemUiVisibilityChangeListener: View.OnSystemUiVisibilityChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6180,11 +6898,13 @@ open class View_ : VirtualNode() {
         }
 
     private val _onSystemUiVisibilityChangeListener:
-        Property<View.OnSystemUiVisibilityChangeListener?, View> = Property(
-        null,
-        View::setOnSystemUiVisibilityChangeListener)
+        Property<View.OnSystemUiVisibilityChangeListener?, View> =
+        Property(
+            "onSystemUiVisibilityChangeListener", null,
+            View::setOnSystemUiVisibilityChangeListener)
 
     var overScrollMode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6193,9 +6913,12 @@ open class View_ : VirtualNode() {
             props += _overScrollMode
         }
 
-    private val _overScrollMode: Property<Int, View> = Property(0, View::setOverScrollMode)
+    private val _overScrollMode: Property<Int, View> = Property(
+        "overScrollMode", 0,
+        View::setOverScrollMode)
 
     var nestedScrollingEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6204,11 +6927,11 @@ open class View_ : VirtualNode() {
             props += _nestedScrollingEnabled
         }
 
-    private val _nestedScrollingEnabled: Property<Boolean, View> = Property(
-        false,
-        View::setNestedScrollingEnabled)
+    private val _nestedScrollingEnabled: Property<Boolean, View> =
+        Property("nestedScrollingEnabled", false, View::setNestedScrollingEnabled)
 
     var textDirection: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6217,9 +6940,12 @@ open class View_ : VirtualNode() {
             props += _textDirection
         }
 
-    private val _textDirection: Property<Int, View> = Property(0, View::setTextDirection)
+    private val _textDirection: Property<Int, View> = Property(
+        "textDirection", 0,
+        View::setTextDirection)
 
     var textAlignment: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6228,9 +6954,12 @@ open class View_ : VirtualNode() {
             props += _textAlignment
         }
 
-    private val _textAlignment: Property<Int, View> = Property(0, View::setTextAlignment)
+    private val _textAlignment: Property<Int, View> = Property(
+        "textAlignment", 0,
+        View::setTextAlignment)
 
     var transitionName: String
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6239,7 +6968,9 @@ open class View_ : VirtualNode() {
             props += _transitionName
         }
 
-    private val _transitionName: Property<String?, View> = Property(null, View::setTransitionName)
+    private val _transitionName: Property<String?, View> = Property(
+        "transitionName", null,
+        View::setTransitionName)
 
     override fun createEmpty(context: Context) = View(context)
 }
@@ -6254,6 +6985,7 @@ fun viewGroup(f: ViewGroup_.() -> Unit) {
 
 open class ViewGroup_ : View_() {
     var descendantFocusability: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6262,11 +6994,11 @@ open class ViewGroup_ : View_() {
             props += _descendantFocusability
         }
 
-    private val _descendantFocusability: Property<Int, ViewGroup> = Property(
-        0,
-        ViewGroup::setDescendantFocusability)
+    private val _descendantFocusability: Property<Int, ViewGroup> =
+        Property("descendantFocusability", 0, ViewGroup::setDescendantFocusability)
 
     var touchscreenBlocksFocus: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6275,11 +7007,11 @@ open class ViewGroup_ : View_() {
             props += _touchscreenBlocksFocus
         }
 
-    private val _touchscreenBlocksFocus: Property<Boolean, ViewGroup> = Property(
-        false,
-        ViewGroup::setTouchscreenBlocksFocus)
+    private val _touchscreenBlocksFocus: Property<Boolean, ViewGroup> =
+        Property("touchscreenBlocksFocus", false, ViewGroup::setTouchscreenBlocksFocus)
 
     var motionEventSplittingEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6288,11 +7020,13 @@ open class ViewGroup_ : View_() {
             props += _motionEventSplittingEnabled
         }
 
-    private val _motionEventSplittingEnabled: Property<Boolean, ViewGroup> = Property(
-        false,
-        ViewGroup::setMotionEventSplittingEnabled)
+    private val _motionEventSplittingEnabled: Property<Boolean, ViewGroup> =
+        Property(
+            "motionEventSplittingEnabled", false,
+            ViewGroup::setMotionEventSplittingEnabled)
 
     var transitionGroup: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6302,10 +7036,11 @@ open class ViewGroup_ : View_() {
         }
 
     private val _transitionGroup: Property<Boolean, ViewGroup> = Property(
-        false,
+        "transitionGroup", false,
         ViewGroup::setTransitionGroup)
 
     var clipChildren: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6315,10 +7050,11 @@ open class ViewGroup_ : View_() {
         }
 
     private val _clipChildren: Property<Boolean, ViewGroup> = Property(
-        false,
+        "clipChildren", false,
         ViewGroup::setClipChildren)
 
     var clipToPadding: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6328,10 +7064,11 @@ open class ViewGroup_ : View_() {
         }
 
     private val _clipToPadding: Property<Boolean, ViewGroup> = Property(
-        false,
+        "clipToPadding", false,
         ViewGroup::setClipToPadding)
 
     var onHierarchyChangeListener: ViewGroup.OnHierarchyChangeListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6341,9 +7078,12 @@ open class ViewGroup_ : View_() {
         }
 
     private val _onHierarchyChangeListener: Property<ViewGroup.OnHierarchyChangeListener?,
-        ViewGroup> = Property(null, ViewGroup::setOnHierarchyChangeListener)
+        ViewGroup> = Property(
+        "onHierarchyChangeListener", null,
+        ViewGroup::setOnHierarchyChangeListener)
 
     var layoutTransition: LayoutTransition
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6352,11 +7092,11 @@ open class ViewGroup_ : View_() {
             props += _layoutTransition
         }
 
-    private val _layoutTransition: Property<LayoutTransition?, ViewGroup> = Property(
-        null,
-        ViewGroup::setLayoutTransition)
+    private val _layoutTransition: Property<LayoutTransition?, ViewGroup> =
+        Property("layoutTransition", null, ViewGroup::setLayoutTransition)
 
     var layoutAnimation: LayoutAnimationController
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6365,11 +7105,11 @@ open class ViewGroup_ : View_() {
             props += _layoutAnimation
         }
 
-    private val _layoutAnimation: Property<LayoutAnimationController?, ViewGroup> = Property(
-        null,
-        ViewGroup::setLayoutAnimation)
+    private val _layoutAnimation: Property<LayoutAnimationController?, ViewGroup> =
+        Property("layoutAnimation", null, ViewGroup::setLayoutAnimation)
 
     var animationCacheEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6378,11 +7118,11 @@ open class ViewGroup_ : View_() {
             props += _animationCacheEnabled
         }
 
-    private val _animationCacheEnabled: Property<Boolean, ViewGroup> = Property(
-        false,
-        ViewGroup::setAnimationCacheEnabled)
+    private val _animationCacheEnabled: Property<Boolean, ViewGroup> =
+        Property("animationCacheEnabled", false, ViewGroup::setAnimationCacheEnabled)
 
     var alwaysDrawnWithCacheEnabled: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6391,11 +7131,13 @@ open class ViewGroup_ : View_() {
             props += _alwaysDrawnWithCacheEnabled
         }
 
-    private val _alwaysDrawnWithCacheEnabled: Property<Boolean, ViewGroup> = Property(
-        false,
-        ViewGroup::setAlwaysDrawnWithCacheEnabled)
+    private val _alwaysDrawnWithCacheEnabled: Property<Boolean, ViewGroup> =
+        Property(
+            "alwaysDrawnWithCacheEnabled", false,
+            ViewGroup::setAlwaysDrawnWithCacheEnabled)
 
     var persistentDrawingCache: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6404,11 +7146,11 @@ open class ViewGroup_ : View_() {
             props += _persistentDrawingCache
         }
 
-    private val _persistentDrawingCache: Property<Int, ViewGroup> = Property(
-        0,
-        ViewGroup::setPersistentDrawingCache)
+    private val _persistentDrawingCache: Property<Int, ViewGroup> =
+        Property("persistentDrawingCache", 0, ViewGroup::setPersistentDrawingCache)
 
     var layoutMode: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6417,9 +7159,12 @@ open class ViewGroup_ : View_() {
             props += _layoutMode
         }
 
-    private val _layoutMode: Property<Int, ViewGroup> = Property(0, ViewGroup::setLayoutMode)
+    private val _layoutMode: Property<Int, ViewGroup> = Property(
+        "layoutMode", 0,
+        ViewGroup::setLayoutMode)
 
     var addStatesFromChildren: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6428,11 +7173,11 @@ open class ViewGroup_ : View_() {
             props += _addStatesFromChildren
         }
 
-    private val _addStatesFromChildren: Property<Boolean, ViewGroup> = Property(
-        false,
-        ViewGroup::setAddStatesFromChildren)
+    private val _addStatesFromChildren: Property<Boolean, ViewGroup> =
+        Property("addStatesFromChildren", false, ViewGroup::setAddStatesFromChildren)
 
     var layoutAnimationListener: Animation.AnimationListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6442,7 +7187,7 @@ open class ViewGroup_ : View_() {
         }
 
     private val _layoutAnimationListener: Property<Animation.AnimationListener?, ViewGroup> =
-        Property(null, ViewGroup::setLayoutAnimationListener)
+        Property("layoutAnimationListener", null, ViewGroup::setLayoutAnimationListener)
 }
 
 fun viewStub(f: ViewStub_.() -> Unit) {
@@ -6455,6 +7200,7 @@ fun viewStub(f: ViewStub_.() -> Unit) {
 
 open class ViewStub_ : View_() {
     var layoutResource: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6463,9 +7209,12 @@ open class ViewStub_ : View_() {
             props += _layoutResource
         }
 
-    private val _layoutResource: Property<Int, ViewStub> = Property(0, ViewStub::setLayoutResource)
+    private val _layoutResource: Property<Int, ViewStub> = Property(
+        "layoutResource", 0,
+        ViewStub::setLayoutResource)
 
     var inflatedId: Int
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6474,9 +7223,12 @@ open class ViewStub_ : View_() {
             props += _inflatedId
         }
 
-    private val _inflatedId: Property<Int, ViewStub> = Property(0, ViewStub::setInflatedId)
+    private val _inflatedId: Property<Int, ViewStub> = Property(
+        "inflatedId", 0,
+        ViewStub::setInflatedId)
 
     var layoutInflater: LayoutInflater
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6486,10 +7238,11 @@ open class ViewStub_ : View_() {
         }
 
     private val _layoutInflater: Property<LayoutInflater?, ViewStub> = Property(
-        null,
-        ViewStub::setLayoutInflater)
+        "layoutInflater",
+        null, ViewStub::setLayoutInflater)
 
     var onInflateListener: ViewStub.OnInflateListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6498,9 +7251,8 @@ open class ViewStub_ : View_() {
             props += _onInflateListener
         }
 
-    private val _onInflateListener: Property<ViewStub.OnInflateListener?, ViewStub> = Property(
-        null,
-        ViewStub::setOnInflateListener)
+    private val _onInflateListener: Property<ViewStub.OnInflateListener?, ViewStub> =
+        Property("onInflateListener", null, ViewStub::setOnInflateListener)
 
     override fun createEmpty(context: Context) = ViewStub(context)
 }
@@ -6514,18 +7266,8 @@ fun textureView(f: TextureView_.() -> Unit) {
 }
 
 open class TextureView_ : View_() {
-    var opaque: Boolean
-        get() {
-            throw IllegalStateException()
-        }
-        set(value) {
-            _opaque.set(value)
-            props += _opaque
-        }
-
-    private val _opaque: Property<Boolean, TextureView> = Property(false, TextureView::setOpaque)
-
     var transform: Matrix
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6535,10 +7277,25 @@ open class TextureView_ : View_() {
         }
 
     private val _transform: Property<Matrix?, TextureView> = Property(
-        null,
+        "transform", null,
         TextureView::setTransform)
 
+    var opaque: Boolean
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
+        get() {
+            throw IllegalStateException()
+        }
+        set(value) {
+            _opaque.set(value)
+            props += _opaque
+        }
+
+    private val _opaque: Property<Boolean, TextureView> = Property(
+        "opaque", false,
+        TextureView::setOpaque)
+
     var surfaceTexture: SurfaceTexture
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6548,10 +7305,11 @@ open class TextureView_ : View_() {
         }
 
     private val _surfaceTexture: Property<SurfaceTexture?, TextureView> = Property(
-        null,
-        TextureView::setSurfaceTexture)
+        "surfaceTexture",
+        null, TextureView::setSurfaceTexture)
 
     var surfaceTextureListener: TextureView.SurfaceTextureListener
+        @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() {
             throw IllegalStateException()
         }
@@ -6561,7 +7319,7 @@ open class TextureView_ : View_() {
         }
 
     private val _surfaceTextureListener: Property<TextureView.SurfaceTextureListener?, TextureView> =
-        Property(null, TextureView::setSurfaceTextureListener)
+        Property("surfaceTextureListener", null, TextureView::setSurfaceTextureListener)
 
     override fun createEmpty(context: Context) = TextureView(context)
 }

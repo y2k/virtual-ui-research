@@ -21,7 +21,13 @@ fun mkNode(f: () -> Unit): VirtualNode {
 
 val globalViewStack = Stack<VirtualNode>()
 
-class Property<T, TView : View>(var value: T, private val f: (TView, T) -> Unit) {
+class Property<T, TView : View>(val name: String, var value: T, private val f: (TView, T) -> Unit) {
+
+    private val default = value
+
+    fun clear(view: TView) {
+        f(view, default)
+    }
 
     fun update(view: TView) {
         f(view, value)
@@ -51,13 +57,21 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
     if (prev == null) {
         current.props.forEach { p -> updateViewProp(view, p) }
     } else {
-        prev.props
-            .zip(current.props)
-            .forEach { (p, c) ->
-                if (p.value != c.value) {
-                    updateViewProp(view, c)
+        prev.props.forEach { oldProp ->
+            val newProp = current.props.find { it.name == oldProp.name }
+            if (newProp == null) {
+                clearViewProp(view, oldProp)
+            } else {
+                if (oldProp.value != newProp.value) {
+                    updateViewProp(view, newProp)
                 }
             }
+        }
+        current.props.forEach { newProp ->
+            if (prev.props.none { it.name == newProp.name }) {
+                updateViewProp(view, newProp)
+            }
+        }
     }
 
     if (view is ViewGroup) {
@@ -96,6 +110,14 @@ fun updateViewProp(view: View, c: Property<*, out View>) {
 
     val a = c as Property<*, View>
     a.update(view)
+}
+
+@Suppress("UNCHECKED_CAST")
+fun clearViewProp(view: View, c: Property<*, out View>) {
+    log { "Clear: ${view.javaClass.simpleName}.$c" }
+
+    val a = c as Property<*, View>
+    a.clear(view)
 }
 
 private inline fun log(f: () -> String) {

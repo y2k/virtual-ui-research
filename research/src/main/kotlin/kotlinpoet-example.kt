@@ -101,6 +101,12 @@ private fun mkCompProps(inputViewClass: TypeName, methodName: String, methodType
         .mutable(true)
         .getter(
             FunSpec.getterBuilder()
+                .addAnnotation(
+                    AnnotationSpec
+                        .builder(Deprecated::class)
+                        .addMember("\"\", level = DeprecationLevel.HIDDEN")
+                        .build()
+                )
                 .addCode("throw IllegalStateException()")
                 .build()
         )
@@ -126,7 +132,7 @@ private fun mkCompProps(inputViewClass: TypeName, methodName: String, methodType
             propertyType.parameterizedBy(fixedType.copy(defValue == null), inputViewClass),
             KModifier.PRIVATE
         )
-        .initializer("%T(%L, %T::%L)", propertyType, defValue, inputViewClass, methodName)
+        .initializer("%T(%S, %L, %T::%L)", propertyType, name, defValue, inputViewClass, methodName)
         .build()
 
     return listOf(p1, p2)

@@ -1,6 +1,5 @@
 package y2k.android
 
-import android.R
 import android.app.Activity
 import android.os.Bundle
 import android.view.Gravity
@@ -56,7 +55,7 @@ class DslExampleActivity : Activity() {
             if (stage >= 2)
                 imageView {
                     scaleType = ImageView.ScaleType.FIT_CENTER
-                    imageDrawable = getDrawable(R.drawable.ic_menu_view)!!
+                    imageDrawable = getDrawable(android.R.drawable.ic_menu_view)!!
                 }
 
             if (stage >= 3)
@@ -68,7 +67,7 @@ class DslExampleActivity : Activity() {
 
             linearLayout {
                 button {
-                    background = getDrawableByAttr(R.attr.selectableItemBackground)
+                    background = getDrawableByAttr(android.R.attr.selectableItemBackground)
                     text = "Line #4 ($stage)"
                     textColor = color1
                     textSize = 14f
@@ -83,7 +82,7 @@ class DslExampleActivity : Activity() {
         frameLayout {
             if (!showProgress)
                 button {
-                    background = getDrawableByAttr(R.attr.selectableItemBackground)
+                    background = getDrawableByAttr(android.R.attr.selectableItemBackground)
                     text = "Line #5"
                     textColor = color1
                     textSize = 14f
