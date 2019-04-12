@@ -11,16 +11,12 @@
         tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".DslExampleActivity"
             android:exported="true" />
 
         <activity
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".flat.ConstraintTestActivity"
-            android:exported="true" />
-
-        <activity
-            android:name="y2k.virtual.ui.DslExampleActivity"
             android:exported="true" />
 
     </application>
