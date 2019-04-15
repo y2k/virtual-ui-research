@@ -3,11 +3,30 @@
 package y2k.virtual.ui
 
 import android.content.Context
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import y2k.android.BuildConfig
 import java.util.*
+
+class VirtualHostView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr) {
+
+    private var prevNode: VirtualNode? = null
+
+    fun update(f: () -> Unit) {
+        val s2 = mkNode {
+            frameLayout {
+                f()
+            }
+        }
+        updateRealView(this, prevNode, s2)
+        prevNode = s2
+    }
+}
 
 fun mkNode(f: () -> Unit): VirtualNode {
     globalViewStack += object : VirtualNode() {

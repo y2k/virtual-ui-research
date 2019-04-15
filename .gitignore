@@ -7,4 +7,4 @@ research/build
 examples
 local.properties
 *.iml
-android.jar
+*.jar

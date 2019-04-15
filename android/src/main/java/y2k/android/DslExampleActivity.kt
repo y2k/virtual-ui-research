@@ -14,15 +14,12 @@ class DslExampleActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val root = LinearLayout(this)
+        val root = VirtualHostView(this)
         setContentView(root)
 
-        var s1: VirtualNode? = null
-        var state = 0
+        var stage = 0
         fun update() {
-            val s2 = mkNode { makeStage(state++) { update() } }
-            updateRealView(root, s1, s2)
-            s1 = s2
+            root.update { makeStage(stage++) { update() } }
         }
         update()
     }
