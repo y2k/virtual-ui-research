@@ -1,15 +1,15 @@
 package y2k.android
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import y2k.android.common.getDrawableByAttr
 import y2k.virtual.ui.*
 
-class DslExampleActivity : Activity() {
+class DslExampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +29,11 @@ class DslExampleActivity : Activity() {
             backgroundColor = color4
             gravity = Gravity.CENTER_VERTICAL
             orientation = LinearLayout.VERTICAL
+
+            appCompatButton {
+                text = "AppCompat Button ($stage)"
+                textSize = 18f
+            }
 
             textView {
                 text = "Line #1"

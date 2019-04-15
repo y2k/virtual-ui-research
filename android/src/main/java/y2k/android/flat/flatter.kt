@@ -1,11 +1,11 @@
 package y2k.android.flat
 
-import android.support.constraint.Barrier
-import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.Barrier
+import androidx.constraintlayout.widget.ConstraintLayout
 
 fun fillConstraintLayout(view: View, target: ConstraintLayout) {
     if (view !is LinearLayout) TODO()

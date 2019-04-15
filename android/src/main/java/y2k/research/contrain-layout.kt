@@ -1,8 +1,8 @@
 package y2k.research
 
-import android.support.constraint.ConstraintLayout
-import android.support.constraint.ConstraintLayout.LayoutParams
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+import androidx.constraintlayout.widget.ConstraintLayout
 
 interface ConstraintLayoutF<T, P, V> {
     fun isView(obj: Any): Boolean

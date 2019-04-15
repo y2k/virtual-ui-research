@@ -10,17 +10,19 @@ import java.lang.reflect.Modifier
 import java.net.URLClassLoader
 
 fun main(args: Array<String>) {
-    val android = File(args[0])
+    val jars = args.map { File(it).toURI().toURL() }.toTypedArray()
 
-    val loader = URLClassLoader(arrayOf(android.toURI().toURL()), ClassLoader.getSystemClassLoader())
-    val classes = loadAllClassesFromJar(android, loader)
+    val loader = URLClassLoader(jars, ClassLoader.getSystemClassLoader())
+    val libClasses = loadAllClassesFromJar(File(args.first()), loader)
 
-    val viewClass = classes.first { it.name == "android.view.View" }
-    val groupClass = classes.first { it.name == "android.view.ViewGroup" }
+    val androidClasses = loadAllClassesFromJar(File(args.last()), loader)
+
+    val viewClass = androidClasses.first { it.name == "android.view.View" }
+    val groupClass = androidClasses.first { it.name == "android.view.ViewGroup" }
 
     val fileSpec = FileSpec.builder(libraryPackage, "dsl")
 
-    classes
+    (libClasses + androidClasses)
         .filter {
             it.name !in listOf(
                 "android.webkit.WebView",
@@ -31,12 +33,34 @@ fun main(args: Array<String>) {
                 "android.inputmethodservice.ExtractEditText",
                 "android.inputmethodservice.KeyboardView",
                 "android.appwidget.AppWidgetHostView",
-                "android.opengl.GLSurfaceView"
+                "android.opengl.GLSurfaceView",
+                // Replaced by AppCompat
+                "android.widget.SearchView",
+                "android.widget.Toolbar",
+
+                // Restrict
+                "androidx.appcompat.widget.ActionBarContextView",
+                "androidx.appcompat.widget.ActionBarContainer",
+                "androidx.appcompat.widget.ActionBarOverlayLayout",
+                "androidx.appcompat.widget.ActivityChooserView",
+                "androidx.appcompat.widget.ButtonBarLayout",
+                "androidx.appcompat.widget.ContentFrameLayout",
+                "androidx.appcompat.widget.ScrollingTabContainerView",
+                "androidx.appcompat.widget.AlertDialogLayout",
+                "androidx.appcompat.widget.DialogTitle",
+                "androidx.appcompat.widget.FitWindowsFrameLayout",
+                "androidx.appcompat.widget.FitWindowsLinearLayout",
+                //
+                "androidx.appcompat.widget.AppCompatAutoCompleteTextView",
+                "androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView",
+                "androidx.appcompat.widget.ActionMenuView"
             )
         }
+        .filter { it.name.startsWith("androidx.appcompat.widget.") }
         .filter {
-            viewClass.isAssignableFrom(it)
-                && !it.isAnnotationPresent(java.lang.Deprecated::class.java)
+            viewClass.isAssignableFrom(it) &&
+                !it.isAnnotationPresent(java.lang.Deprecated::class.java) &&
+                !it.isMemberClass
         }
         .map { mkComponent(it, groupClass) }
         .forEach {
