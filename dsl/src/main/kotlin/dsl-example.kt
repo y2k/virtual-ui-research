@@ -2,7 +2,7 @@
 
 import android.graphics.Color
 import android.widget.LinearLayout
-import common.*
+import y2k.virtualuiresearch.common.*
 
 fun main(args: Array<String>) {
     view(

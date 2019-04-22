@@ -8,3 +8,4 @@ examples
 local.properties
 *.iml
 *.jar
+android.generated.kt

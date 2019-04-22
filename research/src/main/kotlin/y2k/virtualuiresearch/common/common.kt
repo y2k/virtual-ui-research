@@ -1,4 +1,4 @@
-package common
+package y2k.virtualuiresearch.common
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName

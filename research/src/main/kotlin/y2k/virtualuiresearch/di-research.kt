@@ -1,18 +1,24 @@
+package y2k.virtualuiresearch
+
 fun main(args: Array<String>) {
     foo(object : Reader, Writer {
         override fun write(x: Any): Unit = TODO()
         override fun read(): String? = TODO()
     })
-    foo(object : Reader by Reader, Writer by Writer {})
+    foo(object : Reader by Reader,
+        Writer by Writer {})
     foo(Console)
 
-    bar(object : Reader, Writer, Preferences {
+    bar(object : Reader, Writer,
+        Preferences {
         override fun write(x: Any): Unit = TODO()
         override fun read(): String? = TODO()
         override fun load(key: String): String? = TODO()
         override fun save(key: String, value: String): Unit = TODO()
     })
-    bar(object : Reader by Reader, Writer by Writer, Preferences by Preferences {})
+    bar(object : Reader by Reader,
+        Writer by Writer,
+        Preferences by Preferences {})
     bar(System)
 
     write(Writer)

@@ -1,4 +1,6 @@
-import common.loadAllClassesFromJar
+package y2k.virtualuiresearch
+
+import y2k.virtualuiresearch.common.loadAllClassesFromJar
 import java.io.File
 import java.net.URLClassLoader
 

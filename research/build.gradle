@@ -11,6 +11,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile 'org.ow2.asm:asm:7.0'
     compile 'com.squareup:kotlinpoet:1.0.0'
+    testImplementation 'junit:junit:4.12'
 }
 
 compileKotlin {

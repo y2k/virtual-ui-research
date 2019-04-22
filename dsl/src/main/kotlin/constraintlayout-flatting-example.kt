@@ -1,4 +1,4 @@
-import common.printPretty
+import y2k.virtualuiresearch.common.printPretty
 import java.util.*
 import kotlin.collections.ArrayList
 

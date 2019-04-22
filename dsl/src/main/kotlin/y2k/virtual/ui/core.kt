@@ -4,8 +4,8 @@ package y2k.virtual.ui
 
 import android.content.Context
 import android.util.Log
-import common.View
-import common.ViewGroup
+import y2k.virtualuiresearch.common.View
+import y2k.virtualuiresearch.common.ViewGroup
 import java.util.*
 
 fun mkNode(f: () -> Unit): VirtualNode {

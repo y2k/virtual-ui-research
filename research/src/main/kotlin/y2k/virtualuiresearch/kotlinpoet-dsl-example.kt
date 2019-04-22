@@ -1,5 +1,7 @@
+package y2k.virtualuiresearch
+
 import com.squareup.kotlinpoet.*
-import common.simpleName
+import y2k.virtualuiresearch.common.simpleName
 
 const val libraryPackage = "y2k.virtual.ui"
 
@@ -38,16 +40,18 @@ fun main(args: Array<String>) {
 }
 
 fun createTypeDsl(inputViewClass: TypeName, group: Boolean): FunSpec {
+    val componentClass = ClassName.bestGuess(inputViewClass.simpleName + "_")
     return FunSpec
         .builder(toDslFunName(inputViewClass))
         .addParameter(
             "f",
             LambdaTypeName.get(
-                ClassName.bestGuess(inputViewClass.simpleName + "_"),
+                componentClass,
                 emptyList(),
                 Unit::class.asTypeName()
             )
         )
+        .returns(componentClass)
         .addCode(
             """
                 val x = %L_()
@@ -55,6 +59,7 @@ fun createTypeDsl(inputViewClass: TypeName, group: Boolean): FunSpec {
                 x.f()
                 %L
                 globalViewStack.lastOrNull()?.children?.add(x)
+                return x
                 """.trimIndent(),
             inputViewClass.simpleName,
             if (group) "globalViewStack.push(x)" else "",

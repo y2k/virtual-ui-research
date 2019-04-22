@@ -1,6 +1,6 @@
 @file:Suppress("PropertyName", "MemberVisibilityCanBePrivate")
 
-package common
+package y2k.virtualuiresearch.common
 
 import android.content.Context
 

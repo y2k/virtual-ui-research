@@ -1,4 +1,4 @@
-package common
+package y2k.virtualuiresearch.common
 
 import com.google.gson.GsonBuilder
 import y2k.virtual.ui.globalViewStack

@@ -1,4 +1,4 @@
-package common
+package y2k.virtualuiresearch.common
 
 import android.content.Context
 import y2k.virtual.ui.Property

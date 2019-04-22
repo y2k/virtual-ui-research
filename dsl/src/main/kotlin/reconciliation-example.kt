@@ -1,6 +1,6 @@
 
 import android.graphics.Color
-import common.*
+import y2k.virtualuiresearch.common.*
 import y2k.virtual.ui.updateRealView
 
 fun main(args: Array<String>) {

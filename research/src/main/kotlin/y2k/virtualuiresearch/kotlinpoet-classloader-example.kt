@@ -1,21 +1,40 @@
+package y2k.virtualuiresearch
+
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
-import common.isOverrided
-import common.loadAllClassesFromJar
+import y2k.virtualuiresearch.common.isOverrided
+import y2k.virtualuiresearch.common.loadAllClassesFromJar
 import java.io.File
+import java.lang.Deprecated
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.net.URLClassLoader
+import kotlin.Array
+import kotlin.Boolean
+import kotlin.String
 
 fun main(args: Array<String>) {
-    val jars = args.map { File(it).toURI().toURL() }.toTypedArray()
+    println(
+        execute(
+            if (args.size < 2) null else args.first(),
+            args.last(),
+            args
+        )
+    )
+}
+
+fun execute(libPath: String?, androidJar: String, jarPathes: Array<String>): String {
+    val jars = jarPathes.map { File(it).toURI().toURL() }.toTypedArray()
 
     val loader = URLClassLoader(jars, ClassLoader.getSystemClassLoader())
-    val libClasses = loadAllClassesFromJar(File(args.first()), loader)
 
-    val androidClasses = loadAllClassesFromJar(File(args.last()), loader)
+    val libClasses =
+        if (libPath == null) emptyList()
+        else loadAllClassesFromJar(File(libPath), loader)
+
+    val androidClasses = loadAllClassesFromJar(File(androidJar), loader)
 
     val viewClass = androidClasses.first { it.name == "android.view.View" }
     val groupClass = androidClasses.first { it.name == "android.view.ViewGroup" }
@@ -56,10 +75,10 @@ fun main(args: Array<String>) {
                 "androidx.appcompat.widget.ActionMenuView"
             )
         }
-        .filter { it.name.startsWith("androidx.appcompat.widget.") }
+//        .filter { it.name.startsWith("androidx.appcompat.widget.") }
         .filter {
             viewClass.isAssignableFrom(it) &&
-                !it.isAnnotationPresent(java.lang.Deprecated::class.java) &&
+                !it.isAnnotationPresent(Deprecated::class.java) &&
                 !it.isMemberClass
         }
         .map { mkComponent(it, groupClass) }
@@ -68,7 +87,7 @@ fun main(args: Array<String>) {
             fileSpec.addType(createType(it))
         }
 
-    println(fileSpec.build())
+    return fileSpec.build().toString()
 }
 
 private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
@@ -90,7 +109,7 @@ private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
                     && it.parameterCount == 1
                     && Modifier.isPublic(it.modifiers)
                     && !Modifier.isStatic(it.modifiers)
-                    && !it.isAnnotationPresent(java.lang.Deprecated::class.java)
+                    && !it.isAnnotationPresent(Deprecated::class.java)
                     && !it.isOverrided()
                     && !isBlockedMethod(it)
             }

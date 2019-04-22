@@ -1,7 +1,9 @@
+package y2k.virtualuiresearch
+
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import common.canonicalName
-import common.simpleName
+import y2k.virtualuiresearch.common.canonicalName
+import y2k.virtualuiresearch.common.simpleName
 import java.io.File
 
 fun main(args: Array<String>) {
