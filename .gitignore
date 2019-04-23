@@ -9,3 +9,5 @@ local.properties
 *.iml
 *.jar
 android.generated.kt
+appcompat.generated.kt
+build

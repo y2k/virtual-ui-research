@@ -4,8 +4,15 @@ import org.junit.Test
 import java.io.File
 import java.lang.System
 import java.net.URL
+import java.util.zip.ZipFile
 
 class Scripts {
+
+    // https://maven.google.com/com/google/android/material/material/1.0.0/material-1.0.0.aar
+    // https://maven.google.com/com/google/android/material/material/1.0.0/material-1.0.0.pom
+    @Test
+    fun `Create DSL for material`() {
+    }
 
     /*
         $HOME/Projects/virtual-ui-research/appcompat.jar
@@ -36,7 +43,7 @@ class Scripts {
             downloadJar("https://github.com/sourcegraph/android-sdk-jars/raw/master/platforms/android-22/android.jar")
         )
 
-        val code = execute(jars.first(), jars.last(), jars.toTypedArray())
+        val code = execute("androidx.appcompat.widget.", jars.first(), jars.last(), jars.toTypedArray())
         File("../android/src/main/java/y2k/virtual/ui/appcompat.generated.kt").writeText(code)
     }
 
@@ -44,7 +51,7 @@ class Scripts {
     fun `Create DSL`() {
         val jarPath =
             downloadJar("https://github.com/sourcegraph/android-sdk-jars/raw/master/platforms/android-22/android.jar")
-        val code = execute(null, jarPath, arrayOf(jarPath))
+        val code = execute(null, null, jarPath, arrayOf(jarPath))
         File("../android/src/main/java/y2k/virtual/ui/android.generated.kt").writeText(code)
     }
 
@@ -57,7 +64,16 @@ class Scripts {
 
         val aar = downloadToTemp(url, "virtual-ui-" + (Long.MAX_VALUE / 2 + url.hashCode()) + ".aar.zip")
 
-        TODO()
+        ZipFile(aar).use { zipFile ->
+            val e = zipFile
+                .entries().asSequence()
+                .first { it.name == "classes.jar" }
+            zipFile.getInputStream(e).use { input ->
+                file.outputStream().use { input.copyTo(it) }
+            }
+        }
+
+        return file.absolutePath
     }
 
     private fun downloadJar(url: String): String =

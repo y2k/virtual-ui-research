@@ -18,6 +18,7 @@ import kotlin.String
 fun main(args: Array<String>) {
     println(
         execute(
+            null,
             if (args.size < 2) null else args.first(),
             args.last(),
             args
@@ -25,7 +26,7 @@ fun main(args: Array<String>) {
     )
 }
 
-fun execute(libPath: String?, androidJar: String, jarPathes: Array<String>): String {
+fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathes: Array<String>): String {
     val jars = jarPathes.map { File(it).toURI().toURL() }.toTypedArray()
 
     val loader = URLClassLoader(jars, ClassLoader.getSystemClassLoader())
@@ -75,11 +76,11 @@ fun execute(libPath: String?, androidJar: String, jarPathes: Array<String>): Str
                 "androidx.appcompat.widget.ActionMenuView"
             )
         }
-//        .filter { it.name.startsWith("androidx.appcompat.widget.") }
+        .filter { if (rootPackage == null) true else it.name.startsWith(rootPackage) }
         .filter {
             viewClass.isAssignableFrom(it) &&
-                !it.isAnnotationPresent(Deprecated::class.java) &&
-                !it.isMemberClass
+                    !it.isAnnotationPresent(Deprecated::class.java) &&
+                    !it.isMemberClass
         }
         .map { mkComponent(it, groupClass) }
         .forEach {
@@ -106,12 +107,12 @@ private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
             .declaredMethods
             .filter {
                 it.name.matches(Regex("set[A-Z].+"))
-                    && it.parameterCount == 1
-                    && Modifier.isPublic(it.modifiers)
-                    && !Modifier.isStatic(it.modifiers)
-                    && !it.isAnnotationPresent(Deprecated::class.java)
-                    && !it.isOverrided()
-                    && !isBlockedMethod(it)
+                        && it.parameterCount == 1
+                        && Modifier.isPublic(it.modifiers)
+                        && !Modifier.isStatic(it.modifiers)
+                        && !it.isAnnotationPresent(Deprecated::class.java)
+                        && !it.isOverrided()
+                        && !isBlockedMethod(it)
             }
             .map {
                 PropertyDescription(
