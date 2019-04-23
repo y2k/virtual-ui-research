@@ -56,7 +56,7 @@ data class ComponentDesc(
     val typeBound: TypeName? = null
 )
 
-data class PropertyDescription(val methodName: String, val type: TypeName)
+data class PropertyDescription(val methodName: String, val type: TypeName, val hasOverloads: Boolean = false)
 
 fun createType(comp: ComponentDesc): TypeSpec {
     val clazz = comp.type.simpleName
@@ -76,7 +76,7 @@ fun createType(comp: ComponentDesc): TypeSpec {
     }
 
     comp.properties
-        .map { mkCompProps(comp.type, it.methodName, it.type) }
+        .map { mkCompProps(comp.type, it.methodName, it.type, it.hasOverloads) }
         .forEach { viewBuilder.addProperties(it) }
 
     mkCreateEmpty(comp.type, comp.isAbstract)
@@ -93,8 +93,16 @@ private fun mkCreateEmpty(clazz: TypeName, isAbstract: Boolean): FunSpec? =
         .addCode("return %T(context)", clazz)
         .build()
 
-private fun mkCompProps(inputViewClass: TypeName, methodName: String, methodType: TypeName): List<PropertySpec> {
-    val name = toPropertyName(methodName)
+private fun mkCompProps(
+    inputViewClass: TypeName,
+    methodName: String,
+    methodType: TypeName,
+    hasOverloads: Boolean
+): List<PropertySpec> {
+    val name =
+        if (hasOverloads) toPropertyName(methodName) + methodType.simpleName
+        else toPropertyName(methodName)
+
     val privateProp = "_$name"
     val fixedType = fixPropertyType(methodType)
 

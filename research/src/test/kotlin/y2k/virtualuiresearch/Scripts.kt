@@ -1,6 +1,9 @@
 package y2k.virtualuiresearch
 
+import org.jsoup.parser.Parser
 import org.junit.Test
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
 import java.io.File
 import java.lang.System
 import java.net.URL
@@ -8,51 +11,63 @@ import java.util.zip.ZipFile
 
 class Scripts {
 
-    // https://maven.google.com/com/google/android/material/material/1.0.0/material-1.0.0.aar
-    // https://maven.google.com/com/google/android/material/material/1.0.0/material-1.0.0.pom
     @Test
-    fun `Create DSL for material`() {
+    fun `Create DSL for CardView`() {
+        val jars = getJars("https://maven.google.com/androidx/cardview/cardview/1.0.0/cardview-1.0.0.pom")
+        val code = execute("androidx.cardview.widget.", jars.first(), jars.last(), jars.toTypedArray())
+        File("../android/src/main/java/y2k/virtual/ui/cardview.generated.kt").writeText(code)
     }
 
-    /*
-        $HOME/Projects/virtual-ui-research/appcompat.jar
-        $HOME/.gradle/caches/modules-2/files-2.1/androidx.annotation/annotation/1.0.0/45599f2cd5965ac05a1488fa2a5c0cdd7c499ead/annotation-1.0.0.jar
-        $HOME/.gradle/caches/transforms-2/files-2.1/794ad516abb34dbce43d23b8f3a3de56/jars/classes.jar
-        $HOME/.gradle/caches/transforms-2/files-2.1/b64d32257b9cb843e7388a5b226995b0/jars/classes.jar
-        $HOME/Projects/virtual-ui-research/collection-1.0.0.jar
-        $HOME/Projects/virtual-ui-research/lifecycle-viewmodel.jar
-        $HOME/Projects/virtual-ui-research/lifecycle-common-2.0.0.jar
-        $HOME/Projects/virtual-ui-research/fragment.jar
-        $HOME/Projects/virtual-ui-research/drawerlayout.jar
-        $HOME/Projects/virtual-ui-research/core.jar
-        $HOME/Library/Android/sdk/platforms/android-22/android.jar
-    */
     @Test
-    fun `Create DSL AppCompat`() {
-        val jars = listOf(
-            downloadAar("https://maven.google.com/androidx/appcompat/appcompat/1.0.2/appcompat-1.0.2.aar"),
-            downloadJar("https://maven.google.com/androidx/annotation/annotation/1.0.0/annotation-1.0.0.jar"),
-            downloadAar("https://maven.google.com/androidx/customview/customview/1.0.0/customview-1.0.0.aar"),
-            downloadAar("https://maven.google.com/androidx/cursoradapter/cursoradapter/1.0.0/cursoradapter-1.0.0.aar"),
-            downloadJar("https://maven.google.com/androidx/collection/collection/1.0.0/collection-1.0.0.jar"),
-            downloadAar("https://maven.google.com/androidx/lifecycle/lifecycle-viewmodel/2.0.0/lifecycle-viewmodel-2.0.0.aar"),
-            downloadJar("https://maven.google.com/androidx/lifecycle/lifecycle-common/2.0.0/lifecycle-common-2.0.0.jar"),
-            downloadAar("https://maven.google.com/androidx/fragment/fragment/1.0.0/fragment-1.0.0.aar"),
-            downloadAar("https://maven.google.com/androidx/drawerlayout/drawerlayout/1.0.0/drawerlayout-1.0.0.aar"),
-            downloadAar("https://maven.google.com/androidx/core/core/1.0.1/core-1.0.1.aar"),
-            downloadJar("https://github.com/sourcegraph/android-sdk-jars/raw/master/platforms/android-22/android.jar")
-        )
+    fun `Create DSL for Material`() {
+        val jars = getJars("https://maven.google.com/com/google/android/material/material/1.0.0/material-1.0.0.pom")
+        val code = execute("com.google.android.material.", jars.first(), jars.last(), jars.toTypedArray())
+        File("../android/src/main/java/y2k/virtual/ui/material.generated.kt").writeText(code)
+    }
 
+    @Test
+    fun `Create DSL for AppCompat`() {
+        val jars = getJars("https://maven.google.com/androidx/appcompat/appcompat/1.0.2/appcompat-1.0.2.pom")
         val code = execute("androidx.appcompat.widget.", jars.first(), jars.last(), jars.toTypedArray())
         File("../android/src/main/java/y2k/virtual/ui/appcompat.generated.kt").writeText(code)
     }
 
     @Test
-    fun `Create DSL`() {
+    fun `Create DSL for Android`() {
         val jarPath =
             downloadJar("https://github.com/sourcegraph/android-sdk-jars/raw/master/platforms/android-22/android.jar")
         val code = execute(null, null, jarPath, arrayOf(jarPath))
         File("../android/src/main/java/y2k/virtual/ui/android.generated.kt").writeText(code)
+    }
+
+    private fun getJars(startPomUrl: String): List<String> {
+        val computedUrls = HashSet<String>()
+        val jars = ArrayList<String>()
+
+        fun downloadPom(pomUrl: String) {
+            if (computedUrls.contains(pomUrl)) return
+            computedUrls += pomUrl
+
+            val pom = Parser.xmlParser().parseInput(URL(pomUrl).readText(), pomUrl)
+
+            val type = pom.selectFirst("project > packaging")?.text() ?: "jar"
+            val artUrl = pomUrl.replace(".pom", ".$type")
+
+            jars += if (type == "aar") downloadAar(artUrl) else downloadJar(artUrl)
+
+            pom.select("dependency > scope:contains(compile)")
+                .map { it.parent() }
+                .forEach { dep ->
+                    val groupId = dep.children().first { it.tagName() == "groupId" }.text().replace('.', '/')
+                    val artifactId = dep.children().first { it.tagName() == "artifactId" }.text()
+                    val version = dep.children().first { it.tagName() == "version" }.text()
+                    downloadPom("https://maven.google.com/$groupId/$artifactId/$version/$artifactId-$version.pom")
+                }
+        }
+
+        downloadPom(startPomUrl)
+        jars += downloadJar("https://github.com/sourcegraph/android-sdk-jars/raw/master/platforms/android-24/android.jar")
+        return jars
     }
 
     private fun downloadAar(url: String): String {
@@ -90,4 +105,9 @@ class Scripts {
 
         return file
     }
+
+    private fun NodeList.toList() = List(length, this::item)
+
+    operator fun Node.get(name: String): Node =
+        childNodes.toList().first { it.localName == name }
 }

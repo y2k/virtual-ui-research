@@ -1,5 +1,6 @@
 package y2k.virtualuiresearch
 
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.asClassName
@@ -14,6 +15,7 @@ import java.net.URLClassLoader
 import kotlin.Array
 import kotlin.Boolean
 import kotlin.String
+import kotlin.Suppress
 
 fun main(args: Array<String>) {
     println(
@@ -42,7 +44,16 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
 
     val fileSpec = FileSpec.builder(libraryPackage, "dsl")
 
+    fileSpec
+        .addAnnotation(
+            AnnotationSpec.builder(Suppress::class)
+                .addMember("\"unused\"")
+                .addMember("\"ClassName\"")
+                .build()
+        )
+
     (libClasses + androidClasses)
+        .asSequence()
         .filter {
             it.name !in listOf(
                 "android.webkit.WebView",
@@ -77,10 +88,12 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
             )
         }
         .filter { if (rootPackage == null) true else it.name.startsWith(rootPackage) }
-        .filter {
-            viewClass.isAssignableFrom(it) &&
-                    !it.isAnnotationPresent(Deprecated::class.java) &&
-                    !it.isMemberClass
+        .filter { clazz ->
+            viewClass.isAssignableFrom(clazz) &&
+                !clazz.isAnnotationPresent(Deprecated::class.java) &&
+                !clazz.isMemberClass &&
+                ".internal" !in clazz.name &&
+                clazz.constructors.any { it.parameterCount == 1 }
         }
         .map { mkComponent(it, groupClass) }
         .forEach {
@@ -103,27 +116,33 @@ private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
     return ComponentDesc(
         type,
         clazz.superclass.asClassName(),
-        clazz
-            .declaredMethods
-            .filter {
-                it.name.matches(Regex("set[A-Z].+"))
-                        && it.parameterCount == 1
-                        && Modifier.isPublic(it.modifiers)
-                        && !Modifier.isStatic(it.modifiers)
-                        && !it.isAnnotationPresent(Deprecated::class.java)
-                        && !it.isOverrided()
-                        && !isBlockedMethod(it)
-            }
-            .map {
-                PropertyDescription(
-                    it.name,
-                    it.parameters[0].type.asTypeName()
-                )
-            },
+        getProperties(clazz),
         groupClass.isAssignableFrom(clazz),
         Modifier.isAbstract(clazz.modifiers),
         typeBound
     )
+}
+
+private fun getProperties(clazz: Class<*>): List<PropertyDescription> {
+    val methods = clazz
+        .declaredMethods
+        .filter {
+            it.name.matches(Regex("set[A-Z].+"))
+                && it.parameterCount == 1
+                && Modifier.isPublic(it.modifiers)
+                && !Modifier.isStatic(it.modifiers)
+                && !it.isAnnotationPresent(Deprecated::class.java)
+                && !it.isOverrided()
+                && !isBlockedMethod(it)
+        }
+    return methods
+        .map { m ->
+            PropertyDescription(
+                m.name,
+                m.parameters[0].type.asTypeName(),
+                methods.count { it.name == m.name } > 1
+            )
+        }
 }
 
 fun isBlockedMethod(method: Method): Boolean {

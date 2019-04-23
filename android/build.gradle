@@ -14,7 +14,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -38,4 +37,6 @@ dependencies {
     api "androidx.legacy:legacy-support-v4:$androidx_legacy_v4_ver"
     implementation "androidx.appcompat:appcompat:$androidx_appcompat_ver"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
 }

@@ -40,7 +40,7 @@ fun mkNode(f: () -> Unit): VirtualNode {
 
 val globalViewStack = Stack<VirtualNode>()
 
-class Property<T, TView : View>(val name: String, var value: T, private val f: (TView, T) -> Unit) {
+class Property<T, TView : View>(val name: String, var value: T, private val f: (TView, T) -> Any) {
 
     private val default = value
 
