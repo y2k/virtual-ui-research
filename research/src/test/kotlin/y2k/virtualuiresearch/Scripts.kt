@@ -12,6 +12,20 @@ import java.util.zip.ZipFile
 class Scripts {
 
     @Test
+    fun `Create DSL for RecyclerView`() {
+        val jars = getJars("https://maven.google.com/androidx/recyclerview/recyclerview/1.0.0/recyclerview-1.0.0.pom")
+        val code = execute("androidx.recyclerview.widget.", jars.first(), jars.last(), jars.toTypedArray())
+        File("../android/src/main/java/y2k/virtual/ui/recyclerview.generated.kt").writeText(code)
+    }
+
+    @Test
+    fun `Create DSL for CoordinatorLayout`() {
+        val jars = getJars("https://maven.google.com/androidx/coordinatorlayout/coordinatorlayout/1.0.0/coordinatorlayout-1.0.0.pom")
+        val code = execute("androidx.coordinatorlayout.widget.", jars.first(), jars.last(), jars.toTypedArray())
+        File("../android/src/main/java/y2k/virtual/ui/coordinatorlayout.generated.kt").writeText(code)
+    }
+
+    @Test
     fun `Create DSL for CardView`() {
         val jars = getJars("https://maven.google.com/androidx/cardview/cardview/1.0.0/cardview-1.0.0.pom")
         val code = execute("androidx.cardview.widget.", jars.first(), jars.last(), jars.toTypedArray())

@@ -49,6 +49,8 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
             AnnotationSpec.builder(Suppress::class)
                 .addMember("\"unused\"")
                 .addMember("\"ClassName\"")
+                .addMember("\"NewApi\"")
+                .addMember("\"RestrictedApi\"")
                 .build()
         )
 
@@ -92,7 +94,6 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
             viewClass.isAssignableFrom(clazz) &&
                 !clazz.isAnnotationPresent(Deprecated::class.java) &&
                 !clazz.isMemberClass &&
-                ".internal" !in clazz.name &&
                 clazz.constructors.any { it.parameterCount == 1 }
         }
         .map { mkComponent(it, groupClass) }
