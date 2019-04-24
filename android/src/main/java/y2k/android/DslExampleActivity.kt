@@ -31,26 +31,26 @@ class DslExampleActivity : AppCompatActivity() {
             orientation = LinearLayout.VERTICAL
 
             appCompatButton {
-                text = "AppCompat Button ($stage)"
+                textCharSequence = "AppCompat Button ($stage)"
                 textSize = 18f
             }
 
             textView {
-                text = "Line #1"
-                textColor = color3
+                textCharSequence = "Line #1"
+                textColorInt = color3
                 textSize = 20f
             }
 
             if (stage >= 1)
                 textView {
-                    text = "Line #2"
-                    textColor = color3
+                    textCharSequence = "Line #2"
+                    textColorInt = color3
                     textSize = 16f
                 }
 
             textView {
-                text = "Line #3"
-                textColor = color2
+                textCharSequence = "Line #3"
+                textColorInt = color2
                 textSize = 12f
             }
 
@@ -62,16 +62,16 @@ class DslExampleActivity : AppCompatActivity() {
 
             if (stage >= 3)
                 textView {
-                    text = "Line #4"
-                    textColor = color3
+                    textCharSequence = "Line #4"
+                    textColorInt = color3
                     textSize = 16f
                 }
 
             linearLayout {
                 button {
                     background = getDrawableByAttr(android.R.attr.selectableItemBackground)
-                    text = "Line #4 ($stage)"
-                    textColor = color1
+                    textCharSequence = "Line #4 ($stage)"
+                    textColorInt = color1
                     textSize = 14f
                     onClickListener = View.OnClickListener { dispatch() }
                 }
@@ -85,8 +85,8 @@ class DslExampleActivity : AppCompatActivity() {
             if (!showProgress)
                 button {
                     background = getDrawableByAttr(android.R.attr.selectableItemBackground)
-                    text = "Line #5"
-                    textColor = color1
+                    textCharSequence = "Line #5"
+                    textColorInt = color1
                     textSize = 14f
                 }
 
