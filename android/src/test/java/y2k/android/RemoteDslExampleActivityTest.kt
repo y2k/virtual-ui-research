@@ -1,19 +1,47 @@
 package y2k.android
 
-import org.junit.Assert
 import org.junit.Test
+import y2k.virtual.ui.VirtualNode
+import java.io.ByteArrayOutputStream
+import java.io.ObjectOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class RemoteDslExampleActivityTest {
 
     @Test
+    fun `test serialization`() {
+        toBytes(RemoteDslExampleActivity.makeStage(0) {})
+    }
+
+    @Test
     fun run() {
-        val remote = Remote()
-        Assert.assertEquals("10.5.100.179", remote.getIp())
+        val bytes = toBytes(RemoteDslExampleActivity.makeStage(0) {})
+
+        val urlString = "http://${Remote.getIp()}:8080/"
+        println(urlString)
+
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.doInput = true
+        connection.doOutput = true
+        connection.requestMethod = "PUT"
+        connection.setRequestProperty("Content-Type", "application/octet-stream")
+        connection.connect()
+
+        connection.outputStream.use { it.write(bytes) }
+        connection.inputStream.buffered().readBytes()
+    }
+
+    private fun toBytes(node: VirtualNode): ByteArray {
+        val stream = ByteArrayOutputStream()
+        ObjectOutputStream(stream).writeObject(node)
+        return stream.toByteArray()
     }
 }
 
-class Remote {
+object Remote {
 
     fun getIp(): String {
         val dir = System.getenv("ANDROID_HOME")

@@ -1,8 +1,8 @@
 package y2k.android
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +14,6 @@ class RemoteDslExampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        RemoteServer().start()
-
         val root = VirtualHostView(this)
         setContentView(root)
 
@@ -24,6 +22,15 @@ class RemoteDslExampleActivity : AppCompatActivity() {
             root.update { makeStage(stage++) { update() } }
         }
         update()
+
+        RemoteServer { node ->
+            val s2 = mkNode {
+                frameLayout {
+                    children += node
+                }
+            }
+            root.update(s2)
+        }.start()
     }
 
     companion object {
@@ -35,49 +42,57 @@ class RemoteDslExampleActivity : AppCompatActivity() {
                 orientation = LinearLayout.VERTICAL
 
                 appCompatButton {
-                    text = "AppCompat Button ($stage)"
+                    textCharSequence = "AppCompat Button ($stage)"
                     textSize = 18f
                 }
 
+                editText {
+                    backgroundColor = Color.WHITE
+                    textSize = 30f
+                    textColorInt = Color.BLACK
+                    hintCharSequence = "Enter something"
+                    hintTextColorInt = Color.GRAY
+                }
+
                 textView {
-                    text = "Line #1"
-                    textColor = color3
+                    textCharSequence = "Line #1"
+                    textColorInt = color3
                     textSize = 20f
                 }
 
                 if (stage >= 1)
                     textView {
-                        text = "Line #2"
-                        textColor = color3
+                        textCharSequence = "Line #2"
+                        textColorInt = color3
                         textSize = 16f
                     }
 
                 textView {
-                    text = "Line #3"
-                    textColor = color2
+                    textCharSequence = "Line #3"
+                    textColorInt = color2
                     textSize = 12f
                 }
 
                 if (stage >= 2)
                     imageView {
                         scaleType = ImageView.ScaleType.FIT_CENTER
-//                        imageDrawable = getDrawable(android.R.drawable.ic_menu_view)!!
+                        imageResource = android.R.drawable.ic_menu_view
                     }
 
                 if (stage >= 3)
                     textView {
-                        text = "Line #4"
-                        textColor = color3
+                        textCharSequence = "Line #4"
+                        textColorInt = color3
                         textSize = 16f
                     }
 
                 linearLayout {
                     button {
                         //                        background = getDrawableByAttr(android.R.attr.selectableItemBackground)
-                        text = "Line #4 ($stage)"
-                        textColor = color1
+                        textCharSequence = "Line #4 ($stage)"
+                        textColorInt = color1
                         textSize = 14f
-                        onClickListener = View.OnClickListener { dispatch() }
+//                        onClickListener = View.OnClickListener { dispatch() }
                     }
 
                     customButton(stage >= 1)
@@ -89,8 +104,8 @@ class RemoteDslExampleActivity : AppCompatActivity() {
                 if (!showProgress)
                     button {
                         //                        background = getDrawableByAttr(android.R.attr.selectableItemBackground)
-                        text = "Line #5"
-                        textColor = color1
+                        textCharSequence = "Line #5"
+                        textColorInt = color1
                         textSize = 14f
                     }
 

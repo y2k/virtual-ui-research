@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import y2k.android.BuildConfig
+import java.io.Serializable
 import java.util.*
 
 class VirtualHostView @JvmOverloads constructor(
@@ -26,6 +27,11 @@ class VirtualHostView @JvmOverloads constructor(
         updateRealView(this, prevNode, s2)
         prevNode = s2
     }
+
+    fun update(node: VirtualNode) {
+        updateRealView(this, prevNode, node)
+        prevNode = node
+    }
 }
 
 fun mkNode(f: () -> Unit): VirtualNode {
@@ -40,7 +46,7 @@ fun mkNode(f: () -> Unit): VirtualNode {
 
 val globalViewStack = Stack<VirtualNode>()
 
-class Property<T, TView : View>(val name: String, var value: T, private val f: (TView, T) -> Any) {
+class Property<T, TView : View>(val name: String, var value: T, private val f: (TView, T) -> Any) : Serializable {
 
     private val default = value
 
@@ -63,7 +69,7 @@ class Property<T, TView : View>(val name: String, var value: T, private val f: (
     }
 }
 
-abstract class VirtualNode {
+abstract class VirtualNode : Serializable {
 
     val children = ArrayList<VirtualNode>()
 
