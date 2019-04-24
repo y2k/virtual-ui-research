@@ -23,8 +23,10 @@ class RemoteServer(private val f: (VirtualNode) -> Unit) {
                         val len = session.headers["content-length"]!!.toInt()
                         val buf = ByteArray(len)
 
-                        val readed = session.inputStream.read(buf)
-                        assert(len == readed) { "$readed / $len" }
+                        var count = 0
+                        while (count < len) {
+                            count += session.inputStream.read(buf, count, len - count)
+                        }
 
                         val v = ObjectInputStream(ByteArrayInputStream(buf)).readObject() as VirtualNode
                         println(v)

@@ -11,13 +11,8 @@ import java.util.concurrent.TimeUnit
 class RemoteDslExampleActivityTest {
 
     @Test
-    fun `test serialization`() {
-        toBytes(RemoteDslExampleActivity.makeStage(0) {})
-    }
-
-    @Test
     fun run() {
-        val bytes = toBytes(RemoteDslExampleActivity.makeStage(0) {})
+        val bytes = Remote.toBytes(RemoteDslExampleActivity.makeStage(0) {})
 
         val urlString = "http://${Remote.getIp()}:8080/"
         println(urlString)
@@ -33,15 +28,15 @@ class RemoteDslExampleActivityTest {
         connection.outputStream.use { it.write(bytes) }
         connection.inputStream.buffered().readBytes()
     }
+}
 
-    private fun toBytes(node: VirtualNode): ByteArray {
+object Remote {
+
+    fun toBytes(node: VirtualNode): ByteArray {
         val stream = ByteArrayOutputStream()
         ObjectOutputStream(stream).writeObject(node)
         return stream.toByteArray()
     }
-}
-
-object Remote {
 
     fun getIp(): String {
         val dir = System.getenv("ANDROID_HOME")
