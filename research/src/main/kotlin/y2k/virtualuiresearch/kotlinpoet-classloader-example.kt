@@ -87,6 +87,7 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
                 "androidx.appcompat.widget.ActionMenuView"
             )
         }
+//        .filter { "AppCompatTextView" in it.name }
         .filter { if (rootPackage == null) true else it.name.startsWith(rootPackage) }
         .filter { clazz ->
             viewClass.isAssignableFrom(clazz) &&
@@ -94,6 +95,7 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
                 !clazz.isMemberClass &&
                 clazz.constructors.any { it.parameterCount == 1 }
         }
+        .sortedBy { it.name }
         .map { mkComponent(it, groupClass) }
         .forEach {
             fileSpec.addFunction(createTypeDsl(it.type, it.group))
@@ -133,12 +135,23 @@ private fun getProperties(clazz: Class<*>): List<PropertyDescription> {
                 && !it.isAnnotationPresent(Deprecated::class.java)
                 && !it.isOverrided()
         }
-    return methods
-        .map { m ->
-            PropertyDescription(
-                m.name,
-                m.parameters[0].type.asTypeName(),
-                methods.count { it.name == m.name } > 1
-            )
-        }
+        .sortedBy { it.name }
+
+//    val a = methods.first { it.parameters.getOrNull(0)?.type?.simpleName == "Future" }.parameters[0]
+//    val b = a.type
+//    val c = a.parameterizedType
+//    val d = c.asTypeName()
+//
+//    val a = methods.first { it.parameters.getOrNull(0)?.type?.simpleName == "Adapter" }.parameters[0]
+//    val b = a.type
+//    val c = a.parameterizedType
+//    val d = c.asTypeName()
+
+    return methods.map { m ->
+        PropertyDescription(
+            m.name,
+            m.parameters[0].parameterizedType.asTypeName(),
+            methods.count { it.name == m.name } > 1
+        )
+    }
 }
