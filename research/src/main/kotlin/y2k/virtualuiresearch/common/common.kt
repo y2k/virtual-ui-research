@@ -1,13 +1,21 @@
 package y2k.virtualuiresearch.common
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.ParameterizedTypeName
-import com.squareup.kotlinpoet.TypeName
+import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import java.io.File
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
+import java.lang.reflect.Parameter
 import java.net.URLClassLoader
 import java.util.jar.JarFile
+
+fun Parameter.asGenTypeName(): TypeName = run {
+    val pt = parameterizedType
+    val isGeneric = type.toGenericString().contains(Regex("<.+?>"))
+
+    if (type === pt && isGeneric) type.asClassName().parameterizedBy(STAR)
+    else parameterizedType.asTypeName()
+}
 
 fun loadAllClassesFromJar(jar: File, loader: URLClassLoader): List<Class<*>> =
     JarFile(jar)

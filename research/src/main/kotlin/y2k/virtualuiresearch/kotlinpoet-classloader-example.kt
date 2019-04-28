@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
+import y2k.virtualuiresearch.common.asGenTypeName
 import y2k.virtualuiresearch.common.isOverrided
 import y2k.virtualuiresearch.common.loadAllClassesFromJar
 import java.io.File
@@ -87,7 +88,6 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
                 "androidx.appcompat.widget.ActionMenuView"
             )
         }
-//        .filter { "AppCompatTextView" in it.name }
         .filter { if (rootPackage == null) true else it.name.startsWith(rootPackage) }
         .filter { clazz ->
             viewClass.isAssignableFrom(clazz) &&
@@ -108,11 +108,8 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
 private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
     val typeBound = clazz.typeParameters.firstOrNull()?.bounds?.firstOrNull()?.asTypeName()
     val type =
-        if (typeBound != null) {
-            clazz.asClassName().parameterizedBy(typeBound)
-        } else {
-            clazz.asClassName()
-        }
+        if (typeBound != null) clazz.asClassName().parameterizedBy(typeBound)
+        else clazz.asClassName()
 
     return ComponentDesc(
         type,
@@ -120,8 +117,7 @@ private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
         getProperties(clazz),
         groupClass.isAssignableFrom(clazz),
         Modifier.isAbstract(clazz.modifiers),
-        typeBound
-    )
+        typeBound)
 }
 
 private fun getProperties(clazz: Class<*>): List<PropertyDescription> {
@@ -137,21 +133,10 @@ private fun getProperties(clazz: Class<*>): List<PropertyDescription> {
         }
         .sortedBy { it.name }
 
-//    val a = methods.first { it.parameters.getOrNull(0)?.type?.simpleName == "Future" }.parameters[0]
-//    val b = a.type
-//    val c = a.parameterizedType
-//    val d = c.asTypeName()
-//
-//    val a = methods.first { it.parameters.getOrNull(0)?.type?.simpleName == "Adapter" }.parameters[0]
-//    val b = a.type
-//    val c = a.parameterizedType
-//    val d = c.asTypeName()
-
     return methods.map { m ->
         PropertyDescription(
             m.name,
-            m.parameters[0].parameterizedType.asTypeName(),
-            methods.count { it.name == m.name } > 1
-        )
+            m.parameters[0].asGenTypeName(),
+            methods.count { it.name == m.name } > 1)
     }
 }
