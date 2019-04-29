@@ -3,45 +3,45 @@ package y2k.virtualuiresearch.asm
 import org.objectweb.asm.*
 import java.io.File
 import java.io.InputStream
-import java.util.*
 import java.util.jar.JarFile
 
 fun main(args: Array<String>) {
     val file = File(args[0])
-    loadAndScanJar(file)
+    loadAndScanJar(file, HashSet())
 }
 
-private fun loadAndScanJar(jarFile: File) {
-    val classes = HashMap<String, List<Class<*>>>()
+data class ClassRecord(val clazz: String, val method: String)
 
-    val interfaces = ArrayList<Class<*>>()
-    val clazzes = ArrayList<Class<*>>()
-    val enums = ArrayList<Class<*>>()
-    val annotations = ArrayList<Class<*>>()
+fun findOrNonNullMethods(jars: List<File>): Set<ClassRecord> {
+    val nonNullMethods = HashSet<ClassRecord>()
 
-    classes["interfaces"] = interfaces
-    classes["classes"] = clazzes
-    classes["annotations"] = annotations
-    classes["enums"] = enums
+    jars.forEach {
+        loadAndScanJar(it, nonNullMethods)
+    }
 
-    val jar = JarFile(jarFile)
-    val enumeration = jar.entries()
+    return nonNullMethods
+}
 
-    while (enumeration.hasMoreElements()) {
-        val zipEntry = enumeration.nextElement()
-
-        if (zipEntry.name.endsWith(".class")) {
-            jar.getInputStream(zipEntry)
-                .use(::visitClassFile)
+private fun loadAndScanJar(jarFile: File, nonNullMethods: HashSet<ClassRecord>) {
+    JarFile(jarFile).use { jar ->
+        jar.entries().asSequence().forEach { zipEntry ->
+            if (zipEntry.name.endsWith(".class") && zipEntry.name != "java/lang/Object.class") {
+                jar.getInputStream(zipEntry)
+                    .use {
+                        visitClassFile(it, nonNullMethods)
+                    }
+            }
         }
     }
 }
 
-private fun visitClassFile(inputStream: InputStream) {
+private fun visitClassFile(inputStream: InputStream, nonNullMethods: HashSet<ClassRecord>) {
     val cr = ClassReader(inputStream)
+
     cr.accept(object : ClassVisitor(Opcodes.ASM6) {
 
         private var skip = false
+        private var lastClassName = ""
 
         override fun visit(
             version: Int,
@@ -60,11 +60,7 @@ private fun visitClassFile(inputStream: InputStream) {
 //            if (".widget." !in superName.toClsName()) return
             skip = false
 
-            println(
-                """
-                    ${name.toClsName()} : ${superName.toClsName()}
-                    """.trimIndent()
-            )
+            lastClassName = name.toClsName()
         }
 
         override fun visitMethod(
@@ -77,17 +73,19 @@ private fun visitClassFile(inputStream: InputStream) {
             if (skip) return null
             if (!name.matches(Regex("set[A-Z].+"))) return null
 
-            println("\t$name")
-
             return object :
                 MethodVisitor(Opcodes.ASM6, super.visitMethod(access, name, descriptor, signature, exceptions)) {
 
                 override fun visitParameterAnnotation(
                     parameter: Int,
-                    descriptor: String?,
+                    descriptor: String,
                     visible: Boolean
                 ): AnnotationVisitor? {
-                    println("\t\t$descriptor")
+
+                    if ("androidx.annotation.NonNull" in descriptor.toClsName()) {
+                        nonNullMethods += ClassRecord(lastClassName, name)
+                    }
+
                     return super.visitParameterAnnotation(parameter, descriptor, visible)
                 }
             }

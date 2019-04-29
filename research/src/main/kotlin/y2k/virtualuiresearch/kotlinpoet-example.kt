@@ -2,6 +2,7 @@ package y2k.virtualuiresearch
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import y2k.virtualuiresearch.asm.ClassRecord
 import y2k.virtualuiresearch.common.canonicalName
 import y2k.virtualuiresearch.common.simpleName
 import java.io.File
@@ -41,7 +42,7 @@ fun printComponents(components: List<ComponentDesc>) {
 
     components.forEach {
         fileSpecBuild.addFunction(createTypeDsl(it.type, it.group))
-        fileSpecBuild.addType(createType(it))
+        fileSpecBuild.addType(createType(it, emptySet()))
     }
 
     println(fileSpecBuild.build())
@@ -58,7 +59,7 @@ data class ComponentDesc(
 
 data class PropertyDescription(val methodName: String, val type: TypeName, val hasOverloads: Boolean = false)
 
-fun createType(comp: ComponentDesc): TypeSpec {
+fun createType(comp: ComponentDesc, nonNullMethods: Set<ClassRecord>): TypeSpec {
     val clazz = comp.type.simpleName
     val className = ClassName.bestGuess("${clazz}_")
     val viewBuilder = TypeSpec
@@ -76,7 +77,7 @@ fun createType(comp: ComponentDesc): TypeSpec {
     }
 
     comp.properties
-        .map { mkCompProps(comp.type, it.methodName, it.type, it.hasOverloads) }
+        .map { mkCompProps(comp.type, it.methodName, it.type, it.hasOverloads, nonNullMethods) }
         .forEach { viewBuilder.addProperties(it) }
 
     mkCreateEmpty(comp.type, comp.isAbstract)
@@ -97,7 +98,8 @@ private fun mkCompProps(
     inputViewClass: TypeName,
     methodName: String,
     methodType: TypeName,
-    hasOverloads: Boolean
+    hasOverloads: Boolean,
+    nonNullMethods: Set<ClassRecord>
 ): List<PropertySpec> {
     val name =
         if (hasOverloads) toPropertyName(methodName) + methodType.simpleName
@@ -136,10 +138,13 @@ private fun mkCompProps(
     val propertyType = ClassName.bestGuess("Property")
     val defValue = getDefaultValue(fixedType)
 
+    val x = ClassRecord(inputViewClass.canonicalName, methodName)
+    val nullable = defValue == null && x !in nonNullMethods
+
     val p2 = PropertySpec
         .builder(
             privateProp,
-            propertyType.parameterizedBy(fixedType.copy(defValue == null), inputViewClass),
+            propertyType.parameterizedBy(fixedType.copy(nullable), inputViewClass),
             KModifier.PRIVATE
         )
         .initializer("%T(%S, %L, %T::%L)", propertyType, name, defValue, inputViewClass, methodName)
