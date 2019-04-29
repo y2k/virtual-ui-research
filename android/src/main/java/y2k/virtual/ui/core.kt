@@ -46,16 +46,18 @@ fun mkNode(f: () -> Unit): VirtualNode {
 
 val globalViewStack = Stack<VirtualNode>()
 
-class Property<T, TView : View>(val name: String, var value: T, private val f: (TView, T) -> Any) : Serializable {
+class NotRemovablePropertyException : Exception()
+
+class Property<T, TView : View>(val name: String, var value: T?, private val f: (TView, T) -> Any) : Serializable {
 
     private val default = value
 
     fun clear(view: TView) {
-        f(view, default)
+        f(view, default ?: throw NotRemovablePropertyException())
     }
 
     fun update(view: TView) {
-        f(view, value)
+        f(view, value!!)
     }
 
     fun set(x: T) {
@@ -115,18 +117,30 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
                     updateRealView(v, p, c)
                 } else {
                     if (p.javaClass == c.javaClass) {
-                        val v = view.getChildAt(i)
-                        updateRealView(v, p, c)
+                        try {
+                            updateRealView(view.getChildAt(i), p, c)
+                        } catch (e: NotRemovablePropertyException) {
+                            replaceNode(view, i, c, p)
+                        }
                     } else {
-                        view.removeViewAt(i)
-                        val v = c.createEmpty(view.context)
-                        view.addView(v, i)
-                        updateRealView(v, p, c)
+                        replaceNode(view, i, c, p)
                     }
                 }
             }
         }
     }
+}
+
+private fun replaceNode(
+    view: ViewGroup,
+    i: Int,
+    c: VirtualNode,
+    p: VirtualNode?
+) {
+    view.removeViewAt(i)
+    val v = c.createEmpty(view.context)
+    view.addView(v, i)
+    updateRealView(v, p, c)
 }
 
 @Suppress("UNCHECKED_CAST")

@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
 import y2k.virtualuiresearch.common.asGenTypeName
+import y2k.virtualuiresearch.asm.ClassRecord
 import y2k.virtualuiresearch.common.isOverrided
 import y2k.virtualuiresearch.common.loadAllClassesFromJar
 import java.io.File
@@ -22,12 +23,19 @@ fun main(args: Array<String>) {
             null,
             if (args.size < 2) null else args.first(),
             args.last(),
-            args
+            args,
+            emptySet()
         )
     )
 }
 
-fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathes: Array<String>): String {
+fun execute(
+    rootPackage: String?,
+    libPath: String?,
+    androidJar: String,
+    jarPathes: Array<String>,
+    nonNullMethods: Set<ClassRecord>
+): String {
     val jars = jarPathes.map { File(it).toURI().toURL() }.toTypedArray()
 
     val loader = URLClassLoader(jars, ClassLoader.getSystemClassLoader())
@@ -99,7 +107,7 @@ fun execute(rootPackage: String?, libPath: String?, androidJar: String, jarPathe
         .map { mkComponent(it, groupClass) }
         .forEach {
             fileSpec.addFunction(createTypeDsl(it.type, it.group))
-            fileSpec.addType(createType(it))
+            fileSpec.addType(createType(it, nonNullMethods))
         }
 
     return fileSpec.build().toString()
