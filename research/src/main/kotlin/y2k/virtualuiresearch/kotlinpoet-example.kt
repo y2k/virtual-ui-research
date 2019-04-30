@@ -50,7 +50,7 @@ fun printComponents(components: List<ComponentDesc>) {
 
 data class ComponentDesc(
     val type: TypeName,
-    val parentType: ClassName?,
+    val parentType: TypeName?,
     val properties: List<PropertyDescription>,
     val group: Boolean,
     val isAbstract: Boolean,
@@ -66,14 +66,20 @@ fun createType(comp: ComponentDesc, nonNullMethods: Set<ClassRecord>): TypeSpec 
         .classBuilder(className)
         .addModifiers(KModifier.OPEN)
 
-    if (comp.type.canonicalName == "android.view.View") {
-        viewBuilder
-            .superclass(ClassName.bestGuess("VirtualNode"))
-    } else if (comp.parentType != null && comp.parentType.canonicalName !in listOf("java.lang.Object")) {
-        val sc = comp.parentType.simpleName + "_"
+    if (comp.type is ParameterizedTypeName) {
+        viewBuilder.addTypeVariable(TypeVariableName("T", comp.type.typeArguments[0]))
+    }
 
-        viewBuilder
-            .superclass(ClassName.bestGuess(sc))
+    if (comp.type.canonicalName == "android.view.View") {
+        viewBuilder.superclass(ClassName.bestGuess("VirtualNode"))
+    } else if (comp.parentType != null && comp.parentType.canonicalName !in listOf("java.lang.Object")) {
+        val sc = ClassName.bestGuess(comp.parentType.simpleName + "_")
+        if (comp.parentType is ParameterizedTypeName) {
+            val psc = sc.parameterizedBy(comp.parentType.typeArguments[0])
+            viewBuilder.superclass(psc)
+        } else {
+            viewBuilder.superclass(sc)
+        }
     }
 
     comp.properties

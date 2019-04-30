@@ -1,12 +1,9 @@
 package y2k.virtualuiresearch
 
-import com.squareup.kotlinpoet.AnnotationSpec
-import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.asClassName
-import com.squareup.kotlinpoet.asTypeName
-import y2k.virtualuiresearch.common.asGenTypeName
 import y2k.virtualuiresearch.asm.ClassRecord
+import y2k.virtualuiresearch.common.asGenTypeName
 import y2k.virtualuiresearch.common.isOverrided
 import y2k.virtualuiresearch.common.loadAllClassesFromJar
 import java.io.File
@@ -14,6 +11,7 @@ import java.lang.Deprecated
 import java.lang.reflect.Modifier
 import java.net.URLClassLoader
 import kotlin.Array
+import kotlin.Pair
 import kotlin.String
 import kotlin.Suppress
 
@@ -106,7 +104,8 @@ fun execute(
         .sortedBy { it.name }
         .map { mkComponent(it, groupClass) }
         .forEach {
-            fileSpec.addFunction(createTypeDsl(it.type, it.group))
+            if (!it.isAbstract)
+                fileSpec.addFunction(createTypeDsl(it.type, it.group))
             fileSpec.addType(createType(it, nonNullMethods))
         }
 
@@ -114,14 +113,20 @@ fun execute(
 }
 
 private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
-    val typeBound = clazz.typeParameters.firstOrNull()?.bounds?.firstOrNull()?.asTypeName()
-    val type =
-        if (typeBound != null) clazz.asClassName().parameterizedBy(typeBound)
-        else clazz.asClassName()
+    fun extractTypeName(clazz: Class<*>): Pair<TypeName?, TypeName> {
+        val typeBound = clazz.typeParameters.firstOrNull()?.bounds?.firstOrNull()?.asTypeName()
+        val type =
+            if (typeBound != null) clazz.asClassName().parameterizedBy(typeBound)
+            else clazz.asClassName()
+        return Pair(typeBound, type)
+    }
+
+    val (typeBound, type) = extractTypeName(clazz)
+    val parentType = clazz.genericSuperclass.asTypeName()
 
     return ComponentDesc(
         type,
-        clazz.superclass.asClassName(),
+        parentType,
         getProperties(clazz),
         groupClass.isAssignableFrom(clazz),
         Modifier.isAbstract(clazz.modifiers),
