@@ -113,9 +113,14 @@ private fun mkCompProps(
 
     val privateProp = "_$name"
     val fixedType = fixPropertyType(methodType)
+    val propertyType = ClassName.bestGuess("Property")
+    val defValue = getDefaultValue(fixedType)
+    val record = ClassRecord(inputViewClass.canonicalName, methodName)
+    val nullable = defValue == null && record !in nonNullMethods
+    val fixedType2 = fixedType.copy(nullable)
 
-    val p1 = PropertySpec
-        .builder(name, fixedType)
+    val pubProp = PropertySpec
+        .builder(name, fixedType2)
         .mutable(true)
         .getter(
             FunSpec.getterBuilder()
@@ -131,33 +136,31 @@ private fun mkCompProps(
         .setter(
             FunSpec.setterBuilder()
                 .addParameter("value", fixedType)
-                .addCode(
-                    """
-                        $privateProp.set(value)
-                        props += $privateProp
-                        """.trimIndent()
-                )
+                .addCode("updateProp(value, $privateProp)")
                 .build()
         )
         .build()
 
-    val propertyType = ClassName.bestGuess("Property")
-    val defValue = getDefaultValue(fixedType)
+    val isRemote = isRemote(fixedType)
 
-    val x = ClassRecord(inputViewClass.canonicalName, methodName)
-    val nullable = defValue == null && x !in nonNullMethods
-
-    val p2 = PropertySpec
+    val privProp = PropertySpec
         .builder(
             privateProp,
-            propertyType.parameterizedBy(fixedType.copy(nullable), inputViewClass),
+            propertyType.parameterizedBy(fixedType2, inputViewClass),
             KModifier.PRIVATE
         )
-        .initializer("%T(%S, %L, %T::%L)", propertyType, name, defValue, inputViewClass, methodName)
-        .build()
+        .initializer("%T(%L, %S, %L, %T::%L)", propertyType, isRemote, name, defValue, inputViewClass, methodName)
 
-    return listOf(p1, p2)
+    if (!isRemote)
+        privProp.addAnnotation(Transient::class)
+
+    return listOf(pubProp, privProp.build())
 }
+
+private fun isRemote(type: TypeName): Boolean =
+    (getDefaultValue(type) != null
+        || type == CharSequence::class.asTypeName()
+        || type == String::class.asTypeName())
 
 private fun fixPropertyType(methodType: TypeName): TypeName =
     when (methodType) {

@@ -44,11 +44,34 @@ fun mkNode(f: () -> Unit): VirtualNode {
     return globalViewStack.pop().children.first()
 }
 
+private val isRemote = ThreadLocal<Unit>()
+
+fun runInRemote(f: () -> Unit) {
+    try {
+        isRemote.set(Unit)
+        f()
+    } finally {
+        isRemote.remove()
+    }
+}
+
+fun <T> VirtualNode.updateProp(value: T, property: Property<T, *>) {
+    if (isRemote.get() != null && !property.isRemoteReady) return
+
+    property.set(value)
+    props += property
+}
+
 val globalViewStack = Stack<VirtualNode>()
 
 class NotRemovablePropertyException : Exception()
 
-class Property<T, TView : View>(val name: String, var value: T?, private val f: (TView, T) -> Any) : Serializable {
+class Property<T, TView : View>(
+    val isRemoteReady: Boolean,
+    val name: String,
+    var value: T?,
+    private val f: (TView, T) -> Any
+) : Serializable {
 
     private val default = value
 
@@ -114,7 +137,11 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
                     val v = c.createEmpty(view.context)
                     log { "Add view '${v.javaClass.simpleName}'" }
                     view.addView(v)
-                    updateRealView(v, p, c)
+                    try {
+                        updateRealView(v, p, c)
+                    } catch (e: NotRemovablePropertyException) {
+                        throw IllegalStateException()
+                    }
                 } else {
                     if (p.javaClass == c.javaClass) {
                         try {
@@ -140,7 +167,7 @@ private fun replaceNode(
     view.removeViewAt(i)
     val v = c.createEmpty(view.context)
     view.addView(v, i)
-    updateRealView(v, p, c)
+    updateRealView(v, null, c)
 }
 
 @Suppress("UNCHECKED_CAST")
