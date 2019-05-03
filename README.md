@@ -2,6 +2,8 @@
 
 #### Описание компонента в стиле _The Elm Architecture_
 
+[todolist-example.kt](android/src/main/java/y2k/android/todolist%20example.kt)
+
 ```kotlin
 object TodoListComponent : TeaComponent<Msg, Model> {
 
@@ -104,11 +106,9 @@ class HotReloadRunners {
 
     @Test
     fun `run TodoList`() {
-        val model = TodoListComponent.init.copy(todos = List(5) { "Item #$it" })
-
-        runInRemote {
-            val virtualNode = TodoListComponent.view(model) {}
-            HotReloadClient.send(virtualNode)
+        HotReloadClient.send {
+            TodoListComponent.view(
+                TodoListComponent.init.copy(todos = List(5) { "Item #$it" })) {}
         }
     }
 }
