@@ -2,6 +2,8 @@
 
 #### Описание компонента в стиле _The Elm Architecture_
 
+[todolist-example.kt](android/src/main/java/y2k/android/todolist%20example.kt)
+
 ```kotlin
 object TodoListComponent : TeaComponent<Msg, Model> {
 
