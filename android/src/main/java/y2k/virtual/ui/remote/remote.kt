@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
 import fi.iki.elonen.NanoHTTPD
-import y2k.virtual.ui.VirtualHostView
-import y2k.virtual.ui.VirtualNode
-import y2k.virtual.ui.frameLayout
-import y2k.virtual.ui.mkNode
+import y2k.virtual.ui.*
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -67,7 +64,14 @@ object HotReloadServer {
 
 object HotReloadClient {
 
-    fun send(virtualNode: VirtualNode) {
+    fun send(f: () -> VirtualNode) {
+        runInRemote {
+            val virtualNode = f()
+            sendNode(virtualNode)
+        }
+    }
+
+    private fun sendNode(virtualNode: VirtualNode) {
         val bytes = toBytes(virtualNode)
 
         val urlString = "http://${getIp()}:8080/"
