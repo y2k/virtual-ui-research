@@ -13,16 +13,16 @@
         tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
 
         <activity
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:name=".flat.ConstraintTestActivity"
+            android:exported="true" />
+
+        <activity
             android:name=".DslExampleActivity"
             android:exported="true" />
 
         <activity
-            android:name=".RemoteDslExampleActivity"
-            android:exported="true" />
-
-        <activity
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".flat.ConstraintTestActivity"
+            android:name=".TodoListActivity"
             android:exported="true" />
 
     </application>
