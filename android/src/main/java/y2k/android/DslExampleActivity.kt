@@ -10,20 +10,34 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import y2k.android.common.getDrawableByAttr
 import y2k.virtual.ui.*
+import y2k.virtual.ui.remote.HotReloadServer
+import java.io.Closeable
 
 class DslExampleActivity : AppCompatActivity() {
+
+    private lateinit var root: VirtualHostView
+    private lateinit var server: Closeable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val root = VirtualHostView(this)
-        setContentView(root)
+        root = VirtualHostView(this).also(::setContentView)
 
-        var stage = 0
+        var step = 0
         fun update() {
-            root.update { makeStage(this, stage++) { update() } }
+            root.update { view(this, step++) { update() } }
         }
         update()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        server = HotReloadServer.start(root)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        server.close()
     }
 
     companion object {
@@ -33,14 +47,15 @@ class DslExampleActivity : AppCompatActivity() {
         private const val color3 = 0xFFFFFFFF.toInt()
         private const val color4 = 0xFF233544.toInt()
 
-        fun makeStage(context: Context?, stage: Int, dispatch: () -> Unit): VirtualNode =
+        fun view(context: Context?, step: Int, dispatch: () -> Unit): VirtualNode =
             linearLayout {
                 backgroundColor = color4
                 gravity = Gravity.CENTER_VERTICAL
                 orientation = LinearLayout.VERTICAL
 
                 appCompatButton {
-                    textCharSequence = "AppCompat Button ($stage)"
+                    textCharSequence = "AppCompat Button ($step)"
+                    allCaps = false
                     textSize = 18f
                 }
 
@@ -58,7 +73,7 @@ class DslExampleActivity : AppCompatActivity() {
                     textSize = 20f
                 }
 
-                if (stage == 0)
+                if (step == 0)
                     textView {
                         textCharSequence = "Line #2"
                         textColorInt = color3
@@ -71,13 +86,13 @@ class DslExampleActivity : AppCompatActivity() {
                     textSize = 12f
                 }
 
-                if (stage >= 2)
+                if (step >= 2)
                     imageView {
                         scaleType = ImageView.ScaleType.FIT_CENTER
                         imageResource = android.R.drawable.ic_menu_view
                     }
 
-                if (stage >= 3)
+                if (step >= 3)
                     textView {
                         textCharSequence = "Line #4"
                         textColorInt = color3
@@ -87,22 +102,22 @@ class DslExampleActivity : AppCompatActivity() {
                 linearLayout {
                     button {
                         background = context?.getDrawableByAttr(android.R.attr.selectableItemBackground)
-                        textCharSequence = "Line #4 ($stage)"
+                        textCharSequence = "Update UI ($step)"
                         textColorInt = color1
                         textSize = 14f
                         onClickListener = View.OnClickListener { dispatch() }
                     }
 
-                    customButton(context, stage >= 1)
+                    progressButton(context, step >= 1)
                 }
             }
 
-        private fun customButton(context: Context?, showProgress: Boolean) =
+        private fun progressButton(context: Context?, showProgress: Boolean) =
             frameLayout {
                 if (!showProgress)
                     button {
                         background = context?.getDrawableByAttr(R.attr.selectableItemBackground)
-                        textCharSequence = "Line #5"
+                        textCharSequence = "Progress Button"
                         textColorInt = color1
                         textSize = 14f
                     }
