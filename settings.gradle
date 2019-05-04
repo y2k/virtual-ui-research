@@ -1,1 +1,1 @@
-include ':research', ':dsl', ':android'
+include ':research', ':android'
