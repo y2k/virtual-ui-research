@@ -12,6 +12,8 @@ import y2k.android.BuildConfig
 import java.io.Serializable
 import java.util.*
 
+data class Quadruple<T1, T2, T3, T4>(val first: T1, val second: T2, val third: T3, val fourth: T4) : Serializable
+
 class VirtualHostView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
@@ -87,7 +89,7 @@ class Property<T, TView : View>(
         value = x
     }
 
-    override fun toString() = "${functionRegex.find("$f")!!.groupValues[1]}($value)"
+    override fun toString() = "${functionRegex.find("$f")?.groupValues?.get(1)}($value)"
 
     companion object {
         private val functionRegex = Regex("function ([^ ]+)")

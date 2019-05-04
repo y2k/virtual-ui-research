@@ -56,7 +56,7 @@ class DslExampleActivity : AppCompatActivity() {
                 appCompatButton {
                     textCharSequence = "AppCompat Button ($step)"
                     allCaps = false
-                    textSize = 18f
+                    textSizeFloat = 18f
                 }
 
                 editText {
@@ -64,26 +64,26 @@ class DslExampleActivity : AppCompatActivity() {
                     hintTextColorInt = Color.LTGRAY
                     backgroundColor = Color.WHITE
                     textColorInt = Color.DKGRAY
-                    textSize = 20f
+                    textSizeFloat = 20f
                 }
 
                 textView {
                     textCharSequence = "Line #1"
                     textColorInt = color3
-                    textSize = 20f
+                    textSizeFloat = 20f
                 }
 
                 if (step == 0)
                     textView {
                         textCharSequence = "Line #2"
                         textColorInt = color3
-                        textSize = 16f
+                        textSizeFloat = 16f
                     }
 
                 textView {
                     textCharSequence = "Line #3"
                     textColorInt = color2
-                    textSize = 12f
+                    textSizeFloat = 12f
                 }
 
                 if (step >= 2)
@@ -96,7 +96,7 @@ class DslExampleActivity : AppCompatActivity() {
                     textView {
                         textCharSequence = "Line #4"
                         textColorInt = color3
-                        textSize = 16f
+                        textSizeFloat = 16f
                     }
 
                 linearLayout {
@@ -104,7 +104,7 @@ class DslExampleActivity : AppCompatActivity() {
                         background = context?.getDrawableByAttr(android.R.attr.selectableItemBackground)
                         textCharSequence = "Update UI ($step)"
                         textColorInt = color1
-                        textSize = 14f
+                        textSizeFloat = 14f
                         onClickListener = View.OnClickListener { dispatch() }
                     }
 
@@ -119,7 +119,7 @@ class DslExampleActivity : AppCompatActivity() {
                         background = context?.getDrawableByAttr(R.attr.selectableItemBackground)
                         textCharSequence = "Progress Button"
                         textColorInt = color1
-                        textSize = 14f
+                        textSizeFloat = 14f
                     }
 
                 if (showProgress)

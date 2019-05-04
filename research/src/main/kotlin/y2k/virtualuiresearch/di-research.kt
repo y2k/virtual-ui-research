@@ -1,6 +1,6 @@
 package y2k.virtualuiresearch
 
-fun main(args: Array<String>) {
+fun main() {
     foo(object : Reader, Writer {
         override fun write(x: Any): Unit = TODO()
         override fun read(): String? = TODO()

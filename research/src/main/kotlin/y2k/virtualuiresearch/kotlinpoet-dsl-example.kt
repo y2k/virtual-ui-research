@@ -5,40 +5,6 @@ import y2k.virtualuiresearch.common.simpleName
 
 const val libraryPackage = "y2k.virtual.ui"
 
-fun main(args: Array<String>) {
-    val components = listOf(
-        ComponentDesc(
-            ClassName.bestGuess("android.widget.TextView"),
-            ClassName.bestGuess("android.view.View"),
-            listOf(
-                PropertyDescription("setText", String::class.asTypeName()),
-                PropertyDescription("setTextSize", Float::class.asTypeName())
-            ),
-            false,
-            false
-        ),
-        ComponentDesc(
-            ClassName.bestGuess("android.widget.LinearLayout"),
-            ClassName.bestGuess("android.view.ViewGroup"),
-            listOf(
-                PropertyDescription("setText", String::class.asTypeName()),
-                PropertyDescription("setTextSize", Float::class.asTypeName())
-            ),
-            true,
-            false
-        )
-    )
-
-    val fileSpecBuild = FileSpec
-        .builder(libraryPackage, "dsl.kt")
-
-    components.forEach {
-        fileSpecBuild.addFunction(createTypeDsl(it.type, it.group))
-    }
-
-    fileSpecBuild.build().let(::println)
-}
-
 fun createTypeDsl(inputViewClass: TypeName, group: Boolean): FunSpec {
     val componentClass = ClassName.bestGuess(inputViewClass.simpleName + "_")
     return FunSpec

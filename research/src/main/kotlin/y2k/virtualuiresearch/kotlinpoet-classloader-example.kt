@@ -15,18 +15,6 @@ import kotlin.Pair
 import kotlin.String
 import kotlin.Suppress
 
-fun main(args: Array<String>) {
-    println(
-        execute(
-            null,
-            if (args.size < 2) null else args.first(),
-            args.last(),
-            args,
-            emptySet()
-        )
-    )
-}
-
 fun execute(
     rootPackage: String?,
     libPath: String?,
@@ -138,7 +126,7 @@ private fun getProperties(clazz: Class<*>): List<PropertyDescription> {
         .declaredMethods
         .filter {
             it.name.matches(Regex("set[A-Z].+"))
-                && it.parameterCount == 1
+                && (it.parameterCount == 1 || (it.parameterCount in 2..4 && it.parameterTypes.all { it.isPrimitive }))
                 && Modifier.isPublic(it.modifiers)
                 && !Modifier.isStatic(it.modifiers)
                 && !it.isAnnotationPresent(Deprecated::class.java)
@@ -149,7 +137,7 @@ private fun getProperties(clazz: Class<*>): List<PropertyDescription> {
     return methods.map { m ->
         PropertyDescription(
             m.name,
-            m.parameters[0].asGenTypeName(),
+            m.parameters.map { it.asGenTypeName() },
             methods.count { it.name == m.name } > 1)
     }
 }
