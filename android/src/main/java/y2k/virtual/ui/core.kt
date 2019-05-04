@@ -126,12 +126,13 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
 
     if (view is ViewGroup) {
         val prevChildren = prev?.children ?: emptyList<VirtualNode>()
+        var viewPos = 0
         for (i in 0 until Math.max(current.children.size, prevChildren.size)) {
             val p = prevChildren.getOrNull(i)
             val c = current.children.getOrNull(i)
 
             if (c == null) {
-                view.removeViewAt(i)
+                view.removeViewAt(viewPos--)
             } else {
                 if (p == null) {
                     val v = c.createEmpty(view.context)
@@ -147,23 +148,20 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
                         try {
                             updateRealView(view.getChildAt(i), p, c)
                         } catch (e: NotRemovablePropertyException) {
-                            replaceNode(view, i, c, p)
+                            replaceNode(view, i, c)
                         }
                     } else {
-                        replaceNode(view, i, c, p)
+                        replaceNode(view, i, c)
                     }
                 }
             }
+
+            viewPos++
         }
     }
 }
 
-private fun replaceNode(
-    view: ViewGroup,
-    i: Int,
-    c: VirtualNode,
-    p: VirtualNode?
-) {
+private fun replaceNode(view: ViewGroup, i: Int, c: VirtualNode) {
     view.removeViewAt(i)
     val v = c.createEmpty(view.context)
     view.addView(v, i)

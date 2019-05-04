@@ -55,7 +55,7 @@ object TodoListComponent : TeaComponent<Msg, Model> {
         when (msg) {
             is Msg.Add -> model.copy(todos = model.todos + model.text)
             is Msg.DeleteAll -> model.copy(todos = emptyList())
-            is Msg.Delete -> model.copy(todos = model.todos.filterNot { it != msg.title })
+            is Msg.Delete -> model.copy(todos = model.todos.filterNot { it == msg.title })
         }
 
     override fun view(model: Model, dispatch: (Msg) -> Unit): VirtualNode =
