@@ -1,8 +1,8 @@
 package y2k.research
 
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 
 interface ConstraintLayoutF<T, P, V> {
     fun isView(obj: Any): Boolean
@@ -16,6 +16,7 @@ interface ConstraintLayoutF<T, P, V> {
     fun bindStartToEnd(lp: P, prevView: V?)
 }
 
+@Suppress("unused")
 object RealConstraintLayoutF : ConstraintLayoutF<ConstraintLayout, LayoutParams, View> {
 
     override fun isView(obj: Any): Boolean =

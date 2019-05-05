@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import java.util.concurrent.atomic.AtomicInteger
 
+@Suppress("unused")
 fun ViewGroup.paddingLayout(all: Int = 0, f: FrameLayout.() -> Unit): FrameLayout {
     val l = FrameLayout(context)
     l.setPadding(all, all, all, all)
@@ -17,6 +18,7 @@ fun ViewGroup.paddingLayout(all: Int = 0, f: FrameLayout.() -> Unit): FrameLayou
     return l
 }
 
+@Suppress("unused")
 fun ViewGroup.frameLayout(f: FrameLayout.() -> Unit): FrameLayout {
     val l = FrameLayout(context)
     l.f()

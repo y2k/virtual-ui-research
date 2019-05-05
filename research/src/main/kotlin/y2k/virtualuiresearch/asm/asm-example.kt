@@ -5,11 +5,6 @@ import java.io.File
 import java.io.InputStream
 import java.util.jar.JarFile
 
-fun main(args: Array<String>) {
-    val file = File(args[0])
-    loadAndScanJar(file, HashSet())
-}
-
 data class ClassRecord(val clazz: String, val method: String)
 
 fun findOrNonNullMethods(jars: List<File>): Set<ClassRecord> {
