@@ -24,6 +24,7 @@ fun createType(comp: ComponentDesc, nonNullMethods: Set<ClassRecord>): TypeSpec 
     val viewBuilder = TypeSpec
         .classBuilder(className)
         .addModifiers(KModifier.OPEN)
+        .addAnnotation(ClassName.bestGuess("VirtualNodeMarker"))
 
     if (comp.type is ParameterizedTypeName) {
         viewBuilder.addTypeVariable(TypeVariableName("T", comp.type.typeArguments[0]))
