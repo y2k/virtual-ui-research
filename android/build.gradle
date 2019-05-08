@@ -42,5 +42,6 @@ dependencies {
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     testImplementation 'junit:junit:4.12'
-
+    implementation 'com.facebook.yoga.android:yoga-layout:1.14.0'
+    implementation 'com.facebook.soloader:soloader:0.6.0'
 }

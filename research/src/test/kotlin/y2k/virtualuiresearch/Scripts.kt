@@ -12,6 +12,16 @@ import java.util.zip.ZipFile
 class Scripts {
 
     @Test
+    fun `Create DSL for Yoga`() {
+        val jars = getJars("http://jcenter.bintray.com/com/facebook/yoga/android/yoga-layout/1.14.0/yoga-layout-1.14.0.pom")
+        val nonNullMethods = findOrNonNullMethods(jars.map(::File))
+
+        val code =
+            execute("com.facebook.yoga.android.", jars.first(), jars.last(), jars.toTypedArray(), nonNullMethods)
+        File("../android/src/main/java/y2k/virtual/ui/yoga.generated.kt").writeText(code)
+    }
+
+    @Test
     fun `Create DSL for RecyclerView`() {
         val jars = getJars("https://maven.google.com/androidx/recyclerview/recyclerview/1.0.0/recyclerview-1.0.0.pom")
         val nonNullMethods = findOrNonNullMethods(jars.map(::File))
@@ -77,6 +87,7 @@ class Scripts {
     companion object {
 
         fun getJars(startPomUrl: String): List<String> {
+            val domain = URL(startPomUrl).authority
             val computedUrls = HashSet<String>()
             val jars = ArrayList<String>()
 
@@ -97,7 +108,7 @@ class Scripts {
                         val groupId = dep.children().first { it.tagName() == "groupId" }.text().replace('.', '/')
                         val artifactId = dep.children().first { it.tagName() == "artifactId" }.text()
                         val version = dep.children().first { it.tagName() == "version" }.text()
-                        downloadPom("https://maven.google.com/$groupId/$artifactId/$version/$artifactId-$version.pom")
+                        downloadPom("https://$domain/$groupId/$artifactId/$version/$artifactId-$version.pom")
                     }
             }
 
