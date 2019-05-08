@@ -6,7 +6,6 @@ import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import y2k.virtualuiresearch.asm.findOrNonNullMethods
 import java.io.File
-import java.lang.System
 import java.net.URL
 import java.util.zip.ZipFile
 
@@ -85,7 +84,7 @@ class Scripts {
                 if (computedUrls.contains(pomUrl)) return
                 computedUrls += pomUrl
 
-                val pom = Parser.xmlParser().parseInput(URL(pomUrl).readText(), pomUrl)
+                val pom = Parser.xmlParser().parseInput(downloadToTemp(pomUrl, ".pom").readText(), pomUrl)
 
                 val type = pom.selectFirst("project > packaging")?.text() ?: "jar"
                 val artUrl = pomUrl.replace(".pom", ".$type")
@@ -114,7 +113,7 @@ class Scripts {
             )
             if (file.exists()) return file.absolutePath
 
-            val aar = downloadToTemp(url, "virtual-ui-" + (Long.MAX_VALUE / 2 + url.hashCode()) + ".aar.zip")
+            val aar = downloadToTemp(url, ".aar.zip")
 
             ZipFile(aar).use { zipFile ->
                 val e = zipFile
@@ -129,17 +128,17 @@ class Scripts {
         }
 
         private fun downloadJar(url: String): String =
-            downloadToTemp(url, "virtual-ui-" + (Long.MAX_VALUE / 2 + url.hashCode()) + ".jar").absolutePath
+            downloadToTemp(url, ".jar").absolutePath
 
-        private fun downloadToTemp(url: String, name: String): File {
-            val file = File(System.getProperty("java.io.tmpdir"), name)
-
+        private fun downloadToTemp(url: String, ext: String): File {
+            val file = File(
+                System.getProperty("java.io.tmpdir"),
+                "virtual-ui-${Long.MAX_VALUE / 2 + url.hashCode()}$ext")
             if (!file.exists() || file.length() <= 0) {
                 val tmp = File.createTempFile("___", null)
                 URL(url).openStream().use { it.copyTo(tmp.outputStream()) }
                 tmp.renameTo(file)
             }
-
             return file
         }
 
