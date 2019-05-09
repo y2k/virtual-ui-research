@@ -15,30 +15,6 @@ import y2k.virtual.ui.tea.SimpleTea
 import y2k.virtual.ui.tea.TeaComponent
 import java.io.Closeable
 
-class TodoListActivity : AppCompatActivity() {
-
-    private lateinit var root: VirtualHostView
-    private lateinit var server: Closeable
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        root = VirtualHostView(this).also(::setContentView)
-
-        SimpleTea.run(root, TodoListComponent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        server = HotReloadServer.start(root)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        server.close()
-    }
-}
-
 object TodoListComponent : TeaComponent<Msg, Model> {
 
     data class Model(val todos: List<String>, val text: String)
@@ -100,6 +76,30 @@ object TodoListComponent : TeaComponent<Msg, Model> {
                 textCharSequence = "Delete"
                 onClickListener = OnClickListener { dispatch(Msg.Delete(title)) }
             }
+        }
+    }
+
+    class Activity : AppCompatActivity() {
+
+        private lateinit var root: VirtualHostView
+        private lateinit var server: Closeable
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+
+            root = VirtualHostView(this).also(::setContentView)
+
+            SimpleTea.run(root, TodoListComponent)
+        }
+
+        override fun onResume() {
+            super.onResume()
+            server = HotReloadServer.start(root)
+        }
+
+        override fun onPause() {
+            super.onPause()
+            server.close()
         }
     }
 }

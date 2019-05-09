@@ -18,11 +18,11 @@
             android:exported="true" />
 
         <activity
-            android:name=".DslExampleActivity"
+            android:name=".DslExampleComponent$Activity"
             android:exported="true" />
 
         <activity
-            android:name=".TodoListActivity"
+            android:name=".TodoListComponent$Activity"
             android:exported="true" />
 
     </application>
