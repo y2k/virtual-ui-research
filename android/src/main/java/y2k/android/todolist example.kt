@@ -9,6 +9,7 @@ import y2k.android.TodoListComponent.Model
 import y2k.android.TodoListComponent.Msg
 import y2k.virtual.ui.*
 import y2k.virtual.ui.common.border
+import y2k.virtual.ui.common.editableView
 import y2k.virtual.ui.common.fillHorizontal
 import y2k.virtual.ui.remote.HotReloadServer
 import y2k.virtual.ui.tea.SimpleTea
@@ -23,15 +24,17 @@ object TodoListComponent : TeaComponent<Msg, Model> {
         object Add : Msg()
         object DeleteAll : Msg()
         class Delete(val title: String) : Msg()
+        class Changed(val text: CharSequence) : Msg()
     }
 
     override val init = Model(emptyList(), "")
 
     override fun update(model: Model, msg: Msg): Model =
         when (msg) {
-            is Msg.Add -> model.copy(todos = model.todos + model.text)
+            is Msg.Add -> model.copy(todos = model.todos + model.text, text = "")
             is Msg.DeleteAll -> model.copy(todos = emptyList())
             is Msg.Delete -> model.copy(todos = model.todos.filterNot { it == msg.title })
+            is Msg.Changed -> model.copy(text = "" + msg.text)
         }
 
     override fun view(model: Model, dispatch: (Msg) -> Unit): VirtualNode =
@@ -39,8 +42,13 @@ object TodoListComponent : TeaComponent<Msg, Model> {
             linearLayout {
                 orientation = LinearLayout.VERTICAL
 
-                appCompatEditText {
-                    hintCharSequence = "Enter text..."
+                editableView {
+                    onTextChanged = { dispatch(Msg.Changed(it)) }
+                    text = model.text
+
+                    appCompatEditText {
+                        hintCharSequence = "Enter text..."
+                    }
                 }
 
                 linearLayout {
@@ -48,10 +56,12 @@ object TodoListComponent : TeaComponent<Msg, Model> {
                     gravity = Gravity.END
 
                     appCompatButton {
+                        enabled = model.text.isNotBlank()
                         textCharSequence = "Add item"
                         onClickListener = OnClickListener { dispatch(Msg.Add) }
                     }
                     appCompatButton {
+                        enabled = model.todos.isNotEmpty()
                         textCharSequence = "Clear all"
                         onClickListener = OnClickListener { dispatch(Msg.DeleteAll) }
                     }
