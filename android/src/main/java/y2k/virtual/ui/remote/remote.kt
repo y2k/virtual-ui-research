@@ -3,6 +3,7 @@ package y2k.virtual.ui.remote
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import fi.iki.elonen.NanoHTTPD
 import y2k.virtual.ui.*
 import java.io.*
@@ -16,6 +17,7 @@ object HotReloadServer {
 
     fun start(hostView: VirtualHostView): Closeable {
         val nanoHTTPD = mkServer { node ->
+            Toast.makeText(hostView.context, "UI updated", Toast.LENGTH_SHORT).show()
             hostView.update(mkNode {
                 frameLayout {
                     children += node
@@ -75,7 +77,6 @@ object HotReloadClient {
         val bytes = toBytes(virtualNode)
 
         val urlString = "http://${getIp()}:8080/"
-        println(urlString)
 
         val url = URL(urlString)
         val connection = url.openConnection() as HttpURLConnection

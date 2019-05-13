@@ -16,7 +16,7 @@ class HotReloadRunners {
     @Test
     fun `run DSL example`() {
         HotReloadClient.send {
-            DslExampleActivity.view(null, 0) {}
+            DslExampleComponent.view(null, 0) {}
         }
     }
 }
