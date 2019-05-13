@@ -13,47 +13,61 @@ object TodoListComponent : TeaComponent<Msg, Model> {
         object Add : Msg()
         object DeleteAll : Msg()
         class Delete(val title: String) : Msg()
+        class Changed(val text: CharSequence) : Msg()
     }
 
     override val init = Model(emptyList(), "")
 
     override fun update(model: Model, msg: Msg): Model =
         when (msg) {
-            is Msg.Add -> model.copy(todos = model.todos + model.text)
+            is Msg.Add -> model.copy(todos = model.todos + model.text, text = "")
             is Msg.DeleteAll -> model.copy(todos = emptyList())
-            is Msg.Delete -> model.copy(todos = model.todos.filterNot { it != msg.title })
+            is Msg.Delete -> model.copy(todos = model.todos.filterNot { it == msg.title })
+            is Msg.Changed -> model.copy(text = "" + msg.text)
         }
 
     override fun view(model: Model, dispatch: (Msg) -> Unit): VirtualNode =
-        border(all = 20) {
-            linearLayout {
-                orientation = LinearLayout.VERTICAL
+        linearLayout {
+            orientation = LinearLayout.VERTICAL
+            padding = Quadruple(20, 20, 20, 20)
+
+            editableView {
+                onTextChanged = { dispatch(Msg.Changed(it)) }
+                text = model.text
 
                 appCompatEditText {
                     hintCharSequence = "Enter text..."
                 }
+            }
 
-                linearLayout {
-                    orientation = LinearLayout.HORIZONTAL
-                    gravity = Gravity.END
+            linearLayout {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.END
 
-                    appCompatButton {
-                        textCharSequence = "Add item"
-                        onClickListener = OnClickListener { dispatch(Msg.Add) }
-                    }
-                    appCompatButton {
-                        textCharSequence = "Clear all"
-                        onClickListener = OnClickListener { dispatch(Msg.DeleteAll) }
-                    }
+                appCompatButton {
+                    enabled = model.text.isNotBlank()
+                    textCharSequence = "Add item"
+                    onClickListener = OnClickListener { dispatch(Msg.Add) }
                 }
+                appCompatButton {
+                    enabled = model.todos.isNotEmpty()
+                    textCharSequence = "Clear all"
+                    onClickListener = OnClickListener { dispatch(Msg.DeleteAll) }
+                }
+            }
 
-                model.todos.forEach { item ->
-                    viewItem(item, dispatch)
+            scrollView {
+                linearLayout {
+                    orientation = LinearLayout.VERTICAL
+
+                    model.todos.forEach { item ->
+                        viewItem(item, dispatch)
+                    }
                 }
             }
         }
 
-    private fun viewItem(title: String, dispatch: (Msg) -> Unit) {
+    private fun viewItem(title: String, dispatch: (Msg) -> Unit): VirtualNode =
         linearLayout {
             orientation = LinearLayout.HORIZONTAL
 
@@ -67,7 +81,6 @@ object TodoListComponent : TeaComponent<Msg, Model> {
                 onClickListener = OnClickListener { dispatch(Msg.Delete(title)) }
             }
         }
-    }
 }
 ```
 

@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import y2k.android.TodoListComponent.Model
 import y2k.android.TodoListComponent.Msg
 import y2k.virtual.ui.*
-import y2k.virtual.ui.common.border
 import y2k.virtual.ui.common.editableView
 import y2k.virtual.ui.common.fillHorizontal
 import y2k.virtual.ui.remote.HotReloadServer
@@ -38,42 +37,47 @@ object TodoListComponent : TeaComponent<Msg, Model> {
         }
 
     override fun view(model: Model, dispatch: (Msg) -> Unit): VirtualNode =
-        border(all = 20) {
+        linearLayout {
+            orientation = LinearLayout.VERTICAL
+            padding = Quadruple(20, 20, 20, 20)
+
+            editableView {
+                onTextChanged = { dispatch(Msg.Changed(it)) }
+                text = model.text
+
+                appCompatEditText {
+                    hintCharSequence = "Enter text..."
+                }
+            }
+
             linearLayout {
-                orientation = LinearLayout.VERTICAL
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.END
 
-                editableView {
-                    onTextChanged = { dispatch(Msg.Changed(it)) }
-                    text = model.text
-
-                    appCompatEditText {
-                        hintCharSequence = "Enter text..."
-                    }
+                appCompatButton {
+                    enabled = model.text.isNotBlank()
+                    textCharSequence = "Add item"
+                    onClickListener = OnClickListener { dispatch(Msg.Add) }
                 }
+                appCompatButton {
+                    enabled = model.todos.isNotEmpty()
+                    textCharSequence = "Clear all"
+                    onClickListener = OnClickListener { dispatch(Msg.DeleteAll) }
+                }
+            }
 
+            scrollView {
                 linearLayout {
-                    orientation = LinearLayout.HORIZONTAL
-                    gravity = Gravity.END
+                    orientation = LinearLayout.VERTICAL
 
-                    appCompatButton {
-                        enabled = model.text.isNotBlank()
-                        textCharSequence = "Add item"
-                        onClickListener = OnClickListener { dispatch(Msg.Add) }
+                    model.todos.forEach { item ->
+                        viewItem(item, dispatch)
                     }
-                    appCompatButton {
-                        enabled = model.todos.isNotEmpty()
-                        textCharSequence = "Clear all"
-                        onClickListener = OnClickListener { dispatch(Msg.DeleteAll) }
-                    }
-                }
-
-                model.todos.forEach { item ->
-                    viewItem(item, dispatch)
                 }
             }
         }
 
-    private fun viewItem(title: String, dispatch: (Msg) -> Unit) {
+    private fun viewItem(title: String, dispatch: (Msg) -> Unit): VirtualNode =
         linearLayout {
             orientation = LinearLayout.HORIZONTAL
 
@@ -87,7 +91,6 @@ object TodoListComponent : TeaComponent<Msg, Model> {
                 onClickListener = OnClickListener { dispatch(Msg.Delete(title)) }
             }
         }
-    }
 
     class Activity : AppCompatActivity() {
 

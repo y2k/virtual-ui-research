@@ -88,15 +88,3 @@ fun LinearLayout_.fillHorizontal(f: () -> View_) {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             1f)
 }
-
-fun border(all: Int, f: () -> View_): VirtualNode =
-    frameLayout {
-        f().layoutParams = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT).apply {
-            topMargin = all
-            bottomMargin = all
-            leftMargin = all
-            rightMargin = all
-        }
-    }
