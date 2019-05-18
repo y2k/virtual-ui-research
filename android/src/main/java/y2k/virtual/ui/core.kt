@@ -24,13 +24,9 @@ class VirtualHostView @JvmOverloads constructor(
     private var prevNode: VirtualNode? = null
 
     fun update(f: () -> Unit) {
-        val s2 = mkNode {
-            frameLayout {
-                f()
-            }
-        }
-        updateRealView(this, prevNode, s2)
-        prevNode = s2
+        update(mkNode {
+            frameLayout { f() }
+        })
     }
 
     fun update(node: VirtualNode) {
@@ -100,11 +96,9 @@ class Property<T, TView : View>(
 }
 
 abstract class VirtualNode : Serializable {
-
+    lateinit var realView: View
     val children = ArrayList<VirtualNode>()
-
     val props = ArrayList<Property<*, out View>>()
-
     abstract fun createEmpty(context: Context): View
 }
 
@@ -116,10 +110,8 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
             val newProp = current.props.find { it.name == oldProp.name }
             if (newProp == null) {
                 clearViewProp(view, oldProp)
-            } else {
-                if (oldProp.value != newProp.value) {
-                    updateViewProp(view, newProp)
-                }
+            } else if (oldProp.value != newProp.value) {
+                updateViewProp(view, newProp)
             }
         }
         current.props.forEach { newProp ->
@@ -136,29 +128,21 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
             val p = prevChildren.getOrNull(i)
             val c = current.children.getOrNull(i)
 
-            if (c == null) {
-                view.removeViewAt(viewPos--)
-            } else {
-                if (p == null) {
+            when {
+                c == null -> view.removeViewAt(viewPos--)
+                p == null -> {
                     val v = c.createEmpty(view.context)
                     log { "Add view '${v.javaClass.simpleName}'" }
-                    view.addView(v)
+                    updateRealView(v, p, c)
+                    addView(c, view, v)
+                }
+                p.javaClass == c.javaClass ->
                     try {
-                        updateRealView(v, p, c)
+                        updateRealView(p.realView, p, c)
                     } catch (e: NotRemovablePropertyException) {
-                        throw IllegalStateException()
-                    }
-                } else {
-                    if (p.javaClass == c.javaClass) {
-                        try {
-                            updateRealView(view.getChildAt(i), p, c)
-                        } catch (e: NotRemovablePropertyException) {
-                            replaceNode(view, i, c)
-                        }
-                    } else {
                         replaceNode(view, i, c)
                     }
-                }
+                else -> replaceNode(view, i, c)
             }
 
             viewPos++
@@ -169,8 +153,14 @@ fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
 private fun replaceNode(view: ViewGroup, i: Int, c: VirtualNode) {
     view.removeViewAt(i)
     val v = c.createEmpty(view.context)
-    view.addView(v, i)
     updateRealView(v, null, c)
+    addView(c, view, v, i)
+}
+
+private fun addView(vn: VirtualNode, group: ViewGroup, view: View, i: Int? = null) {
+    if (i == null) group.addView(view)
+    else group.addView(view, i)
+    vn.realView = view
 }
 
 @Suppress("UNCHECKED_CAST")
