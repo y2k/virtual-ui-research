@@ -41,6 +41,8 @@ class VirtualHostView @JvmOverloads constructor(
 
 fun mkNode(f: () -> Unit): VirtualNode {
     globalViewStack += object : VirtualNode() {
+        override fun clear(p: Property, a: View): Unit = throw IllegalStateException()
+        override fun update(p: Property, a: View): Unit = throw IllegalStateException()
         override fun createEmpty(context: Context): View = throw IllegalStateException()
     }
 
@@ -60,65 +62,51 @@ fun runInRemote(f: () -> Unit) {
     }
 }
 
-fun VirtualNode.updateProp(property: Property<*, *>) {
-    if (isRemote.get() != null && !property.isRemoteReady) return
-    props += property
+fun VirtualNode.updateProp(isRemoteReady: Boolean, propId: Int, value: Any?) {
+    if (isRemote.get() != null && !isRemoteReady) return
+    props += Property(propId, value)
 }
 
 val globalViewStack = Stack<VirtualNode>()
 
 class NotRemovablePropertyException : Exception()
 
-class Property<T, TView : View>(
-    val isRemoteReady: Boolean,
-    val name: String,
-    var value: T?,
-    private val f: (TView, T) -> Any
-) : Serializable {
-
-    private val default = value
-
-    fun clear(view: TView) {
-        f(view, default ?: throw NotRemovablePropertyException())
-    }
-
-    fun update(view: TView) {
-        f(view, value!!)
-    }
-
-    override fun toString() = "${functionRegex.find("$f")?.groupValues?.get(1)}($value)"
-
-    companion object {
-        private val functionRegex = Regex("function ([^ ]+)")
-    }
-}
+class Property(
+    val propId: Int,
+    var value: Any?
+) : Serializable
 
 abstract class VirtualNode : Serializable {
 
+    open fun clear(p: Property, a: View): Unit = throw NotRemovablePropertyException()
+    open fun update(p: Property, a: View): Unit = throw IllegalStateException("$p $a")
+
     val children = ArrayList<VirtualNode>()
 
-    val props = ArrayList<Property<*, out View>>()
+    val props = ArrayList<Property>()
 
     abstract fun createEmpty(context: Context): View
 }
 
 fun updateRealView(view: View, prev: VirtualNode?, current: VirtualNode) {
     if (prev == null) {
-        current.props.forEach { p -> updateViewProp(view, p) }
+        current.props.forEach { p ->
+            current.update(p, view)
+        }
     } else {
         prev.props.forEach { oldProp ->
-            val newProp = current.props.find { it.name == oldProp.name }
+            val newProp = current.props.find { it.propId == oldProp.propId }
             if (newProp == null) {
-                clearViewProp(view, oldProp)
+                prev.clear(oldProp, view)
             } else {
                 if (oldProp.value != newProp.value) {
-                    updateViewProp(view, newProp)
+                    current.update(newProp, view)
                 }
             }
         }
         current.props.forEach { newProp ->
-            if (prev.props.none { it.name == newProp.name }) {
-                updateViewProp(view, newProp)
+            if (prev.props.none { it.propId == newProp.propId }) {
+                current.update(newProp, view)
             }
         }
     }
@@ -165,22 +153,6 @@ private fun replaceNode(view: ViewGroup, i: Int, c: VirtualNode) {
     val v = c.createEmpty(view.context)
     view.addView(v, i)
     updateRealView(v, null, c)
-}
-
-@Suppress("UNCHECKED_CAST")
-fun updateViewProp(view: View, c: Property<*, out View>) {
-    log { "Update: ${view.javaClass.simpleName}.$c" }
-
-    val a = c as Property<*, View>
-    a.update(view)
-}
-
-@Suppress("UNCHECKED_CAST")
-fun clearViewProp(view: View, c: Property<*, out View>) {
-    log { "Clear: ${view.javaClass.simpleName}.$c" }
-
-    val a = c as Property<*, View>
-    a.clear(view)
 }
 
 private inline fun log(f: () -> String) {

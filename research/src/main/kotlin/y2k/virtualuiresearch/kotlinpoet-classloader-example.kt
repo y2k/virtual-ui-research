@@ -45,6 +45,7 @@ fun execute(
                 .addMember("\"NewApi\"")
                 .addMember("\"RestrictedApi\"")
                 .addMember("\"UsePropertyAccessSyntax\"")
+                .addMember("\"UNCHECKED_CAST\"")
                 .build()
         )
 
@@ -113,13 +114,19 @@ private fun mkComponent(clazz: Class<*>, groupClass: Class<*>): ComponentDesc {
     val (typeBound, type) = extractTypeName(clazz)
     val parentType = clazz.genericSuperclass.asTypeName()
 
+    val inheritLevel =
+        generateSequence(clazz, { it.superclass })
+            .indexOfFirst { it == groupClass.superclass }
+
     return ComponentDesc(
         type,
         parentType,
         getProperties(clazz),
         groupClass.isAssignableFrom(clazz),
         Modifier.isAbstract(clazz.modifiers),
-        typeBound)
+        typeBound,
+        inheritLevel
+    )
 }
 
 private fun getProperties(clazz: Class<*>): List<PropertyDescription> {

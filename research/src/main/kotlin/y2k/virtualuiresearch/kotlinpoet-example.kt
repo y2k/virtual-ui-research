@@ -13,7 +13,8 @@ data class ComponentDesc(
     val properties: List<PropertyDescription>,
     val group: Boolean,
     val isAbstract: Boolean,
-    val typeBound: TypeName? = null
+    val typeBound: TypeName? = null,
+    val inheritLevel: Int
 )
 
 data class PropertyDescription(val methodName: String, val types: List<TypeName>, val hasOverloads: Boolean = false)
@@ -42,8 +43,14 @@ fun createType(comp: ComponentDesc, nonNullMethods: Set<ClassRecord>): TypeSpec 
         }
     }
 
+    val initPropId = comp.inheritLevel * 1000
+
+    viewBuilder.addFunction(mkUpdateFunc(comp.properties, comp, initPropId))
+
     comp.properties
-        .map { mkCompProps(comp.type, it.methodName, it.types, it.hasOverloads, nonNullMethods) }
+        .mapIndexed { i, it ->
+            mkCompProps(comp.type, it.methodName, it.types, it.hasOverloads, nonNullMethods, i + initPropId)
+        }
         .forEach { viewBuilder.addProperties(it) }
 
     mkCreateEmpty(comp.type, comp.isAbstract)
@@ -51,6 +58,69 @@ fun createType(comp: ComponentDesc, nonNullMethods: Set<ClassRecord>): TypeSpec 
 
     return viewBuilder.build()
 }
+
+fun mkUpdateFunc(
+    properties: List<PropertyDescription>,
+    comp: ComponentDesc,
+    initPropId: Int
+): FunSpec = FunSpec.builder("update")
+    .addModifiers(KModifier.OVERRIDE)
+    .addParameter("p", ClassName.bestGuess("Property"))
+    .addParameter("a", ClassName.bestGuess("android.view.View"))
+    .addCode(
+        run {
+            val code = CodeBlock.builder()
+
+            code.addStatement("val view = a as %T", comp.type)
+            code.beginControlFlow("when (p.propId)")
+
+            properties.forEachIndexed { i, p ->
+                code.beginControlFlow("%L -> {", i + initPropId)
+
+                when (p.types.size) {
+                    1 -> {
+                        code.addStatement("val x = p.value as %T", fixPropertyType(p.types[0]))
+                        code.addStatement("view.%L(x)", p.methodName)
+                    }
+                    2 -> {
+                        code.addStatement("val x = p.value as Pair<%T, %T>", p.types[0], p.types[1])
+                        code.addStatement("view.%L(x.first, x.second)", p.methodName)
+                    }
+                    3 -> {
+                        code.addStatement("val x = p.value as Triple<%T, %T, %T>", p.types[0], p.types[1], p.types[2])
+                        code.addStatement("view.%L(x.first, x.second, x.third)", p.methodName)
+                    }
+                    4 -> {
+                        code.addStatement(
+                            "val x = p.value as Quadruple<%T, %T, %T, %T>",
+                            p.types[0],
+                            p.types[1],
+                            p.types[2],
+                            p.types[3]
+                        )
+                        code.addStatement("view.%L(x.first, x.second, x.third, x.fourth)", p.methodName)
+                    }
+                    else -> error("${p.types.size}")
+                }
+
+                code.endControlFlow()
+            }
+
+            code.addStatement("else -> super.update(p, a)")
+
+            code.endControlFlow()
+            code.build()
+        }
+    )
+    .build()
+
+fun mkClearFunc(): FunSpec =
+    FunSpec.builder("clear")
+        .addModifiers(KModifier.OVERRIDE)
+        .addParameter("p", ClassName.bestGuess("Property"))
+        .addParameter("a", ClassName.bestGuess("View"))
+        .addCode("TODO()")
+        .build()
 
 private fun mkCreateEmpty(clazz: TypeName, isAbstract: Boolean): FunSpec? =
     if (isAbstract) null
@@ -65,14 +135,14 @@ private fun mkCompProps(
     methodName: String,
     methodTypes: List<TypeName>,
     hasOverloads: Boolean,
-    nonNullMethods: Set<ClassRecord>
+    nonNullMethods: Set<ClassRecord>,
+    id: Int
 ): List<PropertySpec> {
     val name =
         if (hasOverloads) genOverloadsName(methodName, methodTypes)
         else toPropertyName(methodName)
 
     val fixedTypes = methodTypes.map { fixPropertyType(it) }
-    val propertyType = ClassName.bestGuess("Property")
     val defValues = fixedTypes.map { getDefaultValue(it) }
     val fixedType2s =
         fixedTypes.zip(defValues) { fixedType, defValue ->
@@ -80,15 +150,6 @@ private fun mkCompProps(
         }
 
     val complexTN = generateComplexType(fixedType2s)
-
-    val template =
-        when (methodTypes.size) {
-            1 -> "%T(%L, %S, value, { a, b -> a.%L(b) })"
-            2 -> "%T(%L, %S, value, { a, b -> a.%L(b.first, b.second) })"
-            3 -> "%T(%L, %S, value, { a, b -> a.%L(b.first, b.second, b.third) })"
-            4 -> "%T(%L, %S, value, { a, b -> a.%L(b.first, b.second, b.third, b.fourth) })"
-            else -> error("${methodTypes.size}")
-        }
 
     val isRemote = fixedTypes.size > 1 || isRemote(fixedTypes[0])
 
@@ -109,13 +170,7 @@ private fun mkCompProps(
         .setter(
             FunSpec.setterBuilder()
                 .addParameter("value", complexTN)
-                .addCode(
-                    "updateProp($template)",
-                    propertyType.parameterizedBy(complexTN, inputViewClass),
-                    isRemote,
-                    name,
-                    methodName
-                )
+                .addCode("updateProp(%L, %L, value)", isRemote, id)
                 .build()
         )
         .build()

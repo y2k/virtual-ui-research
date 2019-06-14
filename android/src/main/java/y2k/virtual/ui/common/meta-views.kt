@@ -59,24 +59,31 @@ fun editableView(f: EditableView_.() -> Unit): EditableView_ {
 @VirtualNodeMarker
 open class EditableView_ : ViewGroup_() {
 
+    override fun clear(p: Property, a: View) {
+        val v = a as EditableView
+        when (p.propId) {
+            0 -> v.setText(null)
+            1 -> v.setOnTextChanged(null)
+        }
+    }
+
+    override fun update(p: Property, a: View) {
+        val v = a as EditableView
+        when (p.propId) {
+            0 -> v.setText(p.value as CharSequence?)
+            1 -> v.setOnTextChanged(p.value as ((CharSequence) -> Unit)?)
+        }
+    }
+
     var text: CharSequence?
         @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() = throw IllegalStateException()
-        set(value) = updateProp(
-            Property<CharSequence?, EditableView>(true, "text", value, { a, b -> a.setText(b) })
-        )
+        set(value) = updateProp(true, 0, value)
 
     var onTextChanged: ((CharSequence) -> Unit)?
         @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() = throw IllegalStateException()
-        set(value) = updateProp(
-            Property<((CharSequence) -> Unit)?, EditableView>(
-                false,
-                "onTextChanged",
-                value,
-                { a, b -> a.setOnTextChanged(b) }
-            )
-        )
+        set(value) = updateProp(false, 1, value)
 
     override fun createEmpty(context: Context) = EditableView(context)
 }
