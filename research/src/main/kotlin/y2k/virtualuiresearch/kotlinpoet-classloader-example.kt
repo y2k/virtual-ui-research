@@ -44,6 +44,7 @@ fun execute(
                 .addMember("\"ClassName\"")
                 .addMember("\"NewApi\"")
                 .addMember("\"RestrictedApi\"")
+                .addMember("\"UsePropertyAccessSyntax\"")
                 .build()
         )
 

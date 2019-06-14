@@ -49,7 +49,7 @@ fun mkNode(f: () -> Unit): VirtualNode {
     return globalViewStack.pop().children.first()
 }
 
-private val isRemote = ThreadLocal<Unit>()
+val isRemote = ThreadLocal<Unit>()
 
 fun runInRemote(f: () -> Unit) {
     try {
@@ -60,10 +60,8 @@ fun runInRemote(f: () -> Unit) {
     }
 }
 
-fun <T> VirtualNode.updateProp(value: T, property: Property<T, *>) {
+fun VirtualNode.updateProp(property: Property<*, *>) {
     if (isRemote.get() != null && !property.isRemoteReady) return
-
-    property.set(value)
     props += property
 }
 
@@ -86,10 +84,6 @@ class Property<T, TView : View>(
 
     fun update(view: TView) {
         f(view, value!!)
-    }
-
-    fun set(x: T) {
-        value = x
     }
 
     override fun toString() = "${functionRegex.find("$f")?.groupValues?.get(1)}($value)"

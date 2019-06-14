@@ -71,7 +71,6 @@ private fun mkCompProps(
         if (hasOverloads) genOverloadsName(methodName, methodTypes)
         else toPropertyName(methodName)
 
-    val privateProp = "_$name"
     val fixedTypes = methodTypes.map { fixPropertyType(it) }
     val propertyType = ClassName.bestGuess("Property")
     val defValues = fixedTypes.map { getDefaultValue(it) }
@@ -81,6 +80,17 @@ private fun mkCompProps(
         }
 
     val complexTN = generateComplexType(fixedType2s)
+
+    val template =
+        when (methodTypes.size) {
+            1 -> "%T(%L, %S, value, { a, b -> a.%L(b) })"
+            2 -> "%T(%L, %S, value, { a, b -> a.%L(b.first, b.second) })"
+            3 -> "%T(%L, %S, value, { a, b -> a.%L(b.first, b.second, b.third) })"
+            4 -> "%T(%L, %S, value, { a, b -> a.%L(b.first, b.second, b.third, b.fourth) })"
+            else -> error("${methodTypes.size}")
+        }
+
+    val isRemote = fixedTypes.size > 1 || isRemote(fixedTypes[0])
 
     val pubProp = PropertySpec
         .builder(name, complexTN)
@@ -99,39 +109,18 @@ private fun mkCompProps(
         .setter(
             FunSpec.setterBuilder()
                 .addParameter("value", complexTN)
-                .addCode("updateProp(value, $privateProp)")
+                .addCode(
+                    "updateProp($template)",
+                    propertyType.parameterizedBy(complexTN, inputViewClass),
+                    isRemote,
+                    name,
+                    methodName
+                )
                 .build()
         )
         .build()
 
-    val isRemote = fixedTypes.size > 1 || isRemote(fixedTypes[0])
-
-    val privProp = PropertySpec
-        .builder(
-            privateProp,
-            propertyType.parameterizedBy(complexTN, inputViewClass),
-            KModifier.PRIVATE)
-
-    when {
-        methodTypes.size == 1 -> privProp.initializer(
-            "%T(%L, %S, %L, %T::%L)",
-            propertyType, isRemote, name, defValues[0], inputViewClass, methodName)
-        methodTypes.size == 2 -> privProp.initializer(
-            "%T(%L, %S, Pair(%L), { a, b -> a.%L(b.first, b.second) })",
-            propertyType, isRemote, name, defValues.joinToString(), methodName)
-        methodTypes.size == 3 -> privProp.initializer(
-            "%T(%L, %S, Triple(%L), { a, b -> a.%L(b.first, b.second, b.third) })",
-            propertyType, isRemote, name, defValues.joinToString(), methodName)
-        methodTypes.size == 4 -> privProp.initializer(
-            "%T(%L, %S, Quadruple(%L), { a, b -> a.%L(b.first, b.second, b.third, b.fourth) })",
-            propertyType, isRemote, name, defValues.joinToString(), methodName)
-        else -> error("${methodTypes.size}")
-    }
-
-    if (!isRemote)
-        privProp.addAnnotation(Transient::class)
-
-    return listOf(pubProp, privProp.build())
+    return listOf(pubProp)
 }
 
 fun generateComplexType(types: List<TypeName>): TypeName =
@@ -160,7 +149,8 @@ private fun isNullable(
 ): Boolean {
     return defValue == null && ClassRecord(
         inputViewClass.canonicalName,
-        methodName) !in nonNullMethods
+        methodName
+    ) !in nonNullMethods
 }
 
 private fun isRemote(type: TypeName): Boolean =

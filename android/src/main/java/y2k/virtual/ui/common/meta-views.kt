@@ -62,19 +62,21 @@ open class EditableView_ : ViewGroup_() {
     var text: CharSequence?
         @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() = throw IllegalStateException()
-        set(value) = updateProp(value, _text)
-
-    private val _text: Property<CharSequence?, EditableView> =
-        Property(true, "text", null, EditableView::setText)
+        set(value) = updateProp(
+            Property<CharSequence?, EditableView>(true, "text", value, { a, b -> a.setText(b) })
+        )
 
     var onTextChanged: ((CharSequence) -> Unit)?
         @Deprecated("", level = DeprecationLevel.HIDDEN)
         get() = throw IllegalStateException()
-        set(value) = updateProp(value, _onTextChanged)
-
-    @Transient
-    private val _onTextChanged: Property<((CharSequence) -> Unit)?, EditableView> =
-        Property(false, "onTextChanged", null, EditableView::setOnTextChanged)
+        set(value) = updateProp(
+            Property<((CharSequence) -> Unit)?, EditableView>(
+                false,
+                "onTextChanged",
+                value,
+                { a, b -> a.setOnTextChanged(b) }
+            )
+        )
 
     override fun createEmpty(context: Context) = EditableView(context)
 }
@@ -86,5 +88,6 @@ fun LinearLayout_.fillHorizontal(f: () -> View_) {
         LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            1f)
+            1f
+        )
 }
