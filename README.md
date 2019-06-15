@@ -2,14 +2,21 @@
 
 [![](https://jitpack.io/v/y2k/virtual-ui-lib.svg)](https://jitpack.io/#y2k/virtual-ui-lib)
 
-# Пример компонента
+#### Поддержка
 
-#### Описание компонента в стиле _The Elm Architecture_
+Чат русскоязычного android-сообщества, посвященный декларативным UI-фреймворкам:
+Jetpack Compose, Anko, Anvil, Litho
+
+https://t.me/android_declarative
+
+# Пример TodoList приложения
+
+#### Описание компонента в _The Elm Architecture_
 
 [todolist-example.kt](android/src/main/java/y2k/android/todolist%20example.kt)
 
 ```kotlin
-object TodoListComponent : TeaComponent<Msg, Model> {
+object TodoListComponent : TeaComponent<Model, Msg> {
 
     data class Model(val todos: List<String>, val text: String)
 
@@ -20,17 +27,17 @@ object TodoListComponent : TeaComponent<Msg, Model> {
         class Changed(val text: CharSequence) : Msg()
     }
 
-    override val init = Model(emptyList(), "")
+    override fun initialize(): Pair<Model, Cmd<Msg>> = Model(emptyList(), "") to Cmd.none()
 
-    override fun update(model: Model, msg: Msg): Model =
+    override fun update(model: Model, msg: Msg): Pair<Model, Cmd<Msg>> =
         when (msg) {
             is Msg.Add -> model.copy(todos = model.todos + model.text, text = "")
             is Msg.DeleteAll -> model.copy(todos = emptyList())
             is Msg.Delete -> model.copy(todos = model.todos.filterNot { it == msg.title })
             is Msg.Changed -> model.copy(text = "" + msg.text)
-        }
+        } to Cmd.none()
 
-    override fun view(model: Model, dispatch: (Msg) -> Unit): VirtualNode =
+    fun view(model: Model, dispatch: (Msg) -> Unit): VirtualNode =
         linearLayout {
             orientation = LinearLayout.VERTICAL
             padding = Quadruple(20, 20, 20, 20)
@@ -91,26 +98,33 @@ object TodoListComponent : TeaComponent<Msg, Model> {
 #### Активити для запуска
 
 ```kotlin
-class TodoListActivity : AppCompatActivity() {
+class Activity : AppCompatActivity(), TeaView<Model> {
 
-    private lateinit var root: VirtualHostView
+    private lateinit var virtualHostView: VirtualHostView
     private lateinit var server: Closeable
+
+    private val runtime = TeaRuntime(TodoListComponent, this, { }, true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        root = VirtualHostView(this).also(::setContentView)
-
-        SimpleTea.run(root, TodoListComponent)
+        virtualHostView = VirtualHostView(this)
+        setContentView(virtualHostView)
     }
 
-    override fun onResume() {
-        super.onResume()
-        server = HotReloadServer.start(root)
+    override fun view(model: Model) {
+        virtualHostView.update { view(model, runtime::dispatch) }
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStart() {
+        super.onStart()
+        runtime.attach()
+        server = HotReloadServer.start(virtualHostView)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        runtime.detach()
         server.close()
     }
 }
@@ -125,7 +139,8 @@ class HotReloadRunners {
     fun `run TodoList`() {
         HotReloadClient.send {
             TodoListComponent.view(
-                TodoListComponent.init.copy(todos = List(5) { "Item #$it" })) {}
+                TodoListComponent.initialize().first.copy(todos = List(5) { "Item #$it" })
+            ) {}
         }
     }
 }
