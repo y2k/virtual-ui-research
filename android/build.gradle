@@ -27,10 +27,13 @@ android {
 repositories {
     jcenter()
     google()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.github.y2k:tea:0.3.3'
 
     def androidx_legacy_v4_ver = '1.0.0'
     def androidx_appcompat_ver = '1.0.2'

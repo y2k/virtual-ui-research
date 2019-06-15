@@ -9,7 +9,7 @@ class HotReloadRunners {
     fun `run TodoList`() {
         HotReloadClient.send {
             TodoListComponent.view(
-                TodoListComponent.init.copy(todos = List(5) { "Item #$it" })
+                TodoListComponent.initialize().first.copy(todos = List(5) { "Item #$it" })
             ) {}
         }
     }
